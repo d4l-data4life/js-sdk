@@ -649,43 +649,6 @@ D4L.SDK.countResources('1cf5ee52-88dc-406a-bf7b-bc5e26a17b47', {
 
 The data4life platform supports multiple resource types. The resource types are reflected in the models.
 
-
-#### HCAuthor
-An `Author` resource contains information about the author of a document.
-
-##### Sample construction
-```javascript
-let hcAuthor = new D4L.SDK.models.HCAuthor({
-    firstName: 'Ruslan'
-    prefix: 'Dr.'
-});
-```
-
-##### Parameters
-| Name | Type | Description |
-|------|:-----|:------------|
-| identifier | String | Custom identifier |
-| firstName | String | First name |
-| lastName | String | Last name |
-| prefix | String | e.g., Capt., Mr., Mrs. |
-| suffix | String | e.g., Sr., Late |
-| street | String | Street name |
-| city | String | City name |
-| postalCode | String | Postal code or ZIP code |
-| telephone | String | Phone number |
-| website | String | Website address |
-| specialty | Number | (a standard set of codes is allowed in specialty value, see <https://www.hl7.org/fhir/valueset-c80-practice-codes.html>. reflected in HCSpeciality)
-
-#### HCSpecialty
-
-The `Specialty` resource is an enum (a list of named constants), which has a standard set of codes for an author. The code represents the clinical specialty of the practitioner or provider who interacted with, treated, or provided a service for the patient.
-For the complete list of specialties and codes, see <https://www.hl7.org/fhir/valueset-c80-practice-codes.html>.
-
-##### Sample construction
-```javascript
-D4L.SDK.models.Specialty.AdultMentalIllness // equals 408467006
-```
-
 #### DocumentReference
 To describe a document that's made available to a healthcare system, use the `DocumentReference` resource.
 <https://www.hl7.org/implement/standards/fhir/documentreference.html>
