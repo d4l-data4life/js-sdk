@@ -30,11 +30,17 @@ export default class Practitioner implements fhir.Practitioner {
 
     return practitioner;
   }
+
   public address?: fhir.Address[];
+
   public id?: string;
+
   public identifier?: fhir.Identifier[];
+
   public name?: fhir.HumanName[];
+
   public resourceType: string;
+
   public telecom?: fhir.ContactPoint[];
 
   constructor({
@@ -48,23 +54,25 @@ export default class Practitioner implements fhir.Practitioner {
     telephone,
     website,
   }: PractitionerConstructor) {
-    (this.resourceType = 'Practitioner'), (this.id = 'contained-author-id'), (this.identifier = []);
-    (this.name = [
+    this.resourceType = 'Practitioner';
+    this.id = 'contained-author-id';
+    this.identifier = [];
+    this.name = [
       {
         family: lastName,
         given: firstName ? [firstName] : [],
         prefix: prefix ? [prefix] : [],
         suffix: suffix ? [suffix] : [],
       },
-    ]),
-      (this.address = [
-        {
-          city,
-          postalCode,
-          line: street ? [street] : [],
-        },
-      ]),
-      (this.telecom = []);
+    ];
+    this.address = [
+      {
+        city,
+        postalCode,
+        line: street ? [street] : [],
+      },
+    ];
+    this.telecom = [];
 
     if (telephone) {
       this.telecom.push({
@@ -89,25 +97,32 @@ export default class Practitioner implements fhir.Practitioner {
   public getLastName(): string {
     return this.name?.[0]?.family;
   }
+
   public getPrefix(): string {
     return this.name?.[0]?.prefix?.[0];
   }
+
   public getSuffix(): string {
     return this.name?.[0]?.suffix?.[0];
   }
+
   public getStreet(): string {
     return this.address?.[0]?.line?.[0];
   }
+
   public getCity(): string {
     return this.address?.[0]?.city;
   }
+
   public getPostalCode(): string {
     return this.address?.[0]?.postalCode;
   }
+
   public getTelephone(): string {
     const phone = find(this.telecom, ['system', 'phone']);
     return phone?.value;
   }
+
   public getWebsite(): string {
     const website = find(this.telecom, ['system', 'url']);
     return website?.value;
