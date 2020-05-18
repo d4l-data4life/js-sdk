@@ -1,6 +1,6 @@
 /* tslint:disable:ter-indent */
 // @ts-ignore
-import { hash } from 'hc-crypto';
+import { hash } from 'js-crypto';
 import find from 'lodash/find';
 
 import isUndefined from 'lodash/isUndefined';

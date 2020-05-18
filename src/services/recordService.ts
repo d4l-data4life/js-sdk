@@ -4,7 +4,7 @@ import {
   symDecryptString,
   symEncryptString,
   // @ts-ignore
-} from 'hc-crypto';
+} from 'js-crypto';
 
 import isError from 'lodash/isError';
 import reject from 'lodash/reject';

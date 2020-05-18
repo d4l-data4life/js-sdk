@@ -7,7 +7,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import proxy from 'proxyquireify';
-import 'hc-crypto';
+import 'js-crypto';
 
 import '../../src/services/userService';
 import '../../src/routes/userRoutes';
@@ -78,7 +78,7 @@ describe('services/userService', () => {
     grantPermissionStub = sinon.stub().returns(Promise.resolve());
 
     userService = proxyquire('../../src/services/userService', {
-      'hc-crypto': {
+      'js-crypto': {
         importKey: importKeyStub,
         asymDecrypt: asymDecryptStub,
         asymDecryptString: asymDecryptStub,

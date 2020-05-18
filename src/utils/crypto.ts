@@ -16,7 +16,7 @@ import {
   keyTypes,
   algorithms,
   // @ts-ignore
-} from 'hc-crypto';
+} from 'js-crypto';
 
 // base64
 type b64 = string;
@@ -163,7 +163,7 @@ export const createKeyRotationPayload = async (args: KeyRotationArguments) => {
 
 /**
  * This creates the necessary crypto material necessary for registering a user.
- * Could be outsourced to hc-crypto-js.
+ * Could be outsourced to js-crypto-js.
  */
 export const createRegisterPayload = async (
   email: string,

@@ -2,7 +2,7 @@
 import {
   convertBlobToArrayBufferView,
   // @ts-ignore
-} from 'hc-crypto';
+} from 'js-crypto';
 
 import cloneDeep from 'lodash/cloneDeep';
 import flatMap from 'lodash/flatMap';

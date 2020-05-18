@@ -12,7 +12,7 @@ import {
   importKey,
   convertStringToArrayBufferView,
   convertArrayBufferViewToString,
-} from 'hc-crypto';
+} from 'js-crypto';
 import { D4LSDK } from '../src/d4l';
 import testVariables from './testUtils/testVariables';
 import taggingUtils from '../src/lib/taggingUtils';
