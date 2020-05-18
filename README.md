@@ -99,6 +99,9 @@ Use the naming convention below for branches:
 
 Releases are automatically created when the version in the `package.json` is increased. Afterwards the release notes needs to be added manually.
 
+## License
+
+(c) 2020 D4L data4life gGmbH / All rights reserved. Please refer to our [License](./LICENSE) for further details.
 
 ## Code of conduct
 
