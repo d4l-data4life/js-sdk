@@ -98,3 +98,12 @@ Use the naming convention below for branches:
 ### Releases
 
 Releases are automatically created when the version in the `package.json` is increased. Afterwards the release notes needs to be added manually.
+
+
+## Code of conduct
+
+[Contributor Code of Conduct](./CODE-OF-CONDUCT.md). By participating in this project, you agree to abide by its terms.
+
+## Work in progress
+
+This document is still a work in progress. We are working on adding contributing guidelines and other documents.
