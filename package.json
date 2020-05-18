@@ -30,7 +30,7 @@
     "@types/lodash": "^4.14.118",
     "@types/node": "^12.7.4",
     "babel-polyfill": "^6.26.0",
-    "hc-crypto": "git+ssh://git@github.com/gesundheitscloud/hc-crypto-js.git#1.1.1",
+    "hc-crypto": "git+ssh://git@github.com/d4l-data4life/js-crypto.git#1.1.2",
     "lodash": "^4.17.14",
     "pica": "^5.1.0"
   },
