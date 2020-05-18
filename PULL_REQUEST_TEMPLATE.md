@@ -1,5 +1,3 @@
-### Issue Link
-
 ### Summary of the issue
 Describe what you did in this pull request. If applicable, link to an issue here, such as 
 https://gesundheitscloud.atlassian.net/browse/SDK-
