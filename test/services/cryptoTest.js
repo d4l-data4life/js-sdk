@@ -9,7 +9,7 @@ import {
   asymDecryptString,
   keyTypes,
   // @ts-ignore
-} from 'hc-crypto';
+} from 'js-crypto';
 
 import chai from 'chai';
 import sinonChai from 'sinon-chai';

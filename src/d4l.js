@@ -8,7 +8,7 @@ import {
   generateAsymKeyPair,
   keyTypes,
   importKey,
-} from 'hc-crypto';
+} from 'js-crypto';
 import fhirService from './services/fhirService';
 import createCryptoService from './services/createCryptoService';
 import {
@@ -68,7 +68,7 @@ export const D4LSDK = {
     decryptCUP,
     getEncryptedCommonKeyWithAppPublicKey,
     generateAppKeyPair,
-    importKey, // pass directly from hc-crypto, needed for tests
+    importKey, // pass directly from js-crypto, needed for tests
     encryptString: string =>
       new Promise(resolve => resolve(userService.getCurrentUserId())).then(currentUserId => {
         return createCryptoService(currentUserId).encryptString(string);

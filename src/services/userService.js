@@ -3,7 +3,7 @@ import {
   symDecryptObject,
   asymEncryptString,
   symEncryptString,
-} from 'hc-crypto';
+} from 'js-crypto';
 
 import userRoutes from '../routes/userRoutes';
 import d4lRequest from '../lib/d4lRequest';

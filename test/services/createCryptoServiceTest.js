@@ -7,7 +7,7 @@ import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import proxy from 'proxyquireify';
-import { keyTypes } from 'hc-crypto';
+import { keyTypes } from 'js-crypto';
 
 import '../../src/services/createCryptoService';
 import encryptionResources from '../testUtils/encryptionResources';
@@ -63,7 +63,7 @@ describe('createCryptoService', () => {
       .returns(Promise.resolve(JSON.stringify(encryptionResources.dataKey)));
 
     createCryptoService = proxyquire('../../src/services/createCryptoService', {
-      'hc-crypto': {
+      'js-crypto': {
         asymDecryptString: asymDecryptStringStub,
         generateSymKey: generateSymKeyStub,
         symEncrypt: symEncryptStub,

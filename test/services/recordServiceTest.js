@@ -8,7 +8,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import proxy from 'proxyquireify';
-import 'hc-crypto';
+import 'js-crypto';
 
 import '../../src/routes/documentRoutes';
 import '../../src/services/recordService';
@@ -132,7 +132,7 @@ describe('services/recordService', () => {
       '../lib/fhirValidator': {
         default: { validate: validateStub },
       },
-      'hc-crypto': {
+      'js-crypto': {
         symEncryptString: symEncryptStringStub,
         symEncryptObject: symEncryptObjectStub,
         symDecryptString: symDecryptStringStub,

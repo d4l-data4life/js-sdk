@@ -1,4 +1,4 @@
-import { asymDecryptString, asymEncryptString, importKey } from 'hc-crypto';
+import { asymDecryptString, asymEncryptString, importKey } from 'js-crypto';
 import {
   createChangePasswordPayload,
   createLoginHash,

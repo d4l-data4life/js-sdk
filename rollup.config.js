@@ -54,7 +54,7 @@ export default {
     }),
     commonjs({
       namedExports: {
-        'hc-crypto': [
+        'js-crypto': [
           'deriveKey',
           'importKey',
           'generateAsymKeyPair',

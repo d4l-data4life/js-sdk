@@ -7,7 +7,7 @@ import {
   symEncryptString,
   symDecrypt,
   // @ts-ignore
-} from 'hc-crypto';
+} from 'js-crypto';
 import userService from './userService';
 import { EncryptedDataKey, Key } from './recordService';
 
