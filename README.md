@@ -20,7 +20,9 @@ To use the SDK, you need to create a client id from Data4Life. Please get in tou
 
 ### Prerequisites
 
-- node, npm
+- node version 12 LTS (see below), npm
+
+Tests will fail with node versions 13 above. We are working to fix this soon.
 
 In the directory run:
 
@@ -53,7 +55,7 @@ The SDK uses karma, mocha, sinon, and chai for unit tests.
 To run all tests, execute:
 
 ```bash
-npm test
+npm test # currently requires node 12 LTS, we're working on it
 ```
 
 It uses eslint and tslint to check and report incorrect indentations and patterns in the project, bundles the project, run unit tests and makes a coverage report.
