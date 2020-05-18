@@ -12,7 +12,7 @@ jobs:
       - name: Add js-crypto ssh key
         uses: webfactory/ssh-agent@v0.2.0
         with:
-          ssh-private-key: ${{ secrets.HC_CRYPTO_JS_DEPLOY_KEY }}
+          ssh-private-key: ${{ secrets.JS_CRYPTO_DEPLOY_KEY }}
 
 
       - uses: actions/setup-node@v1
