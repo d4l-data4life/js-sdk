@@ -5,7 +5,7 @@
     "data_model_version": 1
   },
   "module": "dest/d4l.js",
-  "license": "BSD-3-Clause",
+  "license": "See license in LICENSE",
   "main": "dest/d4l.js",
   "scripts": {
     "build": "rollup -c --config-format=esm --config-mode=development",
