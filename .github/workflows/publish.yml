@@ -14,17 +14,29 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.JS_CRYPTO_DEPLOY_KEY }}
 
-      - uses: actions/checkout@master
-
       - uses: actions/setup-node@v1
         with:
           node-version: '13.x'
           registry-url: https://registry.npmjs.org/
 
+      - name: Checkout repository
+        uses: actions/checkout@v2
+        with:
+          ref: master
+
+      - name: Check if version has been updated
+        uses: EndBug/version-check@v1
+        id: check
+        with:
+          diff-search: true
+          file-name: package.json
+
       - name: Install
+        if: steps.check.outputs.changed == 'true'
         run: npm ci
 
       - name: Publish
+        if: steps.check.outputs.changed == 'true'
         run: cd dest && npm publish --access restricted && cd -
         env:
           NODE_AUTH_TOKEN: ${{secrets.NPM_TOKEN}}
