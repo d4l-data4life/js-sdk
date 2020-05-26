@@ -25,7 +25,16 @@ module.exports = {
   rules: {
     'brace-style': ['error', '1tbs', { allowSingleLine: false }],
     'class-methods-use-this': 'error',
-    'comma-dangle': ['error', 'always-multiline'],
+    'comma-dangle': [
+      'error',
+      {
+        arrays: 'always-multiline',
+        objects: 'always-multiline',
+        imports: 'always-multiline',
+        exports: 'always-multiline',
+        functions: 'never',
+      },
+    ],
     complexity: ['error', 15], // push down to 10
     curly: 'error',
     'func-names': 'warn',

@@ -270,6 +270,4 @@ describe('services/userService', () => {
         .catch(done);
     });
   });
-
-  afterEach(() => {});
 });

@@ -28,7 +28,7 @@ export interface Key {
   sym: string;
 }
 
-export interface IDecryptedRecord {
+export interface DecryptedRecord {
   id?: string;
   fhirResource: fhir.DomainResource;
   tags?: string[];
@@ -38,7 +38,7 @@ export interface IDecryptedRecord {
   commonKeyId?: string;
 }
 
-export interface IQueryParams {
+export interface QueryParams {
   limit?: number;
   offset?: number;
   start_date?: string;
@@ -47,7 +47,7 @@ export interface IQueryParams {
 }
 
 const recordService = {
-  updateRecord(ownerId: string, record: IDecryptedRecord): Promise<IDecryptedRecord> {
+  updateRecord(ownerId: string, record: DecryptedRecord): Promise<DecryptedRecord> {
     const updateRequest = (userId, params) =>
       documentRoutes.updateRecord(userId, record.id, params);
 
@@ -70,7 +70,7 @@ const recordService = {
     );
   },
 
-  createRecord(ownerId: string, record: IDecryptedRecord): Promise<IDecryptedRecord> {
+  createRecord(ownerId: string, record: DecryptedRecord): Promise<DecryptedRecord> {
     return this.uploadFhirRecord(
       ownerId,
       {
@@ -84,9 +84,9 @@ const recordService = {
 
   uploadFhirRecord(
     ownerId: string,
-    record: IDecryptedRecord,
-    uploadRequest: Promise<IDecryptedRecord>
-  ): Promise<IDecryptedRecord> {
+    record: DecryptedRecord,
+    uploadRequest: Promise<DecryptedRecord>
+  ): Promise<DecryptedRecord> {
     return fhirValidator.validate(record.fhirResource).then(() =>
       this.uploadRecord(
         ownerId,
@@ -103,7 +103,7 @@ const recordService = {
 
   async uploadRecord(
     ownerId: string,
-    record: IDecryptedRecord,
+    record: DecryptedRecord,
     uploadRequest: (userId: string, data: object) => Promise<any>
   ) {
     const owner = await userService.getUser(ownerId);
@@ -138,7 +138,7 @@ const recordService = {
     };
   },
 
-  downloadRecord(ownerId: string, recordId: string): Promise<IDecryptedRecord> {
+  downloadRecord(ownerId: string, recordId: string): Promise<DecryptedRecord> {
     return documentRoutes
       .downloadRecord(ownerId, recordId)
       .then(result =>
@@ -146,7 +146,7 @@ const recordService = {
       );
   },
 
-  searchRecords(ownerId: string, params: IQueryParams, countOnly = false): Promise<any> {
+  searchRecords(ownerId: string, params: QueryParams, countOnly = false): Promise<any> {
     let user;
     let totalCount;
 
@@ -172,7 +172,7 @@ const recordService = {
             ? documentRoutes.getRecordsCount(user.id, queryParams)
             : documentRoutes.searchRecords(user.id, queryParams)
         )
-        .then(searchResult => {
+        .then((searchResult: { records?: any[]; totalCount: number }) => {
           totalCount = searchResult.totalCount;
           /* eslint-disable indent */
           return searchResult.records
@@ -198,7 +198,7 @@ const recordService = {
     return documentRoutes.deleteRecord(ownerId, recordId);
   },
 
-  decryptResourceAndTags(record: any, tagKey: Key): Promise<IDecryptedRecord> {
+  decryptResourceAndTags(record: any, tagKey: Key): Promise<DecryptedRecord> {
     const tagsPromise = Promise.all<string>(
       record.encrypted_tags.map(tag => symDecryptString(tagKey, tag))
     );

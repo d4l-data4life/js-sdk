@@ -1,5 +1,6 @@
 import isObject from 'lodash/isObject';
 import isString from 'lodash/isString';
+
 import { throttle } from './requestUtils';
 import authRoutes from '../routes/authRoutes';
 
@@ -26,7 +27,7 @@ export const buildQueryString = (url, query = null) => {
   return url;
 };
 
-export function makeRequest(options) {
+export function makeRequest(options): Promise<any> {
   const request = () =>
     new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -140,7 +141,7 @@ const d4lRequest = {
     type,
     path,
     {
-      body,
+      body = {},
       headers = {},
       responseType = '',
       authorize = false,
@@ -175,15 +176,15 @@ const d4lRequest = {
 
     const submitRequest = accessToken =>
       makeRequest({
+        responseType,
+        body,
+        query,
         method: type,
         url: path,
         headers: {
           ...httpHeaders,
           authorization: accessToken,
         },
-        responseType,
-        body,
-        query,
       })
         .then(response => {
           const returnBodyText =
