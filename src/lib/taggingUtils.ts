@@ -41,7 +41,7 @@ const taggingUtils = {
     return Object.keys(tagObject).map(tagKey => this.buildTag(tagKey, tagObject[tagKey]));
   },
 
-  generateCustomTags(annotationList = []) {
+  generateCustomTags(annotationList: string[] = []): string[] {
     return annotationList.map(el => this.buildTag(ANNOTATION_LABEL, el));
   },
 

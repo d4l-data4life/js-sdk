@@ -1,30 +1,31 @@
-import config from 'config';
+// tslint:disable-next-line:import-name
+import config from '../config/index';
 import d4lRequest from '../lib/d4lRequest';
 
 const documentRoutes = {
   createRecord(ownerId, data) {
     return d4lRequest.submit('POST', `${config.userUrl(ownerId)}/records`, {
+      ownerId,
       body: data,
       authorize: true,
-      ownerId,
     });
   },
 
   updateRecord(ownerId, recordId, data) {
     return d4lRequest.submit('PUT', `${config.userUrl(ownerId)}/records/${recordId}`, {
+      ownerId,
       body: data,
       authorize: true,
-      ownerId,
     });
   },
 
   searchRecords(ownerId, query) {
     return d4lRequest
       .submit('GET', `${config.userUrl(ownerId)}/records`, {
+        ownerId,
         query,
         authorize: true,
         includeResponseHeaders: true,
-        ownerId,
       })
       .then(({ body, headers }) => ({
         records: body,
@@ -35,25 +36,25 @@ const documentRoutes = {
   getRecordsCount(ownerId, query) {
     return d4lRequest
       .submit('HEAD', `${config.userUrl(ownerId)}/records`, {
+        ownerId,
         query,
         authorize: true,
         includeResponseHeaders: true,
-        ownerId,
       })
       .then(({ headers }) => ({ totalCount: headers['x-total-count'] }));
   },
 
   downloadRecord(ownerId, recordId) {
     return d4lRequest.submit('GET', `${config.userUrl(ownerId)}/records/${recordId}`, {
-      authorize: true,
       ownerId,
+      authorize: true,
     });
   },
 
   deleteRecord(ownerId, recordId) {
     return d4lRequest.submit('DELETE', `${config.userUrl(ownerId)}/records/${recordId}`, {
-      authorize: true,
       ownerId,
+      authorize: true,
     });
   },
 
@@ -61,7 +62,7 @@ const documentRoutes = {
     return d4lRequest.submit(
       'GET',
       `${config.userUrl(ownerId)}/records/${recordId}/attachment_key`,
-      { authorize: true, ownerId }
+      { ownerId, authorize: true }
     );
   },
 

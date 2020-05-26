@@ -15,9 +15,9 @@ import mergeWith from 'lodash/mergeWith';
 import omit from 'lodash/omit';
 import reject from 'lodash/reject';
 import some from 'lodash/some';
-
-import Attachment from 'lib/models/fhir/Attachment';
 import find from 'lodash/find';
+
+import Attachment from '../lib/models/fhir/Attachment';
 import ValidationError from '../lib/errors/ValidationError';
 import fhirValidator from '../lib/fhirValidator';
 import DocumentReference, { DOCUMENT_REFERENCE } from '../lib/models/fhir/DocumentReference';
@@ -44,7 +44,7 @@ import {
 } from '../lib/attachmentUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
-import recordService, { IDecryptedRecord } from './recordService';
+import recordService, { DecryptedRecord } from './recordService';
 import InvalidAttachmentPayloadError from '../lib/errors/InvalidAttachmentPayloadError';
 
 // The exposed search params
@@ -54,6 +54,7 @@ interface IParams {
   start_date?: string;
   end_date?: string;
   tags?: string[];
+  annotations?: string[];
   resourceType?: string;
   partner?: string;
 }
@@ -90,6 +91,7 @@ const SUPPORTED_PARAMS = [
   'start_date',
   'end_date',
   'tags',
+  'annotations',
   'resourceType',
   'partner',
 ];
@@ -361,10 +363,17 @@ export const prepareSearchParameters = (params: IParams) => {
     parameters.tags.push(taggingUtils.buildTag(tagKeys.partner, params.partner));
     delete parameters.partner;
   }
+
+  if (params.annotations) {
+    const customTags = taggingUtils.generateCustomTags(params.annotations);
+    parameters.tags.push(...customTags);
+    delete parameters.annotations;
+  }
+
   return parameters;
 };
 
-const convertToExposedRecord = (decryptedRecord: IDecryptedRecord) => {
+const convertToExposedRecord = (decryptedRecord: DecryptedRecord) => {
   const exposedRecord = {
     annotations: taggingUtils.getAnnotations(decryptedRecord.tags),
     customCreationDate: decryptedRecord.customCreationDate,
@@ -512,7 +521,7 @@ const fhirService = {
   updateAttachments(ownerId: string, resource: fhir.DomainResource, annotations: string[]) {
     return recordService
       .downloadRecord(ownerId, resource.id)
-      .then((previousRecord: IDecryptedRecord) => {
+      .then((previousRecord: DecryptedRecord) => {
         const previousResource = previousRecord.fhirResource;
         const previousAttachments = getCleanAttachmentsFromResource(previousResource);
 
@@ -615,7 +624,7 @@ const fhirService = {
 
     return recordService
       .downloadRecord(ownerId, resourceId)
-      .then((rec: IDecryptedRecord) => {
+      .then((rec: DecryptedRecord) => {
         record = { ...rec };
 
         resource = record.fhirResource;

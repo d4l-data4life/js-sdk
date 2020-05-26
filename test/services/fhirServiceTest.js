@@ -43,6 +43,18 @@ describe('prepareSearchParameters', () => {
     });
   });
 
+  it('correctly prepares simple parameters with a tag and annotation', () => {
+    const preparedParams = prepareSearchParameters({
+      limit: 10,
+      tags: ['superhero-origin-story'],
+      annotations: ['an annoation'],
+    });
+    expect(preparedParams).to.deep.equal({
+      limit: 10,
+      tags: ['superhero-origin-story', 'custom=an%20annoation'],
+    });
+  });
+
   it('correctly prepares parameters with a tag and a resourceType', () => {
     const preparedParams = prepareSearchParameters({
       limit: 10,

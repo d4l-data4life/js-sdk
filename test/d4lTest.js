@@ -26,8 +26,6 @@ chai.use(sinonChai);
 const { expect } = chai;
 
 describe('D4L', () => {
-  beforeEach(() => {});
-
   it('the D4L object is initiated correctly', () => {
     expect(typeof D4LSDK).to.equal('object');
     expect(typeof D4LSDK.getCurrentUserId).to.equal('function');
