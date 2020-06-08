@@ -141,8 +141,8 @@ describe('services/recordService', () => {
       },
       '../lib/taggingUtils': {
         default: {
-          clientId: testVariables.clientId,
           ...taggingUtils,
+          partnerId: testVariables.partnerId,
         },
       },
     }).default;
@@ -151,12 +151,26 @@ describe('services/recordService', () => {
     global.__DATA_MODEL_VERSION__ = testVariables.dataModelVersion;
   });
 
+  afterEach(() => {
+    validateStub.reset();
+    downloadRecordStub.reset();
+    searchRecordsStub.reset();
+    updateRecordStub.reset();
+    getRecordsCountStub.reset();
+    createRecordStub.reset();
+    deleteRecordStub.reset();
+
+    taggingUtils.reset();
+  });
+
   describe('createRecord', () => {
     it('should resolve when called with userId and correct fhirResource', done => {
+      taggingUtils.setPartnerId(testVariables.partnerId);
       const tags = [
         taggingUtils.generateCreationTag(),
         ...taggingUtils.generateTagsFromFhir(fhirResources.documentReference),
       ];
+
       recordService
         .createRecord(testVariables.userId, {
           fhirResource: fhirResources.documentReference,
@@ -258,6 +272,7 @@ describe('services/recordService', () => {
     });
 
     it('should pass the right custom tags corresponding to the annotations passed', done => {
+      taggingUtils.setPartnerId(testVariables.partnerId);
       const tags = [
         ...taggingUtils.generateCustomTags(documentResources.annotations),
         taggingUtils.generateUpdateTag(),
@@ -385,15 +400,5 @@ describe('services/recordService', () => {
         })
         .catch(done);
     });
-  });
-
-  afterEach(() => {
-    validateStub.reset();
-    downloadRecordStub.reset();
-    searchRecordsStub.reset();
-    updateRecordStub.reset();
-    getRecordsCountStub.reset();
-    createRecordStub.reset();
-    deleteRecordStub.reset();
   });
 });
