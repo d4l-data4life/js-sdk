@@ -45,7 +45,13 @@ describe('taggingUtils', () => {
     },
   };
 
-  taggingUtils.setPartnerId(testVariables.partnerId);
+  beforeEach(() => {
+    taggingUtils.setPartnerId(testVariables.partnerId);
+  });
+
+  afterEach(() => {
+    taggingUtils.reset();
+  });
 
   describe('generateTagsFromFhir', () => {
     it('verifies that correct tag values are generated', () => {

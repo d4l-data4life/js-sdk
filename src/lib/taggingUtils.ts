@@ -1,6 +1,7 @@
 import isString from 'lodash/isString';
 import stringUtils from './stringUtils';
 import { CURRENT_FHIR_VERSION } from '../services/fhirService';
+import SetupError, { NOT_SETUP } from './errors/SetupError';
 
 const TAG_DELIMITER = '=';
 
@@ -17,23 +18,34 @@ export const tagKeys: { [key: string]: string } = {
 const taggingUtils = {
   partnerId: null,
 
-  setPartnerId(partnerId) {
+  reset() {
+    this.partnerId = null;
+  },
+
+  setPartnerId(partnerId: string | null): void {
     this.partnerId = partnerId;
   },
 
-  generateCreationTag() {
-    return this.buildTag(tagKeys.partner, this.partnerId);
+  getPartnertId(): string {
+    if (!this.partnerId) {
+      throw new SetupError(NOT_SETUP);
+    }
+    return this.partnerId;
   },
 
-  generateUpdateTag() {
-    return this.buildTag(tagKeys.updatedByPartner, this.partnerId);
+  generateCreationTag(): string {
+    return this.buildTag(tagKeys.partner, this.getPartnertId());
   },
 
-  generateFhirVersionTag() {
+  generateUpdateTag(): string {
+    return this.buildTag(tagKeys.updatedByPartner, this.getPartnertId());
+  },
+
+  generateFhirVersionTag(): string {
     return this.buildTag(tagKeys.fhirVersion, CURRENT_FHIR_VERSION);
   },
 
-  generateTagsFromFhir(fhirObject: any) {
+  generateTagsFromFhir(fhirObject: Record<string, any>): string[] {
     const tagObject: any = {};
     if (fhirObject.resourceType) {
       tagObject[tagKeys.resourceType] = fhirObject.resourceType;

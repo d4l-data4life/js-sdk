@@ -152,7 +152,7 @@ export const D4LSDK = {
    * resets the SDK
    */
   reset() {
-    taggingUtils.clientId = null;
+    taggingUtils.reset();
     d4lRequest.reset();
     userService.resetUser();
   },

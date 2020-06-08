@@ -276,4 +276,30 @@ describe('D4L', () => {
       config.environmentConfig = {};
     });
   });
+
+  describe('reset', () => {
+    it('resets the state of the SDK', () => {
+      taggingUtils.partnerId = 'partnerId';
+      d4lRequest.currentUserId = 'currentUserId';
+      d4lRequest.currentUserLanguage = 'currentUserLanguage';
+      d4lRequest.masterAccessToken = 'masterAccessToken';
+      d4lRequest.accessTokens = { userId: 'accessToken' };
+      userService.users = { userId: {} };
+      userService.currentUserId = 'currentUserId';
+      userService.currentAppId = 'partnerId#web';
+      userService.commonKeys = { userId: {} };
+
+      D4LSDK.reset();
+
+      expect(taggingUtils.partnerId).to.equal(null);
+      expect(d4lRequest.currentUserId).to.equal(null);
+      expect(d4lRequest.currentUserLanguage).to.equal(null);
+      expect(d4lRequest.masterAccessToken).to.equal(null);
+      expect(d4lRequest.accessTokens).to.deep.equal({});
+      expect(userService.users).to.deep.equal({});
+      expect(userService.currentUserId).to.equal(null);
+      expect(userService.currentAppId).to.equal(null);
+      expect(userService.commonKeys).to.deep.equal({});
+    });
+  });
 });
