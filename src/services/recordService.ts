@@ -16,6 +16,7 @@ import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
 import userService from './userService';
 import { populateCommonKeyId } from '../lib/cryptoUtils';
+import { DecryptedAppData } from './appDataService';
 
 export interface EncryptedDataKey {
   commonKeyId: string;
@@ -30,7 +31,8 @@ export interface Key {
 
 export interface DecryptedRecord {
   id?: string;
-  fhirResource: fhir.DomainResource;
+  fhirResource?: fhir.DomainResource;
+  data?: any;
   tags?: string[];
   attachmentKey?: EncryptedDataKey;
   customCreationDate?: Date;
@@ -104,11 +106,12 @@ const recordService = {
   async uploadRecord(
     ownerId: string,
     record: DecryptedRecord,
-    uploadRequest: (userId: string, data: object) => Promise<any>
+    uploadRequest: (userId: string, data: object) => Promise<DecryptedRecord | DecryptedAppData>
   ) {
     const owner = await userService.getUser(ownerId);
     const cryptoService = await createCryptoService(ownerId);
-    const [cipherData, dataKey] = await cryptoService.encryptObject(record.fhirResource);
+    const bodyDataToEncrypt = record.fhirResource || record.data;
+    const [cipherData, dataKey] = await cryptoService.encryptObject(bodyDataToEncrypt);
     // update keys step makes certain data and attachment keys
     // are encrypted with the latest common key
     // in particular that they are encrypted with the _same_ common key
@@ -130,10 +133,13 @@ const recordService = {
     });
 
     return {
+      // @ts-ignore
       customCreationDate: result.date,
       fhirResource: record.fhirResource,
+      // @ts-ignore
       id: result.record_id,
       tags: record.tags,
+      // @ts-ignore
       updatedDate: result.createdAt,
     };
   },
@@ -214,9 +220,7 @@ const recordService = {
       .then(convertArrayBufferViewToString)
       // @ts-ignore
       .then(JSON.parse);
-    return Promise.all([recordPromise, tagsPromise]).then(([decryptedResource, decryptedTags]) => {
-      const fhirResource = decryptedResource;
-      fhirResource.id = record.record_id;
+    return Promise.all([recordPromise, tagsPromise]).then(([decryptedRecord, decryptedTags]) => {
       const commonKeyId = populateCommonKeyId(record.common_key_id);
       let attachmentKey = record.attachment_key;
       if (attachmentKey) {
@@ -225,14 +229,27 @@ const recordService = {
           encryptedKey: attachmentKey,
         };
       }
-      return {
-        fhirResource,
+
+      const returnObject = {
         attachmentKey,
         commonKeyId,
         customCreationDate: new Date(record.date),
         id: record.record_id,
         tags: decryptedTags,
         updatedDate: new Date(record.createdAt),
+      };
+
+      if (decryptedTags?.some(tag => tag === taggingUtils.generateAppDataFlagTag())) {
+        return {
+          ...returnObject,
+          data: decryptedRecord,
+        };
+      }
+      const fhirResource = decryptedRecord;
+      fhirResource.id = record.record_id;
+      return {
+        ...returnObject,
+        fhirResource,
       };
     });
   },

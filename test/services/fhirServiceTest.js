@@ -636,9 +636,9 @@ describe('fhirService', () => {
 
   describe('createResource', () => {
     it('should create resource with a valid input', done => {
-      const hcResource = { resourceType: 'CarePlan', id: 'record_id' };
+      const d4lResource = { resourceType: 'CarePlan', id: 'record_id' };
       fhirService
-        .createResource(userId, hcResource)
+        .createResource(userId, d4lResource)
         .then(res => {
           expect(createRecordStub).to.be.calledWith(userId);
           const { args } = createRecordStub.getCall(0);
@@ -670,7 +670,7 @@ describe('fhirService', () => {
 
   describe('updateResource', () => {
     it('should update a resource correctly', done => {
-      const hcResource = Object.assign(
+      const d4lResource = Object.assign(
         {
           id: testVariables.recordId,
         },
@@ -678,12 +678,12 @@ describe('fhirService', () => {
       );
       const customCreationDate = new Date();
       fhirService
-        .updateResource(userId, hcResource, customCreationDate)
+        .updateResource(userId, d4lResource, customCreationDate)
         .then(res => {
           expect(updateRecordStub).to.be.calledOnce;
           expect(updateRecordStub).to.be.calledWith(userId, {
-            id: hcResource.id,
-            fhirResource: hcResource,
+            id: d4lResource.id,
+            fhirResource: d4lResource,
             tags: [],
             attachmentKey: undefined,
             customCreationDate,
@@ -695,10 +695,10 @@ describe('fhirService', () => {
     });
 
     it('should reject a resource without an id', done => {
-      const hcResource = Object.assign({}, fhirResources.carePlan);
-      delete hcResource.id;
+      const d4lResource = Object.assign({}, fhirResources.carePlan);
+      delete d4lResource.id;
       fhirService
-        .updateResource(userId, hcResource)
+        .updateResource(userId, d4lResource)
         .catch(err => {
           expect(err).to.not.be.null;
           expect(updateRecordStub).to.not.be.called;
@@ -748,7 +748,6 @@ describe('fhirService', () => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: ['resourcetype=documentreference'],
           });
-          expect(parameters.resourceType).to.equal('documentReference');
           done();
         })
         .catch(done);

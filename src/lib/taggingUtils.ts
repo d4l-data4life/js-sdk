@@ -10,6 +10,7 @@ const ANNOTATION_LABEL = 'custom';
 // all the values will be lowercased by the API
 export const tagKeys: { [key: string]: string } = {
   fhirVersion: 'fhirVersion',
+  flag: 'flag',
   partner: 'partner',
   resourceType: 'resourceType',
   updatedByPartner: 'updatedByPartner',
@@ -26,7 +27,7 @@ const taggingUtils = {
     this.partnerId = partnerId;
   },
 
-  getPartnertId(): string {
+  getPartnerId(): string {
     if (!this.partnerId) {
       throw new SetupError(NOT_SETUP);
     }
@@ -34,11 +35,15 @@ const taggingUtils = {
   },
 
   generateCreationTag(): string {
-    return this.buildTag(tagKeys.partner, this.getPartnertId());
+    return this.buildTag(tagKeys.partner, this.getPartnerId());
   },
 
   generateUpdateTag(): string {
-    return this.buildTag(tagKeys.updatedByPartner, this.getPartnertId());
+    return this.buildTag(tagKeys.updatedByPartner, this.getPartnerId());
+  },
+
+  generateAppDataFlagTag(): string {
+    return this.buildTag(tagKeys.flag, 'appdata');
   },
 
   generateFhirVersionTag(): string {
