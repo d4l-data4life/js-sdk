@@ -16,6 +16,11 @@ export const tagKeys: { [key: string]: string } = {
   updatedByPartner: 'updatedByPartner',
 };
 
+// all the values will be lowercased by the API
+export const flagKeys: { [key: string]: string } = {
+  appData: 'appData',
+};
+
 const taggingUtils = {
   partnerId: null,
 
@@ -43,7 +48,7 @@ const taggingUtils = {
   },
 
   generateAppDataFlagTag(): string {
-    return this.buildTag(tagKeys.flag, 'appdata');
+    return this.buildTag(tagKeys.flag, flagKeys.appData);
   },
 
   generateFhirVersionTag(): string {

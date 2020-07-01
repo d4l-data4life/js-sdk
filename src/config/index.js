@@ -24,7 +24,7 @@ const config = {
   userUrl(ownerId) {
     return `${this.apiUrl()}/users/${ownerId}`;
   },
-  rateLimit: 100, // 200, but divide by 2 to account for pre-flight requests
+  rateLimit: 50, // 100, but divide by 2 to account for pre-flight requests
   userInfoPollInterval: 5 * 60, // check for new common keys every 5 minutes
 };
 
