@@ -73,9 +73,18 @@ interface IRecord {
   updatedDate?: Date;
   partner?: string;
 }
+
+interface AppData {
+  id?: string;
+  data: any;
+  annotations?: string[];
+  customCreationDate?: Date;
+  updatedDate?: Date;
+  partner?: string;
+}
 interface IFetchResponse {
   totalCount: number;
-  records: IRecord[];
+  records: IRecord[] | AppData[];
 }
 
 type IAttachment = {
