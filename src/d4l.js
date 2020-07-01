@@ -37,6 +37,7 @@ import {
 import { throttle } from './lib/requestUtils';
 import Attachment from './lib/models/fhir/Attachment';
 import ValidationError from './lib/errors/ValidationError';
+import appDataService from './services/appDataService';
 
 export const D4LSDK = {
   getCurrentUserId: userService.getCurrentUserId.bind(userService),
@@ -44,6 +45,12 @@ export const D4LSDK = {
   grantPermission: userService.grantPermission.bind(userService),
   getReceivedPermissions: userService.getReceivedPermissions.bind(userService),
   setCurrentUserLanguage: userService.setCurrentUserLanguage.bind(userService),
+
+  createAppData: appDataService.createAppData.bind(appDataService),
+  fetchAppData: appDataService.fetchAppData.bind(appDataService),
+  updateAppData: appDataService.updateAppData.bind(appDataService),
+  deleteAppData: appDataService.deleteAppData.bind(appDataService),
+  fetchAllAppData: appDataService.fetchAllAppData.bind(appDataService),
 
   createResource: fhirService.createResource.bind(fhirService),
   fetchResource: fhirService.fetchResource.bind(fhirService),
