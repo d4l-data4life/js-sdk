@@ -49,6 +49,15 @@ module.exports = config => {
                 },
               ],
             ],
+            ignore: [
+              'fhir/documentreference.js',
+              'fhir/practitioner.js',
+              'fhir/questionnaireresponse.js',
+              'fhir/patient.js',
+              'fhir/observation.js',
+              'fhir/diagnosticreport.js',
+              'fhir/questionnaire.js',
+            ],
             extensions: ['.ts', '.js'],
             plugins: ['dynamic-import-node', '@babel/plugin-proposal-object-rest-spread', 'lodash'],
             env: {

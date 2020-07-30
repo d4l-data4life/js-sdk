@@ -18,7 +18,7 @@ Depending on the complexity of your resource, you will need additional types tha
 
 ## Compile the schema into a javascript function
 
-On the terminal inside the `fhir`directory, run
+On the terminal inside the `fhir` directory, run
 
 ```npx ajv compile -s fhir-careplan.schema.v301.json -0 careplan.js```
 
@@ -32,7 +32,7 @@ Two small modifications are required for the integration of the javascript file.
 
 1. On the last line (it starts with `module.exports`), replace the content with `export default validate;`.
 
-2. Find the line `message: 'should be equal to constant'`. Exactly ten lines above, set the result of `var schema 1 =` to your resource type (such as CarePlan) instead of the long JSON path.
+2. Find the line `message: 'should be equal to constant'`. Exactly ten lines above, set the result of `var schema1 =` to your resource type (such as CarePlan) instead of the long JSON path.
 
 3. Delete the property validate.schema and all its JSON structure. They are not actually needed for the validation.
 
