@@ -2,11 +2,13 @@ module.exports = config => {
   const configuration = {
     // list of files / patterns to load in the browser
     files: [
+      { pattern: 'test/lib/fileValidator/fileSamples/*', included: false, served: true },
+      { pattern: 'test/lib/resources/*', included: false, served: true },
+      { pattern: 'fhir/*', included: false, served: true },
       'test/testUtils/globalResources.js',
       'src/**/*.js',
       'src/**/*.ts',
       'test/**/*.js',
-      { pattern: 'test/lib/fileValidator/fileSamples/*', included: false, served: true },
     ],
 
     preprocessors: {
@@ -14,6 +16,7 @@ module.exports = config => {
       'src/**/*.ts': ['browserify'],
       'test/**/*.js': ['browserify'],
     },
+
     client: {
       node: config.node,
     },

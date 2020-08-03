@@ -620,7 +620,7 @@ describe('fhirService', () => {
         .then(result => {
           expect(downloadRecordStub).to.be.calledWith(userId, recordId);
           expect(downloadRecordStub).to.be.calledOnce;
-          expect(result).to.be.defined;
+          expect(result).to.exist;
         })
         .then(done)
         .catch(done);
