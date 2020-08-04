@@ -1,12 +1,13 @@
 {
   "compilerOptions": {
-    "allowJs": true,
+    // "allowJs": true,
     "sourceMap": true,
     "outDir": "tsDist",
     "module": "esnext",
     "target": "es6",
     "allowSyntheticDefaultImports": true,
-    "baseUrl": "./src"
+    "baseUrl": "./src",
+    "strict": false
   },
   "exclude": [
     "node_modules",
