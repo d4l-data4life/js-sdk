@@ -33,4 +33,5 @@ export const SUPPORTED_RESOURCES = [
   'Organization',
   'Questionnaire',
   'QuestionnaireResponse',
+  'ResearchSubject',
 ];
