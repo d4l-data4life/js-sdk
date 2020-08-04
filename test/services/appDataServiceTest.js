@@ -76,7 +76,7 @@ describe('appDataService', () => {
         .then(result => {
           expect(downloadRecordStub).to.be.calledWith(userId, appDataId);
           expect(downloadRecordStub).to.be.calledOnce;
-          expect(result).to.be.defined;
+          expect(result).to.exist;
         })
         .then(done)
         .catch(done);
@@ -128,7 +128,7 @@ describe('appDataService', () => {
         .then(res => {
           expect(downloadRecordStub).to.be.calledWith(userId, appDataId);
           expect(downloadRecordStub).to.be.calledOnce;
-          expect(res).to.be.defined;
+          expect(res).to.exist;
           done();
         })
         .catch(done);
