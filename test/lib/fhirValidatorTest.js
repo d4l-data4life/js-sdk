@@ -133,6 +133,8 @@ import observationExample5MinuteApgarScore from './resources/observation-example
 import observationExample2MinuteApgarScore from './resources/observation-example-2minute-apgar-score.json';
 import observationExample1MinuteApgarScore from './resources/observation-example-1minute-apgar-score.json';
 
+import researchsubjectExample from './resources/researchsubject-example.json';
+
 chai.use(sinonChai);
 
 const { expect } = chai;
@@ -379,6 +381,7 @@ describe('fhir validator', () => {
       { observationExample2MinuteApgarScore },
       { observationExample1MinuteApgarScore },
     ],
+    ResearchSubject: [{ researchsubjectExample }],
   };
 
   // eslint-disable-next-line no-restricted-syntax

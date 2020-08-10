@@ -74,6 +74,13 @@ const fhirValidator = {
       });
     }
 
+    if (resourceType === 'ResearchSubject') {
+      returnPromise = import('../../fhir/researchsubject').then(bundle => {
+        this.validator[resourceType] = bundle.default;
+        return this.validator[resourceType];
+      });
+    }
+
     /*
      * This is, for now, a deliberately simplified version that just deals with our own
      * "Organization" as attached to Documents by the native apps.

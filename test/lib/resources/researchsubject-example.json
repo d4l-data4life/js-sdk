@@ -1,0 +1,16 @@
+{
+  "resourceType": "ResearchSubject",
+  "status": "enrolled",
+  "individual" : { 
+    "identifier": {
+      "system": "http://fhir.data4life.care/stu3/CodeSystem/some-identifier",
+      "value": "HdCUXf9ZjrJD+T79JcA6+ke/sRi1KzXnNuCM06r5T8PhxCjNbcCWbTKD5Dhm9RuHg1PwY4TgjS6F3JbK+ulAl08rhqGuhzPp16oMlAByHElORnUKaijK23OmA0QEiiJjsF8KrLRLwK4RILHKELB1r2E82gvSnio9fXdPakeOrIMVZ69DTrqne1SJClHeW/R4ZSZUzpAWk8M2qU67pvCVc/8dwrhsWullsCjzQqmJsuu7vusjiRihpBIEa6tQK1+V767h1hYBEgcqDN3pQIxADbkWl0TF62+t2gqLdLS+f9QcnOInsb32QPwEuW1ZhpAPekVDKMYgJSbnZF0v4B4O5w=="
+    }
+  }, 
+  "study": {
+    "identifier" : {
+      "system": "http://fhir.data4life.care/stu3/CodeSystem/research-study-id",
+      "value" : "some-identifier"
+    }
+  }
+}
