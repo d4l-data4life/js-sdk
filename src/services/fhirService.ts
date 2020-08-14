@@ -612,7 +612,9 @@ const fhirService = {
   countResources(ownerId: string, params: IParams = {}): Promise<number> {
     const parameters = prepareSearchParameters({
       ...params,
-      exclude_tags: [...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()],
+      exclude_tags: [
+        ...new Set([...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()]),
+      ],
     });
     return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
   },
@@ -620,9 +622,10 @@ const fhirService = {
   fetchResources(ownerId: string, params: IParams = {}): Promise<IFetchResponse> {
     const parameters = prepareSearchParameters({
       ...params,
-      exclude_tags: [...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()],
+      exclude_tags: [
+        ...new Set([...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()]),
+      ],
     });
-
     return recordService.searchRecords(ownerId, parameters).then(result => ({
       records: result.records.map(convertToExposedRecord),
       totalCount: result.totalCount,
