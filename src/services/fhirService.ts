@@ -54,6 +54,7 @@ interface IParams {
   start_date?: string;
   end_date?: string;
   tags?: string[];
+  exclude_tags?: string[];
   annotations?: string[];
   resourceType?: string;
   partner?: string;
@@ -100,6 +101,7 @@ const SUPPORTED_PARAMS = [
   'start_date',
   'end_date',
   'tags',
+  'exclude_tags',
   'annotations',
   'resourceType',
   'partner',
@@ -608,13 +610,18 @@ const fhirService = {
   },
 
   countResources(ownerId: string, params: IParams = {}): Promise<number> {
-    return recordService
-      .searchRecords(ownerId, prepareSearchParameters(params), true)
-      .then(result => result.totalCount);
+    const parameters = prepareSearchParameters({
+      ...params,
+      exclude_tags: [...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()],
+    });
+    return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
   },
 
   fetchResources(ownerId: string, params: IParams = {}): Promise<IFetchResponse> {
-    const parameters = prepareSearchParameters(params);
+    const parameters = prepareSearchParameters({
+      ...params,
+      exclude_tags: [...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()],
+    });
 
     return recordService.searchRecords(ownerId, parameters).then(result => ({
       records: result.records.map(convertToExposedRecord),
