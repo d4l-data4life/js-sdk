@@ -575,7 +575,8 @@ Lets you specify options for the `fetchResource` method.
 | end_date | Date | (optional) Latest date for which to return records |
 | resourceType | String | (optional) Type of requested FHIR resources |
 | partner | String | (optional) ID of the partner the records where uploaded from |
-| annotations | String[] | (optional)
+| annotations | String[] | (optional) Custom annotations to filter by
+| exclude_tags | String[] | (optional) Don't fetch resources with given tags
 
 #### Resolves
 | Property | Type | Description |
