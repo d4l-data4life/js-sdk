@@ -740,6 +740,19 @@ describe('fhirService', () => {
         .catch(done);
     });
 
+    it('should add the exclude_tags parameter', done => {
+      fhirService
+        .fetchResources(testVariables.userId, {})
+        .then(() => {
+          expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
+            exclude_tags: ['flag=appdata'],
+            tags: [],
+          });
+          done();
+        })
+        .catch(done);
+    });
+
     it('should add the resourceType parameter as a tag', done => {
       const parameters = { resourceType: 'documentReference' };
       fhirService
@@ -747,6 +760,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: ['resourcetype=documentreference'],
+            exclude_tags: ['flag=appdata'],
           });
           done();
         })
@@ -760,6 +774,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: ['partner=glumpany'],
+            exclude_tags: ['flag=appdata'],
           });
           expect(parameters.partner).to.equal('glumpany');
           done();
@@ -787,7 +802,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(
             testVariables.userId,
-            { tags: ['resourcetype=documentreference'] },
+            { tags: ['resourcetype=documentreference'], exclude_tags: ['flag=appdata'] },
             true
           );
           done();
@@ -802,7 +817,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(
             testVariables.userId,
-            { tags: ['partner=glumpany'] },
+            { tags: ['partner=glumpany'], exclude_tags: ['flag=appdata'] },
             true
           );
           expect(parameters.partner).to.equal('glumpany');

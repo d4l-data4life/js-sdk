@@ -1,4 +1,4 @@
-import taggingUtils, { tagKeys } from '../lib/taggingUtils';
+import taggingUtils, { tagKeys, flagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import recordService from './recordService';
 import { prepareSearchParameters } from './fhirService';
@@ -24,6 +24,15 @@ interface IFetchResponse {
   totalCount: number;
   records: IRecord[];
 }
+
+const convertToExposedAppData = (decryptedAppData: DecryptedAppData) => ({
+  annotations: taggingUtils.getAnnotations(decryptedAppData.tags),
+  customCreationDate: decryptedAppData.customCreationDate,
+  data: decryptedAppData.data,
+  id: decryptedAppData.id,
+  partner: taggingUtils.getTagValueFromList(decryptedAppData.tags, tagKeys.partner),
+  updatedDate: decryptedAppData.updatedDate,
+});
 
 const appDataService = {
   createAppData(
@@ -90,7 +99,7 @@ const appDataService = {
 
   fetchAllAppData(ownerId: string): Promise<IFetchResponse> {
     const parameters = prepareSearchParameters({
-      tags: [`${tagKeys.flag}=appdata`],
+      tags: [taggingUtils.generateAppDataFlagTag()],
     });
 
     return recordService.searchRecords(ownerId, parameters).then(result => ({
@@ -99,14 +108,5 @@ const appDataService = {
     }));
   },
 };
-
-const convertToExposedAppData = (decryptedAppData: DecryptedAppData) => ({
-  annotations: taggingUtils.getAnnotations(decryptedAppData.tags),
-  customCreationDate: decryptedAppData.customCreationDate,
-  data: decryptedAppData.data,
-  id: decryptedAppData.id,
-  partner: taggingUtils.getTagValueFromList(decryptedAppData.tags, tagKeys.partner),
-  updatedDate: decryptedAppData.updatedDate,
-});
 
 export default appDataService;
