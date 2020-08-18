@@ -79,6 +79,40 @@ describe('prepareSearchParameters', () => {
     });
   });
 
+  it('correctly prepares parameters with exclude_tags', () => {
+    const preparedParams = prepareSearchParameters({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['superman'],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['custom=superman'],
+    });
+  });
+
+  it('correctly prepares parameters with exclude_flags', () => {
+    const preparedParams = prepareSearchParameters({
+      tags: ['superhero-origin-story'],
+      exclude_flags: [testVariables.appDataFlag],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story'],
+      exclude_tags: [testVariables.appDataFlag],
+    });
+  });
+
+  it('correctly prepares parameters with exclude_tags and exclude_flags', () => {
+    const preparedParams = prepareSearchParameters({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['superman'],
+      exclude_flags: [testVariables.appDataFlag],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+    });
+  });
+
   it('throws when an unsupported parameter is passed', () => {
     expect(() => prepareSearchParameters({ illegalTag: 'suchIllegalMuchEvil' })).to.throw();
   });
