@@ -389,8 +389,10 @@ export const prepareSearchParameters = (params: IParams) => {
   }
 
   if (params.exclude_flags) {
-    parameters.exclude_tags = [...new Set([...(params.exclude_tags || []), ...params.exclude_flags])];
-    delete parameters.exclude_flags
+    parameters.exclude_tags = [
+      ...new Set([...(params.exclude_tags || []), ...params.exclude_flags]),
+    ];
+    delete parameters.exclude_flags;
   }
 
   return parameters;
