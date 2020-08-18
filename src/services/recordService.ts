@@ -46,6 +46,7 @@ export interface QueryParams {
   start_date?: string;
   end_date?: string;
   tags?: string[];
+  exclude_tags?: string[];
 }
 
 const recordService = {
@@ -205,16 +206,19 @@ const recordService = {
         // @ts-ignore
         .then(userObject => {
           user = userObject;
-
-          if (params?.tags?.length) {
-            return Promise.all(params.tags.map(tag => symEncryptString(user.tek, tag))).then(
-              tags => ({
-                ...params,
-                tags,
-              })
-            );
-          }
-          return params;
+          const encryptedTagsPromise = params?.tags?.length
+            ? Promise.all(params.tags.map(tag => symEncryptString(user.tek, tag)))
+            : Promise.resolve([]);
+          const excludeTagsPromise = params?.exclude_tags?.length
+            ? Promise.all(params.exclude_tags.map(tag => symEncryptString(user.tek, tag)))
+            : Promise.resolve([]);
+          return Promise.all([encryptedTagsPromise, excludeTagsPromise]).then(
+            ([tags, excludeTags]) => ({
+              ...params,
+              tags,
+              exclude_tags: excludeTags,
+            })
+          );
         })
         .then(queryParams =>
           countOnly

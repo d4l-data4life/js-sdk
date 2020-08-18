@@ -55,6 +55,7 @@ interface IParams {
   end_date?: string;
   tags?: string[];
   exclude_tags?: string[];
+  exclude_flags?: string[];
   annotations?: string[];
   resourceType?: string;
   partner?: string;
@@ -102,6 +103,7 @@ const SUPPORTED_PARAMS = [
   'end_date',
   'tags',
   'exclude_tags',
+  'exclude_flags',
   'annotations',
   'resourceType',
   'partner',
@@ -381,6 +383,18 @@ export const prepareSearchParameters = (params: IParams) => {
     delete parameters.annotations;
   }
 
+  if (params.exclude_tags) {
+    const excludeTags = taggingUtils.generateCustomTags(params.exclude_tags);
+    parameters.exclude_tags = excludeTags;
+  }
+
+  if (params.exclude_flags) {
+    parameters.exclude_tags = [
+      ...new Set([...(parameters.exclude_tags || []), ...params.exclude_flags]),
+    ];
+    delete parameters.exclude_flags;
+  }
+
   return parameters;
 };
 
@@ -612,9 +626,7 @@ const fhirService = {
   countResources(ownerId: string, params: IParams = {}): Promise<number> {
     const parameters = prepareSearchParameters({
       ...params,
-      exclude_tags: [
-        ...new Set([...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()]),
-      ],
+      exclude_flags: [taggingUtils.generateAppDataFlagTag()],
     });
     return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
   },
@@ -622,9 +634,7 @@ const fhirService = {
   fetchResources(ownerId: string, params: IParams = {}): Promise<IFetchResponse> {
     const parameters = prepareSearchParameters({
       ...params,
-      exclude_tags: [
-        ...new Set([...(params.exclude_tags || []), taggingUtils.generateAppDataFlagTag()]),
-      ],
+      exclude_flags: [taggingUtils.generateAppDataFlagTag()],
     });
     return recordService.searchRecords(ownerId, parameters).then(result => ({
       records: result.records.map(convertToExposedRecord),

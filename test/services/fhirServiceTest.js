@@ -79,6 +79,40 @@ describe('prepareSearchParameters', () => {
     });
   });
 
+  it('correctly prepares parameters with exclude_tags', () => {
+    const preparedParams = prepareSearchParameters({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['superman'],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['custom=superman'],
+    });
+  });
+
+  it('correctly prepares parameters with exclude_flags', () => {
+    const preparedParams = prepareSearchParameters({
+      tags: ['superhero-origin-story'],
+      exclude_flags: [testVariables.appDataFlag],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story'],
+      exclude_tags: [testVariables.appDataFlag],
+    });
+  });
+
+  it('correctly prepares parameters with exclude_tags and exclude_flags', () => {
+    const preparedParams = prepareSearchParameters({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['superman'],
+      exclude_flags: [testVariables.appDataFlag],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+    });
+  });
+
   it('throws when an unsupported parameter is passed', () => {
     expect(() => prepareSearchParameters({ illegalTag: 'suchIllegalMuchEvil' })).to.throw();
   });
@@ -745,7 +779,7 @@ describe('fhirService', () => {
         .fetchResources(testVariables.userId, {})
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
-            exclude_tags: ['flag=appdata'],
+            exclude_tags: [testVariables.appDataFlag],
             tags: [],
           });
           done();
@@ -760,7 +794,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: ['resourcetype=documentreference'],
-            exclude_tags: ['flag=appdata'],
+            exclude_tags: [testVariables.appDataFlag],
           });
           done();
         })
@@ -774,7 +808,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: ['partner=glumpany'],
-            exclude_tags: ['flag=appdata'],
+            exclude_tags: [testVariables.appDataFlag],
           });
           expect(parameters.partner).to.equal('glumpany');
           done();
@@ -802,7 +836,10 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(
             testVariables.userId,
-            { tags: ['resourcetype=documentreference'], exclude_tags: ['flag=appdata'] },
+            {
+              tags: ['resourcetype=documentreference'],
+              exclude_tags: [testVariables.appDataFlag],
+            },
             true
           );
           done();
@@ -817,7 +854,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(
             testVariables.userId,
-            { tags: ['partner=glumpany'], exclude_tags: ['flag=appdata'] },
+            { tags: ['partner=glumpany'], exclude_tags: [testVariables.appDataFlag] },
             true
           );
           expect(parameters.partner).to.equal('glumpany');

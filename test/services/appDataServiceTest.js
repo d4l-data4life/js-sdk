@@ -91,7 +91,7 @@ describe('appDataService', () => {
         .then(res => {
           expect(uploadRecordStub).to.be.calledWith(userId);
           const { args: uploadRecordArgs } = uploadRecordStub.getCall(0);
-          expect(JSON.stringify(uploadRecordArgs)).to.contain('flag=appdata');
+          expect(JSON.stringify(uploadRecordArgs)).to.contain(testVariables.appDataFlag);
           expect(uploadRecordStub).to.be.calledOnce;
           expect(res).to.deep.equal(appData);
           done();
@@ -111,7 +111,7 @@ describe('appDataService', () => {
           expect(updateRecordStub).to.be.calledWith(userId, {
             id: 'id',
             data: appDataEntity,
-            tags: ['flag=appdata'],
+            tags: [testVariables.appDataFlag],
             customCreationDate,
           });
           expect(res).to.deep.equal(appData);
@@ -141,7 +141,7 @@ describe('appDataService', () => {
         .fetchAllAppData(userId)
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
-            tags: ['flag=appdata'],
+            tags: [testVariables.appDataFlag],
           });
           done();
         })
