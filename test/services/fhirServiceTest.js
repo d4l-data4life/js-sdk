@@ -745,7 +745,7 @@ describe('fhirService', () => {
         .fetchResources(testVariables.userId, {})
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
-            exclude_tags: [testVariables.customAppDataFlag],
+            exclude_tags: [testVariables.appDataFlag],
             tags: [],
           });
           done();
@@ -760,7 +760,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: ['resourcetype=documentreference'],
-            exclude_tags: [testVariables.customAppDataFlag],
+            exclude_tags: [testVariables.appDataFlag],
           });
           done();
         })
@@ -774,7 +774,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: ['partner=glumpany'],
-            exclude_tags: [testVariables.customAppDataFlag],
+            exclude_tags: [testVariables.appDataFlag],
           });
           expect(parameters.partner).to.equal('glumpany');
           done();
@@ -804,7 +804,7 @@ describe('fhirService', () => {
             testVariables.userId,
             {
               tags: ['resourcetype=documentreference'],
-              exclude_tags: [testVariables.customAppDataFlag],
+              exclude_tags: [testVariables.appDataFlag],
             },
             true
           );
@@ -820,7 +820,7 @@ describe('fhirService', () => {
         .then(() => {
           expect(searchRecordsStub).to.be.calledWith(
             testVariables.userId,
-            { tags: ['partner=glumpany'], exclude_tags: [testVariables.customAppDataFlag] },
+            { tags: ['partner=glumpany'], exclude_tags: [testVariables.appDataFlag] },
             true
           );
           expect(parameters.partner).to.equal('glumpany');

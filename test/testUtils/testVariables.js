@@ -23,7 +23,7 @@ const testVariables = {
   updatedByPartnerTag: 'updatedbypartner=2',
   encodedTag: 'client=ann%5Fotation',
   customTag: 'custom=annotation',
-  customAppDataFlag: 'custom=flag%3Dappdata',
+  appDataFlag: 'flag=appdata',
   encryptedTag: 'encrypted_tag',
   tek: 'tag_encryption_key',
   encryptedTek: 'encrypted_tag_encryption_key',
