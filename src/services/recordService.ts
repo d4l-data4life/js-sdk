@@ -209,14 +209,14 @@ const recordService = {
           const encryptedTagsPromise = params?.tags?.length
             ? Promise.all(params.tags.map(tag => symEncryptString(user.tek, tag)))
             : Promise.resolve([]);
-          const encryptedExceptTagsPromise = params?.exclude_tags?.length
+          const excludeTagsPromise = params?.exclude_tags?.length
             ? Promise.all(params.exclude_tags.map(tag => symEncryptString(user.tek, tag)))
             : Promise.resolve([]);
-          return Promise.all([encryptedTagsPromise, encryptedExceptTagsPromise]).then(
-            ([tags, exclude_tags]) => ({
+          return Promise.all([encryptedTagsPromise, excludeTagsPromise]).then(
+            ([tags, excludeTags]) => ({
               ...params,
               tags,
-              exclude_tags,
+              exclude_tags: excludeTags,
             })
           );
         })

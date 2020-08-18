@@ -324,6 +324,7 @@ describe('services/recordService', () => {
         offset: 20,
         start_date: '2017-06-06',
         end_date: '2017-08-08',
+        exclude_tags: [testVariables.customAppDataFlag],
         tags: [testVariables.tag, testVariables.secondTag],
       };
 
@@ -332,6 +333,7 @@ describe('services/recordService', () => {
         offset: 20,
         start_date: '2017-06-06',
         end_date: '2017-08-08',
+        exclude_tags: [encryptionResources.encryptedString],
         tags: [encryptionResources.encryptedString, encryptionResources.encryptedString],
       };
 
@@ -370,6 +372,7 @@ describe('services/recordService', () => {
       };
 
       const expectedParamsForRoute = {
+        exclude_tags: [],
         tags: [encryptionResources.encryptedString],
       };
 

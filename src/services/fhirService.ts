@@ -382,8 +382,8 @@ export const prepareSearchParameters = (params: IParams) => {
   }
 
   if (params.exclude_tags) {
-    const excludeTags = taggingUtils.generateCustomTags(params.exclude_tags)
-    parameters.exclude_tags = excludeTags
+    const excludeTags = taggingUtils.generateCustomTags(params.exclude_tags);
+    parameters.exclude_tags = excludeTags;
   }
 
   return parameters;
