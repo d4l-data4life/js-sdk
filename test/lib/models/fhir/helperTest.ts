@@ -71,6 +71,7 @@ describe('models/FHIR/helper', () => {
     });
 
     it('omits empty objects and arrays from the codeable concept', () => {
+      // @ts-ignore
       const codeableConcept = createCodeableConcept([], 'codeValue', {});
 
       expect(
@@ -85,6 +86,7 @@ describe('models/FHIR/helper', () => {
     });
 
     it('does omit NaN values from the codeable concept', () => {
+      // @ts-ignore
       const codeableConcept = createCodeableConcept('displayValue', NaN, 'systemValue');
 
       expect(
@@ -115,6 +117,7 @@ describe('models/FHIR/helper', () => {
     });
 
     it('does omit false from the codeable concept', () => {
+      // @ts-ignore
       const codeableConcept = createCodeableConcept('displayValue', false, 'systemValue');
 
       expect(
@@ -193,6 +196,7 @@ describe('models/FHIR/helper', () => {
       const foundResource = getResource({ reference: '#pat-123' }, resources);
 
       expect(foundResource.resourceType).to.equal('Patient');
+      // @ts-ignore
       expect(foundResource.deceasedBoolean).to.equal(false);
       expect(foundResource.id).to.equal('pat-123');
     });

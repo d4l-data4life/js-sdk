@@ -3,6 +3,7 @@ import {
   symDecryptObject,
   asymEncryptString,
   symEncryptString,
+  // @ts-ignore
 } from 'js-crypto';
 
 import userRoutes from '../routes/userRoutes';
@@ -10,6 +11,23 @@ import d4lRequest from '../lib/d4lRequest';
 import taggingUtils from '../lib/taggingUtils';
 import SetUpError, { NOT_SETUP } from '../lib/errors/SetupError';
 import { populateCommonKeyId } from '../lib/cryptoUtils';
+
+export interface User {
+  id: string;
+  commonKey: Object;
+  commonKeyId: string;
+  tek: string;
+}
+
+export interface Permission {
+  id: string;
+  appId: string;
+  owner: string;
+  grantee: string;
+  granteePublicKey: string;
+  commonKey: Object;
+  scope: string[];
+}
 
 const userService = {
   currentUserId: null,
@@ -19,7 +37,7 @@ const userService = {
   privateKey: null, // WebCrypto Object
   userPollAction: null,
 
-  resetUser() {
+  resetUser(): void {
     this.users = {};
     this.currentUserId = null;
     this.currentAppId = null;
@@ -38,26 +56,26 @@ const userService = {
    *
    * @param {Object} privateKey - an unexportable CryptoKey.
    */
-  setPrivateKey(privateKey) {
+  setPrivateKey(privateKey): void {
     this.privateKey = privateKey;
   },
 
-  getCurrentUserId() {
+  getCurrentUserId(): string {
     if (!this.currentUserId) {
       throw new SetUpError(NOT_SETUP);
     }
     return this.currentUserId;
   },
 
-  getCurrentAppId() {
+  getCurrentAppId(): string {
     return this.currentAppId;
   },
 
-  setCurrentUserLanguage(languageCode) {
+  setCurrentUserLanguage(languageCode: string): void {
     d4lRequest.currentUserLanguage = languageCode ? String(languageCode).slice(0, 2) : null;
   },
 
-  isCurrentUser(userId) {
+  isCurrentUser(userId: string): boolean {
     return userId === this.currentUserId;
   },
 
@@ -68,17 +86,17 @@ const userService = {
    *  @returns {Promise} Resolves to a userObject that contains userId,
    *      commonKey and tagEncryptionKey
    */
-  getUser(userId = this.currentUserId) {
+  getUser(userId: string = this.currentUserId): Promise<User> {
     return this.users[userId] ? Promise.resolve(this.users[userId]) : this.pullUser(userId);
   },
 
   /**
-   *  @param {String} userId - userId of the user whos data is requested.
+   *  @param {String} userId - userId of the user whose data is requested.
    *      Loggedin user by default.
    *  @returns {Promise} Resolves to a userObject that contains userId,
    *      commonKey and tagEncryptionKey
    */
-  pullUser(userId) {
+  pullUser(userId?: string): Promise<User> {
     // Does not work, if this.privateKey is not set.
     if (!this.privateKey) {
       return Promise.reject(new SetUpError(NOT_SETUP));
@@ -129,7 +147,7 @@ const userService = {
    *  @param {String} keyId - ID of key to retrieve
    *  @returns {Promise} Resolves to the (decrypted) common key
    */
-  getCommonKey(userId, keyId) {
+  getCommonKey(userId: string, keyId: string): Promise<Object> {
     if (!this.commonKeys[userId]) {
       this.commonKeys[userId] = {};
     }
@@ -162,9 +180,9 @@ const userService = {
    *
    * TODO: decide on which data should be exposed
    */
-  getReceivedPermissions() {
+  getReceivedPermissions(): Promise<Permission[]> {
     return new Promise(resolve => resolve(this.getCurrentUserId()))
-      .then(currentUserId => userRoutes.getReceivedPermissions(currentUserId))
+      .then((currentUserId: string) => userRoutes.getReceivedPermissions(currentUserId))
       .then(permissions =>
         permissions.map(
           ({
@@ -193,7 +211,7 @@ const userService = {
    * @param {Array} annotations - the annotations that shall be shared.
    * @returns {Promise}
    */
-  grantPermission(appId, annotations = []) {
+  grantPermission(appId: string, annotations: string[] = []): Promise<void> {
     const scope = ['rec:r', 'rec:w', 'attachment:r', 'attachment:w', 'user:r', 'user:w', 'user:q'];
     let ownerId;
     let granteeId;
@@ -228,7 +246,7 @@ const userService = {
    * Starts a regular, recurring call to /userinfo to get common key updates
    * @param {number} interval - interval between calls in seconds
    */
-  beginUserInfoPoll(interval) {
+  beginUserInfoPoll(interval: number): void {
     if (this.userPollAction) {
       clearInterval(this.userPollAction);
     }

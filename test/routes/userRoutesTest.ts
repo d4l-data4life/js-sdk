@@ -1,7 +1,7 @@
 /* eslint-env mocha */
 /* eslint-disable no-unused-expressions */
 /* eslint-disable max-nested-callbacks */
-import config from 'config';
+import config from '../../src/config/index';
 import 'babel-polyfill';
 import chai from 'chai';
 import sinon from 'sinon';
@@ -37,6 +37,7 @@ describe('userRoutes', () => {
 
   it('getUserDetails passes', done => {
     requestStub
+      // @ts-ignore
       .withArgs('GET', `${config.environmentConfig.api}/users/test`, {
         authorize: true,
       })
@@ -53,6 +54,7 @@ describe('userRoutes', () => {
 
   it('fetchUserInfo passes', done => {
     requestStub
+      // @ts-ignore
       .withArgs('GET', `${config.environmentConfig.api}/userinfo`, {
         authorize: true,
         ownerId: testVariables.userId,
@@ -72,6 +74,7 @@ describe('userRoutes', () => {
     const { userId } = testVariables;
 
     requestStub
+      // @ts-ignore
       .withArgs('PUT', `${config.environmentConfig.api}/users/${userId}`, {
         authorize: true,
         body: { name: 'fakeName' },
@@ -90,6 +93,7 @@ describe('userRoutes', () => {
   it('updateUser returns error on request failure', done => {
     // eslint-disable-next-line prefer-promise-reject-errors
     requestStub.returns(Promise.reject('error'));
+    // @ts-ignore
     userRoutes.updateUser({ name: 'fakeName' }).catch(err => {
       expect(err).to.equal('error');
       expect(requestStub).to.be.calledOnce;
@@ -103,6 +107,7 @@ describe('userRoutes', () => {
       const { userId } = testVariables;
 
       requestStub
+        // @ts-ignore
         .withArgs('GET', `${config.environmentConfig.api}/users/${userId}/permissions`, {
           authorize: true,
         })
@@ -131,6 +136,7 @@ describe('userRoutes', () => {
       };
 
       requestStub
+        // @ts-ignore
         .withArgs('POST', `${config.environmentConfig.api}/users/${userId}/permissions`, {
           authorize: true,
           body,
@@ -160,6 +166,7 @@ describe('userRoutes', () => {
   describe('getCAP', () => {
     it('passes when request resolves', done => {
       requestStub
+        // @ts-ignore
         .withArgs('GET', `${config.environmentConfig.api}/permissions`, {
           authorize: true,
           query: { app_id: testVariables.appId },

@@ -1,6 +1,6 @@
 {
   "name": "@d4l/js-sdk",
-  "version": "2.5.2",
+  "version": "2.6.0",
   "D4L": {
     "data_model_version": 1
   },
@@ -14,8 +14,7 @@
     "watch": "npm run build -- --watch",
     "watch:crypto": "npm run build:crypto -- --watch",
     "eslint": "eslint src test",
-    "tslint": "tslint src/**/*.ts",
-    "lint": "npm run tslint && npm run eslint",
+    "lint": "npm run eslint",
     "karma:web": "karma start karma.conf.js --node false",
     "karma:prod:web": "karma start karma.conf.js --single-run --node false",
     "test": "npm run lint && npm run build && npm run karma:prod:web",
@@ -94,10 +93,6 @@
     "sinon": "^7.1.1",
     "sinon-chai": "^3.5.0",
     "tsify": "^3.0.4",
-    "tslint": "^5.11.0",
-    "tslint-config-airbnb": "^5.11.1",
-    "tslint-config-prettier": "^1.18.0",
-    "tslint-plugin-prettier": "^2.0.1",
     "typescript": "^3.7.2",
     "watchify": "^3.11.0"
   },

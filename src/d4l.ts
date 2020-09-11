@@ -1,13 +1,14 @@
 /* eslint-disable import/prefer-default-export */
 
 import isString from 'lodash/isString';
-import config, { envConfig } from 'config';
+import config, { envConfig } from './config/index';
 import {
   convertArrayBufferViewToString,
   convertBase64ToArrayBufferView,
   generateAsymKeyPair,
   keyTypes,
   importKey,
+  // @ts-ignore
 } from 'js-crypto';
 import fhirService from './services/fhirService';
 import createCryptoService from './services/createCryptoService';
@@ -77,15 +78,17 @@ export const D4LSDK = {
     generateAppKeyPair,
     importKey, // pass directly from js-crypto, needed for tests
     encryptString: string =>
-      new Promise(resolve => resolve(userService.getCurrentUserId())).then(currentUserId => {
-        return createCryptoService(currentUserId).encryptString(string);
-      }),
+      new Promise(resolve => resolve(userService.getCurrentUserId())).then(
+        (currentUserId: string) => {
+          return createCryptoService(currentUserId).encryptString(string);
+        }
+      ),
     decryptString: (keyObject, cipherString) =>
       Promise.all([
         new Promise(resolve => resolve(userService.getCurrentUserId())),
         convertBase64ToArrayBufferView(cipherString),
       ])
-        .then(([currentUserId, cipherData]) =>
+        .then(([currentUserId, cipherData]: [string, any]) =>
           createCryptoService(currentUserId).decryptData(keyObject, cipherData)
         )
         .then(convertArrayBufferViewToString),

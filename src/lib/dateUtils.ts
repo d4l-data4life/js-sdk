@@ -1,5 +1,5 @@
 const helpers = {
-  formatDateYyyyMmDd(date) {
+  formatDateYyyyMmDd(date: Date): string {
     const mm = date.getMonth() + 1; // getMonth() is zero-based
     const dd = date.getDate();
 

@@ -20,7 +20,7 @@ describe('fileRoutes', () => {
 
   it('downloadFile passes', done => {
     requestStub.returns(Promise.resolve('pass'));
-    fileRoutes.downloadFile('fakeSasUrl', 'fakeDocumentBlob').then(res => {
+    fileRoutes.downloadFile('fakeSasUrl').then(res => {
       expect(res).to.equal('pass');
       expect(requestStub).to.be.calledOnce;
       expect(requestStub).to.be.calledWith('GET');

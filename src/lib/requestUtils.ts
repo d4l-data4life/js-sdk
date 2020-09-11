@@ -1,4 +1,3 @@
-// tslint:disable-next-line:import-name
 import config from '../config/index';
 
 const throttleQueue: Function[] = [];

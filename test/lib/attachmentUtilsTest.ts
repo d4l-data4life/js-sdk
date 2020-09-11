@@ -69,6 +69,7 @@ describe('getFileContentsAsBuffer', () => {
       .then(contentRes => {
         expect(typeof contentRes).to.equal('object');
         // needs to be converted: https://github.com/node-file-api/FileReader/issues/2
+        // @ts-ignore
         const convertedUint8Array = new Uint8Array(contentRes);
         expect(typeof convertedUint8Array).to.equal('object');
         expect(convertedUint8Array.length).to.equal(40);
@@ -150,6 +151,7 @@ describe('verifyAttachmentPayload', () => {
 
   const fileContent = { hello: 'world' };
   const file = new Blob([JSON.stringify(fileContent, null, 2)], { type: 'application/json' });
+  // @ts-ignore
   file.name = 'filename';
 
   it('returns true if the the attachment is from before the cutoff date', done => {

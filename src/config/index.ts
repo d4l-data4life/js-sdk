@@ -21,7 +21,7 @@ const config = {
   apiUrl() {
     return this.environmentConfig.api;
   },
-  userUrl(ownerId) {
+  userUrl(ownerId: string): string {
     return `${this.apiUrl()}/users/${ownerId}`;
   },
   rateLimit: 50, // 100, but divide by 2 to account for pre-flight requests

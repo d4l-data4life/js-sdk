@@ -60,6 +60,7 @@ describe('models/FHIR/Practioner', () => {
   });
   it('should throw error when fromFHIRObject is called with  with no arguments', done => {
     try {
+      // @ts-ignore
       Practitioner.fromFHIRObject();
     } catch (err) {
       expect(err.message).to.equal('require 1 argument of type fhir Practitioner');

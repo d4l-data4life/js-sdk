@@ -1,4 +1,3 @@
-/* tslint:disable:ter-indent */
 // @ts-ignore
 import { hash } from 'js-crypto';
 import find from 'lodash/find';
@@ -102,7 +101,6 @@ export const getIdentifierValue = uploadInformation => {
   };
 };
 
-// tslint:disable-next-line:variable-name
 const ImageProcessor = {
   getProcessor() {
     if (this.imageProcessor) {
@@ -110,7 +108,6 @@ const ImageProcessor = {
     }
     return new Promise(resolve => {
       // @ts-ignore
-      // tslint:disable-next-line:import-name
       import('pica').then(({ default: pica }) => {
         this.imageProcessor = pica({ features: ['js'] });
         return resolve(this.imageProcessor);

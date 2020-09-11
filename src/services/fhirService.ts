@@ -327,7 +327,6 @@ export const attachBlobs = ({
     )
   );
 
-  // tslint:disable-next-line:ter-indent
   return Promise.all(uploadPromises).then(uploadInformation => {
     // @ts-ignore
     const identifier = resource.identifier || [];
@@ -503,7 +502,7 @@ const fhirService = {
     ownerId: string,
     fhirResource: fhir.DomainResource,
     date,
-    annotations: string[]
+    annotations?: string[]
   ): Promise<IRecord> {
     if (!fhirValidator.validate(fhirResource)) {
       return Promise.reject(
@@ -519,13 +518,11 @@ const fhirService = {
     let returnResource;
 
     if (hasAttachments(fhirResource)) {
-      /* tslint:disable */
       [attachmentKey, resource, returnResource] = await this.updateAttachments(
         ownerId,
         fhirResource as fhir.DomainResource,
         annotations
       );
-      /* tslint:enable */
     }
 
     return recordService
@@ -581,7 +578,6 @@ const fhirService = {
             );
 
             const currentAttachmentsWithMeta = merge(currentAttachments, metaInformation);
-            // tslint:disable-next-line:prefer-const
             const [oldAttachments, newAttachments] = separateOldAndNewAttachments(
               currentAttachmentsWithMeta,
               previousAttachments

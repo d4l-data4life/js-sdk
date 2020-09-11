@@ -65,7 +65,7 @@ This method has no parameters.
 #### Returns
 | Property | Type | Description |
 |----------|:-----|:------------|
-| id | String | The ID of the logged-in user |
+| id | String | The ID of the logged-inuser |
 
 #### Sample call
 ```javascript

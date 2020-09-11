@@ -4,7 +4,10 @@
     "sourceMap": true,
     "outDir": "tsDist",
     "module": "esnext",
+    "moduleResolution": "node",
     "target": "es6",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
     "strict": false

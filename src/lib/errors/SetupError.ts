@@ -1,4 +1,6 @@
 export default class SetupError {
+  name: string;
+  message: string;
   constructor(message) {
     this.name = 'SetupError';
     this.message = message || '';

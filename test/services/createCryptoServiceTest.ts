@@ -6,7 +6,9 @@ import 'babel-polyfill';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+// @ts-ignore
 import proxy from 'proxyquireify';
+// @ts-ignore
 import { keyTypes } from 'js-crypto';
 
 import '../../src/services/createCryptoService';

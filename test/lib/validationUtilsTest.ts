@@ -128,6 +128,7 @@ describe('validationUtils', () => {
     }));
 
   it('should ignore array validation when is undefined', () => {
+    // @ts-ignore
     expect(ensureArrayIfExists(undefined)).to.equal(undefined);
   });
 

@@ -17,6 +17,7 @@ import fhirResources from '../testUtils/fhirResources';
 import recordService from '../../src/services/recordService';
 import { D4LSDK } from '../../src/d4l';
 import documentRoutes from '../../src/routes/documentRoutes';
+import DocumentReference from '../../src/lib/models/fhir/DocumentReference';
 
 chai.use(sinonChai);
 
@@ -114,6 +115,7 @@ describe('prepareSearchParameters', () => {
   });
 
   it('throws when an unsupported parameter is passed', () => {
+    // @ts-ignore
     expect(() => prepareSearchParameters({ illegalTag: 'suchIllegalMuchEvil' })).to.throw();
   });
 });
@@ -125,6 +127,7 @@ describe('setAttachmentsToResource', () => {
       resourceType: 'DocumentReference',
     };
     const originalDocumentReference = JSON.parse(JSON.stringify(documentReference));
+    // @ts-ignore
     const updatedDocumentReference = setAttachmentsToResource(documentReference, attachments);
     expect(updatedDocumentReference).to.deep.equal({
       resourceType: 'DocumentReference',
@@ -151,6 +154,7 @@ describe('setAttachmentsToResource', () => {
       resourceType: 'Patient',
     };
     const originalPatient = JSON.parse(JSON.stringify(patient));
+    // @ts-ignore
     const updatedPatient = setAttachmentsToResource(patient, attachments);
     expect(updatedPatient).to.deep.equal({
       resourceType: 'Patient',
@@ -164,6 +168,7 @@ describe('setAttachmentsToResource', () => {
       resourceType: 'Practitioner',
     };
     const originalPractitioner = JSON.parse(JSON.stringify(practitioner));
+    // @ts-ignore
     const updatedPractitioner = setAttachmentsToResource(practitioner, attachments);
     expect(updatedPractitioner).to.deep.equal({
       resourceType: 'Practitioner',
@@ -177,6 +182,7 @@ describe('setAttachmentsToResource', () => {
       resourceType: 'Medication',
     };
     const originalMedication = JSON.parse(JSON.stringify(medication));
+    // @ts-ignore
     const updatedPractitioner = setAttachmentsToResource(medication, attachments);
     expect(updatedPractitioner).to.deep.equal({
       resourceType: 'Medication',
@@ -190,6 +196,7 @@ describe('setAttachmentsToResource', () => {
       resourceType: 'DiagnosticReport',
     };
     const originalDiagnosticReport = JSON.parse(JSON.stringify(diagnosticReport));
+    // @ts-ignore
     const updatedDiagnosticReport = setAttachmentsToResource(diagnosticReport, attachments);
     expect(updatedDiagnosticReport).to.deep.equal({
       resourceType: 'DiagnosticReport',
@@ -373,12 +380,16 @@ describe('attachBlobs', () => {
           encryptedFiles,
           ownerId: testVariables.userId,
           oldAttachments: [],
+          // @ts-ignore
           newAttachments: [newAttachment],
+          // @ts-ignore
           resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
+        // @ts-ignore
         const uploadAttachments = resource.getAttachments();
+        // @ts-ignore
         const returnAttachments = returnResource.getAttachments();
         expect(uploadDocumentStub).to.be.calledOnce;
         expect(uploadAttachments.length).to.equal(returnAttachments.length);
@@ -409,16 +420,20 @@ describe('attachBlobs', () => {
           ownerId: testVariables.userId,
           oldAttachments: [],
           newAttachments: [newAttachment],
+          // @ts-ignore
           resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
+        // @ts-ignore
         const uploadAttachments = resource.getAttachments();
+        // @ts-ignore
         const returnAttachments = returnResource.getAttachments();
         expect(uploadDocumentStub).to.be.calledThrice;
         expect(uploadAttachments.length).to.equal(returnAttachments.length);
         expect(uploadAttachments[0].file).to.be.undefined;
         expect(returnAttachments[0].file).to.not.be.undefined;
+        // @ts-ignore
         expect(returnResource.identifier).to.not.be.undefined;
         expect(returnAttachments[0].file instanceof Blob).to.be.true;
       })
@@ -445,16 +460,20 @@ describe('attachBlobs', () => {
           ownerId: testVariables.userId,
           oldAttachments: [],
           newAttachments: [attachment],
+          // @ts-ignore
           resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
+        // @ts-ignore
         const uploadAttachments = resource.getAttachments();
+        // @ts-ignore
         const returnAttachments = returnResource.getAttachments();
         expect(uploadDocumentStub).to.be.calledTwice;
         expect(uploadAttachments.length).to.equal(returnAttachments.length);
         expect(uploadAttachments[0].file).to.be.undefined;
         expect(returnAttachments[0].file).to.not.be.undefined;
+        // @ts-ignore
         expect(returnResource.identifier).to.not.be.undefined;
         expect(returnAttachments[0].file instanceof Blob).to.be.true;
       })
@@ -480,16 +499,20 @@ describe('attachBlobs', () => {
           ownerId: testVariables.userId,
           oldAttachments: [],
           newAttachments: [attachment],
+          // @ts-ignore
           resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
+        // @ts-ignore
         const uploadAttachments = resource.getAttachments();
+        // @ts-ignore
         const returnAttachments = returnResource.getAttachments();
         expect(uploadDocumentStub).to.be.calledOnce;
         expect(uploadAttachments.length).to.equal(returnAttachments.length);
         expect(uploadAttachments[0].file).to.be.undefined;
         expect(returnAttachments[0].file).to.not.be.undefined;
+        // @ts-ignore
         expect(returnResource.identifier).to.not.be.undefined;
         expect(returnAttachments[0].file instanceof Blob).to.be.true;
       })
@@ -512,6 +535,7 @@ describe('attachBlobs', () => {
 
         // technically not encrypted at this point
         const encryptedFiles = [mockPdfBlob];
+        // @ts-ignore
         const resource = new D4LSDK.models.DocumentReference(fhirResources.documentReference);
         resource.setAttachments([oldAttachment]);
 
@@ -519,18 +543,23 @@ describe('attachBlobs', () => {
           resource,
           encryptedFiles,
           ownerId: testVariables.userId,
+          // @ts-ignore
           oldAttachments: [oldAttachment],
+          // @ts-ignore
           newAttachments: [newAttachment],
         });
       })
       .then(([resource, returnResource]) => {
+        // @ts-ignore
         const uploadAttachments = resource.getAttachments();
+        // @ts-ignore
         const returnAttachments = returnResource.getAttachments();
         expect(uploadDocumentStub).to.be.calledOnce;
         expect(uploadAttachments.length).to.equal(returnAttachments.length);
         expect(uploadAttachments.length).to.equal(2);
         expect(uploadAttachments[0].file).to.be.undefined;
         expect(returnAttachments[0].file).to.not.be.undefined;
+        // @ts-ignore
         expect(returnResource.identifier).to.not.be.undefined;
         expect(returnAttachments[0].file instanceof Blob).to.be.true;
         expect(returnAttachments[1].file instanceof Blob).to.be.true;
@@ -561,6 +590,7 @@ describe('attachBlobs', () => {
 
         // technically not encrypted at this point
         const encryptedFiles = [mockPngBlob, mockPngBlob, mockPngBlob, mockPdfBlob];
+        // @ts-ignore
         const resource = new D4LSDK.models.DocumentReference(fhirResources.documentReference);
         resource.setAttachments([oldAttachment]);
 
@@ -568,18 +598,23 @@ describe('attachBlobs', () => {
           resource,
           encryptedFiles,
           ownerId: testVariables.userId,
+          // @ts-ignore
           oldAttachments: [oldAttachment],
+          // @ts-ignore
           newAttachments: [newAttachment1, newAttachment2],
         });
       })
       .then(([resource, returnResource]) => {
+        // @ts-ignore
         const uploadAttachments = resource.getAttachments();
+        // @ts-ignore
         const returnAttachments = returnResource.getAttachments();
         expect(uploadDocumentStub.callCount).to.equal(4);
         expect(uploadAttachments.length).to.equal(returnAttachments.length);
         expect(uploadAttachments.length).to.equal(3);
         expect(uploadAttachments[0].file).to.be.undefined;
         expect(returnAttachments[0].file).to.not.be.undefined;
+        // @ts-ignore
         expect(returnResource.identifier).to.not.be.undefined;
         expect(returnAttachments[0].file instanceof Blob).to.be.true;
         expect(returnAttachments[1].file instanceof Blob).to.be.true;
@@ -602,20 +637,20 @@ describe('fhirService', () => {
 
   const decryptedRecord = {
     id: recordId,
-    customCreationDate: '2017-09-19',
+    customCreationDate: new Date('2017-09-19'),
     user_id: userId,
     fhirResource: fhirResources.carePlan,
     tags: ['tag1', 'tag2', testVariables.secondTag],
     version: 1,
     status: 'Active',
-    updatedDate: '2017-09-19T09:29:48.278',
+    updatedDate: new Date('2017-09-19T09:29:48.278'),
   };
 
   const record = {
     id: recordId,
-    customCreationDate: '2017-09-19',
+    customCreationDate: new Date('2017-09-19'),
     fhirResource: fhirResources.carePlan,
-    updatedDate: '2017-09-19T09:29:48.278',
+    updatedDate: new Date('2017-09-19T09:29:48.278'),
     annotations: [],
     partner: '1',
   };
@@ -637,7 +672,7 @@ describe('fhirService', () => {
       // eslint-disable-next-line prefer-promise-reject-errors
       .returns(Promise.reject('error'));
     downloadRecordStub.withArgs(userId, recordId).returns(Promise.resolve(decryptedRecord));
-    fhirValidatorStub = sinon.stub(fhirValidator, 'validate').returns(Promise.resolve());
+    fhirValidatorStub = sinon.stub(fhirValidator, 'validate').returns(Promise.resolve(true));
 
     searchRecordsStub = sinon.stub(recordService, 'searchRecords').returns(
       Promise.resolve({
@@ -687,6 +722,7 @@ describe('fhirService', () => {
     it('should reject the resource creation with an invalid input', done => {
       fhirValidatorStub.returns(false);
       fhirService
+        // @ts-ignore
         .createResource(userId, badResource)
         .catch(err => {
           expect(err).to.not.be.null;
@@ -730,8 +766,10 @@ describe('fhirService', () => {
 
     it('should reject a resource without an id', done => {
       const d4lResource = Object.assign({}, fhirResources.carePlan);
+      // @ts-ignore
       delete d4lResource.id;
       fhirService
+        // @ts-ignore
         .updateResource(userId, d4lResource)
         .catch(err => {
           expect(err).to.not.be.null;
@@ -745,6 +783,7 @@ describe('fhirService', () => {
     it('should reject the resource update with an invalid input', done => {
       fhirValidatorStub = fhirValidatorStub.returns(false);
       fhirService
+        // @ts-ignore
         .updateResource(userId, badResource)
         .catch(err => {
           expect(err).to.not.be.null;

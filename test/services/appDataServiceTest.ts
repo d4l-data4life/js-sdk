@@ -26,20 +26,20 @@ describe('appDataService', () => {
 
   const decryptedAppData = {
     id: appDataId,
-    customCreationDate: '2017-09-19',
+    customCreationDate: new Date('2017-09-19'),
     user_id: userId,
     data: 'I can even be a string',
     tags: ['tag1', 'tag2', testVariables.secondTag],
     version: 1,
     status: 'Active',
-    updatedDate: '2017-09-19T09:29:48.278',
+    updatedDate: new Date('2017-09-19T09:29:48.278'),
   };
 
   const appData = {
     id: appDataId,
-    customCreationDate: '2017-09-19',
+    customCreationDate: new Date('2017-09-19'),
     data: 'I can even be a string',
-    updatedDate: '2017-09-19T09:29:48.278',
+    updatedDate: new Date('2017-09-19T09:29:48.278'),
     annotations: [],
     partner: '1',
   };

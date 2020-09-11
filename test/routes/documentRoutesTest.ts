@@ -5,7 +5,7 @@ import 'babel-polyfill';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import config from 'config';
+import config from '../../src/config/index';
 import documentRoutes from '../../src/routes/documentRoutes';
 import testVariables from '../testUtils/testVariables';
 import recordResources from '../testUtils/recordResources';
@@ -36,6 +36,7 @@ describe('documentRoutes', () => {
       };
 
       requestStub
+        // @ts-ignore
         .withArgs('POST', `${config.environmentConfig.api}/users/${testVariables.userId}/records`, {
           body: params,
           authorize: true,
@@ -85,6 +86,7 @@ describe('documentRoutes', () => {
     it('passes', done => {
       const { userId, recordId } = testVariables;
       requestStub
+        // @ts-ignore
         .withArgs('GET', `${config.environmentConfig.api}/users/${userId}/records/${recordId}`)
         .returns(Promise.resolve('pass'));
 
@@ -102,6 +104,7 @@ describe('documentRoutes', () => {
     it('passes', done => {
       const searchParams = { tags: [testVariables.tag] };
       requestStub
+        // @ts-ignore
         .withArgs('GET', `${config.environmentConfig.api}/users/${testVariables.userId}/records`, {
           query: searchParams,
           authorize: true,
@@ -128,6 +131,7 @@ describe('documentRoutes', () => {
     it('passes', done => {
       const searchParmas = { tags: [testVariables.tag] };
       requestStub
+        // @ts-ignore
         .withArgs('HEAD', `${config.environmentConfig.api}/users/${testVariables.userId}/records`, {
           query: searchParmas,
           authorize: true,
@@ -156,6 +160,7 @@ describe('documentRoutes', () => {
     it('passes', done => {
       const { userId, recordId } = testVariables;
       requestStub
+        // @ts-ignore
         .withArgs('DELETE', `${config.environmentConfig.api}/users/${userId}/records/${recordId}`, {
           authorize: true,
           ownerId: userId,
@@ -178,6 +183,7 @@ describe('documentRoutes', () => {
       requestStub
         .withArgs(
           'GET',
+          // @ts-ignore
           `${config.environmentConfig.api}/users/${userId}/records/${recordId}/attachment_key`,
           {
             authorize: true,
@@ -202,6 +208,7 @@ describe('documentRoutes', () => {
       requestStub
         .withArgs(
           'GET',
+          // @ts-ignore
           `${config.environmentConfig.api}/users/${userId}/documents/${documentId}`,
           {
             authorize: true,
@@ -230,6 +237,7 @@ describe('documentRoutes', () => {
       requestStub
         .withArgs(
           'POST',
+          // @ts-ignore
           `${config.environmentConfig.api}/users/${testVariables.userId}/documents`,
           {
             body: blob,

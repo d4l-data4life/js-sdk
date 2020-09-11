@@ -5,16 +5,13 @@ module.exports = config => {
       { pattern: 'test/lib/fileValidator/fileSamples/*', included: false, served: true },
       { pattern: 'test/lib/resources/*', included: false, served: true },
       { pattern: 'fhir/*', included: false, served: true },
-      'test/testUtils/globalResources.js',
-      'src/**/*.js',
-      'src/**/*.ts',
-      'test/**/*.js',
+      { pattern: 'src/**/*.ts', type: 'ts', included: true, served: true },
+      { pattern: 'test/**/*.ts', type: 'ts', included: false, served: true },
     ],
 
     preprocessors: {
-      'src/**/*.js': ['browserify'],
       'src/**/*.ts': ['browserify'],
-      'test/**/*.js': ['browserify'],
+      'test/**/*.ts': ['browserify'],
     },
 
     client: {
@@ -52,7 +49,7 @@ module.exports = config => {
                 },
               ],
             ],
-            extensions: ['.ts', '.js'],
+            extensions: ['.ts', '.js'], // need to keep .js for the ajv-generated ones
             plugins: ['dynamic-import-node', '@babel/plugin-proposal-object-rest-spread', 'lodash'],
             env: {
               test: {

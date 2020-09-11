@@ -6,12 +6,14 @@ import 'babel-polyfill';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import config from 'config';
+import config from '../src/config/index';
+// @ts-ignore
 import proxy from 'proxyquireify';
 import {
   importKey,
   convertStringToArrayBufferView,
   convertArrayBufferViewToString,
+  // @ts-ignore
 } from 'js-crypto';
 import { D4LSDK } from '../src/d4l';
 import testVariables from './testUtils/testVariables';
@@ -192,9 +194,14 @@ describe('D4L', () => {
 
     beforeEach(() => {
       requestAccessTokenStub = sinon.stub().returns(Promise.resolve());
-      pullUserStub = sinon
-        .stub(userService, 'pullUser')
-        .returns(Promise.resolve({ id: testVariables.userId }));
+      pullUserStub = sinon.stub(userService, 'pullUser').returns(
+        Promise.resolve({
+          id: testVariables.userId,
+          tek: testVariables.tek,
+          commonKey: {},
+          commonKeyId: testVariables.commonKeyId,
+        })
+      );
     });
 
     it('makes its calls with hcKey', done => {

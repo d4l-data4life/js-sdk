@@ -8,15 +8,15 @@ import ValidationError from './errors/ValidationError';
 import { SUPPORTED_RESOURCES } from './models/fhir/helper';
 
 const fhirValidator = {
-  getRefName(definitionName) {
+  getRefName(definitionName: string): string {
     return `${'fhir.schema.json'}#/definitions/${definitionName}`;
   },
 
-  isValidResourceType(resourceType) {
+  isValidResourceType(resourceType: string): boolean {
     return SUPPORTED_RESOURCES.includes(resourceType);
   },
 
-  getValidator(resourceType) {
+  getValidator(resourceType: string): Promise<boolean> {
     if (this.validator && this.validator[resourceType]) {
       return Promise.resolve(this.validator[resourceType]);
     }
@@ -96,7 +96,7 @@ const fhirValidator = {
     return returnPromise;
   },
 
-  async validate(resource) {
+  async validate(resource: fhir.DomainResource): Promise<Error | true> {
     if (isUndefined(resource)) {
       throw new ValidationError('No resource provided.');
     }
@@ -110,6 +110,7 @@ const fhirValidator = {
     if (isUndefined(resourceType)) {
       throw new ValidationError(
         `Resource object does not have a resource type. ${
+          // @ts-ignore
           !isUndefined(resource.fhirResource)
             ? 'Did you mean to submit the .fhirResource property?'
             : ''

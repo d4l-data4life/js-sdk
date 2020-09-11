@@ -22,7 +22,6 @@ export const DOCUMENT_REFERENCE = 'DocumentReference';
 export default class DocumentReference implements fhir.DocumentReference {
   // this method can be utilised to use all the helper methods provided in class.
   // here we copy the properties from fhir object which are supported in our class.
-  // tslint:disable-next-line variable-name
   public static fromFHIRObject(FHIRObject: fhir.DocumentReference): DocumentReference {
     if (!FHIRObject) {
       throw new Error(

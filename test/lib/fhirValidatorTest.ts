@@ -135,6 +135,8 @@ import observationExample1MinuteApgarScore from './resources/observation-example
 
 import researchsubjectExample from './resources/researchsubject-example.json';
 
+// @ts-ignore-disable
+
 chai.use(sinonChai);
 
 const { expect } = chai;
@@ -203,6 +205,7 @@ describe('fhir validator', () => {
   });
   it('fails to validate with an explicit message if no parameter is provided', done => {
     try {
+      // @ts-ignore
       fhirValidator.validate();
       done();
     } catch (err) {
@@ -216,6 +219,7 @@ describe('fhir validator', () => {
 
   it('fails to validate with an explicit message if a non-string, non-object parameter is provided', done => {
     try {
+      // @ts-ignore
       fhirValidator.validate([]);
       done();
     } catch (err) {
@@ -230,6 +234,7 @@ describe('fhir validator', () => {
   it('fails to validate with an explicit message if a parameter without a resourceType property is provided', done => {
     try {
       fhirValidator.validate({
+        // @ts-ignore
         uselessProperty: 'not a resource type',
       });
       done();
@@ -246,6 +251,7 @@ describe('fhir validator', () => {
   it('fails to validate with an explicit message if a parameter without a resourceType property is provided but a fhirResource property exists on the object', done => {
     try {
       fhirValidator.validate({
+        // @ts-ignore
         uselessProperty: 'not a resource type',
         fhirResource: {
           why: 'You might want to submit me though',
@@ -266,6 +272,7 @@ describe('fhir validator', () => {
     const dummyObject = { resourceType: 'DocumentReference', id: 1 };
 
     fhirValidator
+        // @ts-ignore
       .validate(dummyObject)
       .then(() => done(new Error('should have been rejected')))
       .catch(err => {

@@ -44,7 +44,8 @@ describe('models/FHIR', () => {
         attachments: [attachment],
         type,
         title: 'John Doe Document',
-        customCreationDate: '2018-08-08',
+        // @ts-ignore
+        customCreationDate: new Date('2018-08-08'),
         author: practitioner,
         practiceSpecialty,
         id: 'documentId',
@@ -122,6 +123,7 @@ describe('models/FHIR', () => {
     });
     it('should throw error when fromFHIRObject is called with no arguments', done => {
       try {
+        // @ts-ignore
         DocumentReference.fromFHIRObject();
       } catch (err) {
         expect(err.message).to.equal(

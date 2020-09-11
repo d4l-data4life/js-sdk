@@ -1,7 +1,7 @@
-import config from 'config';
+import config from '../config/index';
 
 const authRoutes = {
-  fetchAccessToken(userId) {
+  fetchAccessToken(userId: string) {
     const query = {
       grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
       owner: userId,

@@ -1,3 +1,4 @@
+// @ts-ignore
 import { asymDecryptString, asymEncryptString, importKey } from 'js-crypto';
 import {
   createChangePasswordPayload,

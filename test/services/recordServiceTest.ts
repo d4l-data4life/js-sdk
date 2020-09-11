@@ -7,6 +7,7 @@ import 'babel-polyfill';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+// @ts-ignore
 import proxy from 'proxyquireify';
 import 'js-crypto';
 
@@ -148,6 +149,7 @@ describe('services/recordService', () => {
     }).default;
 
     fhirServiceUploadRecordSpy = sinon.spy(recordService, 'uploadRecord');
+    // @ts-ignore
     global.__DATA_MODEL_VERSION__ = testVariables.dataModelVersion;
   });
 
@@ -324,7 +326,7 @@ describe('services/recordService', () => {
         offset: 20,
         start_date: '2017-06-06',
         end_date: '2017-08-08',
-        exclude_tags: [testVariables.customAppDataFlag],
+        exclude_tags: [testVariables.appDataFlag],
         tags: [testVariables.tag, testVariables.secondTag],
       };
 

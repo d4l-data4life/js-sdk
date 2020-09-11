@@ -6,6 +6,7 @@ import 'babel-polyfill';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
+// @ts-ignore
 import proxy from 'proxyquireify';
 import 'js-crypto';
 
@@ -149,6 +150,7 @@ describe('services/userService', () => {
     });
   });
 
+  // @ts-ignore
   describe('isCurrentUser', done => {
     it('Happy Path', () => {
       userService.setPrivateKey(encryptionResources.privateKeyClientUser);

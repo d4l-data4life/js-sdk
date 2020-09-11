@@ -29,6 +29,7 @@ describe('authRoutes', () => {
       server.respondWith('POST', /oauth\/token/, goodResponse);
 
       d4lRequest
+        // @ts-ignore
         .submit(...authRoutes.fetchAccessToken(testVariables.userId))
         .then(() => {
           expect(server.requests[0].method).to.equal('POST');
