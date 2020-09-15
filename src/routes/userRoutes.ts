@@ -1,5 +1,6 @@
 import config from '../config/index';
 import d4lRequest from '../lib/d4lRequest';
+import { CommonKey } from '../services/userService';
 
 const userRoutes = {
   resolveUserId(d4lUserAlias: string) {
@@ -48,7 +49,7 @@ const userRoutes = {
     });
   },
 
-  grantPermission(ownerId: string, granteeId: string, appId: string, commonKey: Object, scope: string[]) {
+  grantPermission(ownerId: string, granteeId: string, appId: string, commonKey: CommonKey, scope: string[]) {
     const scopeString = scope.join(' ');
     const body = {
       grantee: granteeId,

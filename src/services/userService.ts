@@ -12,9 +12,16 @@ import taggingUtils from '../lib/taggingUtils';
 import SetUpError, { NOT_SETUP } from '../lib/errors/SetupError';
 import { populateCommonKeyId } from '../lib/cryptoUtils';
 
+// todo: there should be a base Key class that is expanded upon in js-crypto
+export interface CommonKey {
+  t: string;
+  v: number;
+  sym: string;
+}
+
 export interface User {
   id: string;
-  commonKey: Object;
+  commonKey: CommonKey;
   commonKeyId: string;
   tek: string;
 }
@@ -25,7 +32,7 @@ export interface Permission {
   owner: string;
   grantee: string;
   granteePublicKey: string;
-  commonKey: Object;
+  commonKey: CommonKey;
   scope: string[];
 }
 
