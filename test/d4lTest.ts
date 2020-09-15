@@ -195,6 +195,7 @@ describe('D4L', () => {
     beforeEach(() => {
       requestAccessTokenStub = sinon.stub().returns(Promise.resolve());
       pullUserStub = sinon.stub(userService, 'pullUser').returns(
+        // @ts-ignore
         Promise.resolve({
           id: testVariables.userId,
           tek: testVariables.tek,
