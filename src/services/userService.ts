@@ -154,7 +154,7 @@ const userService = {
    *  @param {String} keyId - ID of key to retrieve
    *  @returns {Promise} Resolves to the (decrypted) common key
    */
-  getCommonKey(userId: string, keyId: string): Promise<Object> {
+  getCommonKey(userId: string, keyId: string): Promise<Record<string, any>> {
     if (!this.commonKeys[userId]) {
       this.commonKeys[userId] = {};
     }

@@ -9,10 +9,12 @@ import { getCleanAttachmentsFromResource } from '../services/fhirService';
 export const separateOldAndNewAttachments = (newDocumentAttachments, oldDocumentAttachments) =>
   newDocumentAttachments.reduce(
     (accumulator, attachment) => {
+      // eslint-disable-next-line no-shadow
       const { hash = null, id = null } = attachment;
       const match = find(oldDocumentAttachments, { hash }) || find(oldDocumentAttachments, { id });
 
       if (match) {
+        // eslint-disable-next-line no-param-reassign
         attachment.id = match.id;
         accumulator[0].push(attachment);
         return accumulator;

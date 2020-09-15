@@ -13,7 +13,7 @@
     "postinstall": "npm run build",
     "watch": "npm run build -- --watch",
     "watch:crypto": "npm run build:crypto -- --watch",
-    "eslint": "eslint src test",
+    "eslint": "eslint src test --ext .ts --fix",
     "lint": "npm run eslint",
     "karma:web": "karma start karma.conf.js --node false",
     "karma:prod:web": "karma start karma.conf.js --single-run --node false",

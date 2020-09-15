@@ -13,7 +13,7 @@ interface DocumentReferenceConstructor {
   title?: string;
   creationDate?: Date;
   author?: Practitioner;
-  additionalIds?: Object;
+  additionalIds?: Record<string, any>;
   practiceSpecialty?: fhir.CodeableConcept;
 }
 
@@ -46,18 +46,31 @@ export default class DocumentReference implements fhir.DocumentReference {
 
     return documentReference;
   }
+
   public resourceType: string;
+
   public id: string;
+
   public indexed: fhir.instant;
+
   public status: fhir.code;
+
   public type: fhir.CodeableConcept;
+
   public author?: fhir.Reference[];
+
   public description?: string;
+
   public subject?: fhir.Reference;
+
   public content: fhir.DocumentReferenceContent[];
+
   public context?: fhir.DocumentReferenceContext;
+
   public identifier?: fhir.Identifier[];
+
   public contained: any[];
+
   constructor({
     id,
     attachments,
@@ -131,12 +144,15 @@ export default class DocumentReference implements fhir.DocumentReference {
   public getTitle(): string {
     return this.description;
   }
+
   public getType(): fhir.CodeableConcept {
     return this.type;
   }
+
   public getAttachments(): fhir.Attachment[] {
     return this.content ? map(this.content, 'attachment') : [];
   }
+
   public setAttachments(attachments: fhir.Attachment[]) {
     this.content = attachments.map(attachment => ({ attachment }));
   }
@@ -144,6 +160,7 @@ export default class DocumentReference implements fhir.DocumentReference {
   public getPracticeSpecialty(): fhir.CodeableConcept {
     return this.context?.practiceSetting;
   }
+
   // author can be Practitioner or Organisation
   // TODO handle organisation
   public getAuthor() {

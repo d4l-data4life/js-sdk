@@ -272,7 +272,7 @@ describe('fhir validator', () => {
     const dummyObject = { resourceType: 'DocumentReference', id: 1 };
 
     fhirValidator
-        // @ts-ignore
+      // @ts-ignore
       .validate(dummyObject)
       .then(() => done(new Error('should have been rejected')))
       .catch(err => {

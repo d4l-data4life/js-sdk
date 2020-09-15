@@ -23,7 +23,7 @@ const userRoutes = {
     });
   },
 
-  updateUser(userId: string, userData: Object) {
+  updateUser(userId: string, userData: Record<string, any>) {
     return d4lRequest.submit('PUT', `${config.userUrl(userId)}`, {
       body: userData,
       authorize: true,
@@ -49,7 +49,13 @@ const userRoutes = {
     });
   },
 
-  grantPermission(ownerId: string, granteeId: string, appId: string, commonKey: CommonKey, scope: string[]) {
+  grantPermission(
+    ownerId: string,
+    granteeId: string,
+    appId: string,
+    commonKey: CommonKey,
+    scope: string[]
+  ) {
     const scopeString = scope.join(' ');
     const body = {
       grantee: granteeId,
