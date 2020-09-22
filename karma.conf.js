@@ -5,13 +5,13 @@ module.exports = config => {
       { pattern: 'test/lib/fileValidator/fileSamples/*', included: false, served: true },
       { pattern: 'test/lib/resources/*', included: false, served: true },
       { pattern: 'fhir/*', included: false, served: true },
-      { pattern: 'src/**/*.ts', type: 'ts', included: true, served: true },
-      { pattern: 'test/**/*.ts', type: 'ts', included: false, served: true },
+      'src/**/*.ts',
+      'test/**/*.ts',
     ],
 
     preprocessors: {
-      'src/**/*.ts': ['browserify'],
-      'test/**/*.ts': ['browserify'],
+      'src/**/*.ts': ['karma-typescript'],
+      'test/**/*.ts': ['karma-typescript'],
     },
 
     client: {
@@ -22,23 +22,14 @@ module.exports = config => {
       '/fileSamples/': '/base/test/lib/fileValidator/fileSamples/',
     },
 
-    browserify: {
-      verbose: true,
-      output: './',
-      debug: true,
-      plugin: [
-        'proxyquire-universal',
-        [
-          'tsify',
-          {
-            project: 'tsconfig.json',
-          },
-        ],
-      ],
-      transform: [
-        [
-          'babelify',
-          {
+    karmaTypescriptConfig: {
+      compilerOptions: {
+        module: 'commonjs',
+      },
+      tsconfig: './tsconfig.json',
+      bundlerOptions: {
+        transforms: [
+          require('karma-typescript-es6-transform')({
             presets: [
               [
                 '@babel/preset-env',
@@ -49,28 +40,13 @@ module.exports = config => {
                 },
               ],
             ],
-            extensions: ['.ts', '.js'], // need to keep .js for the ajv-generated ones
-            plugins: ['dynamic-import-node', '@babel/plugin-proposal-object-rest-spread', 'lodash'],
-            env: {
-              test: {
-                plugins: ['istanbul'],
-              },
-            },
-          },
+          }),
         ],
-        [
-          'aliasify',
-          {
-            aliases: {
-              config: './src/config/index',
-            },
-          },
-        ],
-      ],
+      },
     },
     // frameworks to use
     // available frameworks: https://npmjs.org/browse/keyword/karma-adapter
-    frameworks: ['mocha', 'chai', 'sinon', 'browserify'],
+    frameworks: ['mocha', 'chai', 'sinon', 'karma-typescript'],
 
     // test results reporter to use
     // possible values: 'dots', 'progress'
