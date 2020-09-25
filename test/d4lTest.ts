@@ -95,7 +95,7 @@ describe('D4L', () => {
     const plainText = 'encrypt-me';
     const base64CipherText = 'Y2lwaGVyX2VuY3J5cHQtbWU=';
     describe('encryptString', () => {
-      let createCryptoServiceEncryptStringSpy = sinon.spy(D4LSDK.crypto, 'encryptString');
+      const createCryptoServiceEncryptStringSpy = sinon.spy(D4LSDK.crypto, 'encryptString');
       afterEach(() => {
         createCryptoServiceEncryptStringSpy.resetHistory();
       });
@@ -141,7 +141,7 @@ describe('D4L', () => {
     });
 
     describe('decryptString', () => {
-      let createCryptoServiceStub = sinon.stub(createCryptoService);
+      const createCryptoServiceStub = sinon.stub(createCryptoService);
       // @ts-ignore
       createCryptoServiceStub.default.returns({
         decryptData: (keyInformation, cipherData) => {
