@@ -7,8 +7,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import config from '../src/config/index';
-// @ts-ignore
-import proxy from 'proxyquireify';
 import {
   importKey,
   convertStringToArrayBufferView,
@@ -21,11 +19,14 @@ import taggingUtils from '../src/lib/taggingUtils';
 import d4lRequest from '../src/lib/d4lRequest';
 import encryptionResources from './testUtils/encryptionResources';
 import userService from '../src/services/userService';
+import * as createCryptoService from '../src/services/createCryptoService';
 
-const proxyquire = proxy(require);
 chai.use(sinonChai);
 
 const { expect } = chai;
+
+// https://stackoverflow.com/a/7874175
+const BASE_64_REGEX = /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/;
 
 describe('D4L', () => {
   it('the D4L object is initiated correctly', () => {
@@ -91,44 +92,18 @@ describe('D4L', () => {
   });
 
   describe('crypto', () => {
-    let createCryptoServiceStub;
-    let proxyD4LSDK;
-
     const plainText = 'encrypt-me';
-    const cipherText = `cipher_${plainText}`;
     const base64CipherText = 'Y2lwaGVyX2VuY3J5cHQtbWU=';
-    beforeEach(() => {
-      createCryptoServiceStub = sinon
-        .stub()
-        // .withArgs(testVariables.userId)
-        .returns({
-          encryptString: string => {
-            return Promise.resolve(`cipher_${string}`);
-          },
-          decryptData: (keyInformation, cipherData) => {
-            const [, plain] = convertArrayBufferViewToString(cipherData).split('_');
-            return Promise.resolve(plain).then(convertStringToArrayBufferView);
-          },
-        });
-
-      proxyD4LSDK = proxyquire('../src/d4l', {
-        './services/createCryptoService': {
-          default: createCryptoServiceStub,
-        },
-        './services/userService': {
-          default: userService,
-        },
-      }).default;
-    });
-    afterEach(() => {
-      createCryptoServiceStub.reset();
-    });
-
     describe('encryptString', () => {
-      it('fails when userservice.currentUserId is null', done => {
+      let createCryptoServiceEncryptStringSpy = sinon.spy(D4LSDK.crypto, 'encryptString');
+      afterEach(() => {
+        createCryptoServiceEncryptStringSpy.resetHistory();
+      });
+
+      it('fails when userService.currentUserId is null', done => {
         userService.currentUserId = null;
 
-        proxyD4LSDK.crypto
+        D4LSDK.crypto
           .encryptString('encrypt me')
           .then(() => {
             done(new Error('should have thrown setup error'));
@@ -142,12 +117,23 @@ describe('D4L', () => {
 
       it('calls encryptString of the cryptoService', done => {
         userService.currentUserId = testVariables.userId;
+        userService.users = {
+          [testVariables.userId]: {
+            commonKey: testVariables.commonKey,
+            commonkeyId: testVariables.commonKeyId,
+          },
+        };
+        userService.privateKey = testVariables.privateKey;
 
-        proxyD4LSDK.crypto
+        D4LSDK.crypto
           .encryptString(plainText)
           .then(cipherMaterial => {
-            expect(cipherMaterial).to.equal(cipherText);
-            expect(createCryptoServiceStub).to.be.calledWith(testVariables.userId);
+            const [result, encryptedDataKey] = cipherMaterial;
+            expect(BASE_64_REGEX.test(result)).to.equal(true);
+            expect(Object.keys(encryptedDataKey)[0]).to.equal('commonKeyId');
+            expect(Object.keys(encryptedDataKey)[1]).to.equal('encryptedKey');
+            expect(createCryptoServiceEncryptStringSpy).to.be.calledOnce;
+            expect(createCryptoServiceEncryptStringSpy).to.be.calledWith(plainText);
             done();
           })
           .catch(done);
@@ -155,10 +141,19 @@ describe('D4L', () => {
     });
 
     describe('decryptString', () => {
-      it('fails when userservice.currentUserId is null', done => {
+      let createCryptoServiceStub = sinon.stub(createCryptoService);
+      // @ts-ignore
+      createCryptoServiceStub.default.returns({
+        decryptData: (keyInformation, cipherData) => {
+          const [, plain] = convertArrayBufferViewToString(cipherData).split('_');
+          return Promise.resolve(plain).then(convertStringToArrayBufferView);
+        },
+      });
+
+      it('fails when userService.currentUserId is null', done => {
         userService.currentUserId = null;
 
-        proxyD4LSDK.crypto
+        D4LSDK.crypto
           .decryptString({}, base64CipherText)
           .then(() => {
             done(new Error('should have thrown setup error'));
@@ -172,15 +167,28 @@ describe('D4L', () => {
 
       it('calls decryptString of the cryptoService', done => {
         userService.currentUserId = testVariables.userId;
+        userService.users = {
+          [testVariables.userId]: {
+            commonKey: testVariables.commonKey,
+            commonkeyId: testVariables.commonKeyId,
+          },
+        };
+        userService.commonKeys = {
+          [testVariables.userId]: {
+            [testVariables.commonKeyId]: testVariables.commonKey,
+          },
+        };
+        userService.privateKey = testVariables.privateKey;
 
-        proxyD4LSDK.crypto
+        D4LSDK.crypto
           .decryptString(
-            { commonKeyId: 'commonKeyId', encryptedKey: 'encryptedKey' },
+            { commonKeyId: testVariables.commonKeyId, encryptedKey: 'encryptedKey' },
             base64CipherText
           )
           .then(cipherMaterial => {
             expect(cipherMaterial).to.equal(plainText);
-            expect(createCryptoServiceStub).to.be.calledWith(testVariables.userId);
+            expect(createCryptoServiceStub.default).to.be.calledOnce;
+            expect(createCryptoServiceStub.default).to.be.calledWith(testVariables.userId);
             done();
           })
           .catch(done);

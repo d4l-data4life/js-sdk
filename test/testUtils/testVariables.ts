@@ -1,5 +1,11 @@
 const testVariables = {
   userId: 'user_id',
+  privateKey: 'private_key',
+  commonKey: {
+    t: 'ck',
+    v: 1,
+    sym: 'ekoomVklw+go3Xg/vPuK7lJYDSAu97UohSAdZXi/22Y=',
+  },
   commonKeyId: 'common_key_id',
   clientId: 'partner_id#client',
   partnerId: 'partner_id',

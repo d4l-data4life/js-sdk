@@ -78,11 +78,9 @@ export const D4LSDK = {
     generateAppKeyPair,
     importKey, // pass directly from js-crypto, needed for tests
     encryptString: string =>
-      new Promise(resolve => resolve(userService.getCurrentUserId())).then(
-        (currentUserId: string) => {
-          return createCryptoService(currentUserId).encryptString(string);
-        }
-      ),
+      new Promise(resolve =>
+        resolve(userService.getCurrentUserId())
+      ).then((currentUserId: string) => createCryptoService(currentUserId).encryptString(string)),
     decryptString: (keyObject, cipherString) =>
       Promise.all([
         new Promise(resolve => resolve(userService.getCurrentUserId())),
