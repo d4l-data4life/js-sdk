@@ -95,9 +95,12 @@ describe('D4L', () => {
     const plainText = 'encrypt-me';
     const base64CipherText = 'Y2lwaGVyX2VuY3J5cHQtbWU=';
     describe('encryptString', () => {
-      const createCryptoServiceEncryptStringSpy = sinon.spy(D4LSDK.crypto, 'encryptString');
+      let createCryptoServiceEncryptStringSpy;
+      beforeEach(() => {
+        createCryptoServiceEncryptStringSpy = sinon.spy(D4LSDK.crypto, 'encryptString');
+      });
       afterEach(() => {
-        createCryptoServiceEncryptStringSpy.resetHistory();
+        createCryptoServiceEncryptStringSpy.restore();
       });
 
       it('fails when userService.currentUserId is null', done => {
@@ -141,13 +144,19 @@ describe('D4L', () => {
     });
 
     describe('decryptString', () => {
-      const createCryptoServiceStub = sinon.stub(createCryptoService);
-      // @ts-ignore
-      createCryptoServiceStub.default.returns({
-        decryptData: (keyInformation, cipherData) => {
-          const [, plain] = convertArrayBufferViewToString(cipherData).split('_');
-          return Promise.resolve(plain).then(convertStringToArrayBufferView);
-        },
+      let createCryptoServiceStub;
+      beforeEach(() => {
+        // @ts-ignore
+        createCryptoServiceStub = sinon.stub(createCryptoService).default.returns({
+          decryptData: (keyInformation, cipherData) => {
+            const [, plain] = convertArrayBufferViewToString(cipherData).split('_');
+            return Promise.resolve(plain).then(convertStringToArrayBufferView);
+          },
+        });
+      });
+
+      afterEach(() => {
+        createCryptoServiceStub.restore();
       });
 
       it('fails when userService.currentUserId is null', done => {
@@ -187,8 +196,8 @@ describe('D4L', () => {
           )
           .then(cipherMaterial => {
             expect(cipherMaterial).to.equal(plainText);
-            expect(createCryptoServiceStub.default).to.be.calledOnce;
-            expect(createCryptoServiceStub.default).to.be.calledWith(testVariables.userId);
+            expect(createCryptoServiceStub).to.be.calledOnce;
+            expect(createCryptoServiceStub).to.be.calledWith(testVariables.userId);
             done();
           })
           .catch(done);

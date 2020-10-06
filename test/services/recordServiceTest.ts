@@ -16,7 +16,6 @@ import testVariables from '../testUtils/testVariables';
 import userResources from '../testUtils/userResources';
 import fhirResources from '../testUtils/fhirResources';
 import recordResources from '../testUtils/recordResources';
-import documentResources from '../testUtils/documentResources';
 import encryptionResources from '../testUtils/encryptionResources';
 import recordService from '../../src/services/recordService';
 
@@ -30,8 +29,13 @@ chai.use(sinonChai);
 const { expect } = chai;
 
 describe('services/recordService', () => {
-  let jsCryptoStub = sinon.stub(jsCrypto);
-  let documentRoutesStub = sinon.stub(documentRoutes);
+  let jsCryptoStub;
+  let documentRoutesStub;
+
+  beforeEach(() => {
+    jsCryptoStub = sinon.stub(jsCrypto);
+    documentRoutesStub = sinon.stub(documentRoutes);
+  });
 
   let createRecordStub = sinon
     .stub()
@@ -136,7 +140,8 @@ describe('services/recordService', () => {
     jsCryptoStub.default.symEncryptObject = symEncryptObjectStub;
     jsCryptoStub.default.symDecryptString = symDecryptStringStub;
     jsCryptoStub.default.convertBase64ToArrayBufferView = convertBase64ToArrayBufferViewStub;
-    jsCryptoStub.default.convertArrayBufferViewToString = convertArrayBufferViewToStringStub;*/
+    jsCryptoStub.default.convertArrayBufferViewToString = convertArrayBufferViewToStringStub;
+    */
 
     // @ts-ignore
     global.__DATA_MODEL_VERSION__ = testVariables.dataModelVersion;

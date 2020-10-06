@@ -13,7 +13,7 @@ describe('BlobFile', () => {
     const lastModified = 1;
     /* eslint-disable no-restricted-globals */
     // @ts-ignore
-    const blobFile = new BlobFile(['data'], name, { lastModified });
+    const blobFile = BlobFile(['data'], name, { lastModified });
     // eslint-disable-next-line no-restricted-globals
     const file = new File(['data'], name, { lastModified });
     expect(blobFile.lastModified).to.equal(file.lastModified);

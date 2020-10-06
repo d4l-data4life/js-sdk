@@ -33,12 +33,8 @@ export const getFileContentsAsBuffer = (file: IBlobFile) =>
     fileReader.readAsArrayBuffer(file);
   });
 
-export const getContentHash = (file: any): Promise<string> =>
-  new Promise(resolve => {
-    getFileContentsAsBuffer(file).then(result => {
-      resolve(hash(result, 'SHA-1'));
-    });
-  });
+export const getContentHash = (file: IBlobFile): Promise<string> =>
+  getFileContentsAsBuffer(file).then(result => hash(result, 'SHA-1'));
 
 const getAttachmentIncrementor = attachment => {
   if (attachment.hasPreview) {
