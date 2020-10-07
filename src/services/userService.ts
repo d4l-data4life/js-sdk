@@ -13,7 +13,7 @@ import SetUpError, { NOT_SETUP } from '../lib/errors/SetupError';
 import { populateCommonKeyId } from '../lib/cryptoUtils';
 
 // todo: there should be a base Key class that is expanded upon in js-crypto
-export interface CommonKey {
+export interface SymKey {
   t: string;
   v: number;
   sym: string;
@@ -21,9 +21,9 @@ export interface CommonKey {
 
 export interface User {
   id: string;
-  commonKey: CommonKey;
+  commonKey: SymKey;
   commonKeyId: string;
-  tek: string;
+  tek: SymKey;
 }
 
 export interface Permission {
@@ -32,7 +32,7 @@ export interface Permission {
   owner: string;
   grantee: string;
   granteePublicKey: string;
-  commonKey: CommonKey;
+  commonKey: SymKey;
   scope: string[];
 }
 

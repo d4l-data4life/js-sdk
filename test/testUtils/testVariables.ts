@@ -7,6 +7,7 @@ const testVariables = {
     sym: 'ekoomVklw+go3Xg/vPuK7lJYDSAu97UohSAdZXi/22Y=',
   },
   commonKeyId: 'common_key_id',
+  alternativeCommonKeyId: 'alt_common_key_id',
   clientId: 'partner_id#client',
   partnerId: 'partner_id',
   clientSecret: 'client_secret',
