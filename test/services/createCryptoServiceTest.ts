@@ -9,7 +9,7 @@ import sinonChai from 'sinon-chai';
 // @ts-ignore
 import proxy from 'proxyquireify';
 // @ts-ignore
-import { keyTypes, convertBase64ToArrayBufferView } from 'js-crypto';
+import * as jsCrypto from 'js-crypto';
 
 import createCryptoService from '../../src/services/createCryptoService';
 import encryptionResources from '../testUtils/encryptionResources';
@@ -92,6 +92,7 @@ describe('createCryptoService', () => {
     // TODO: maybe use another key as an alternativecommonkey
     userService.commonKeys = {
       [testVariables.userId]: {
+        //'some old common key id': encryptionResources.symHCKey,
         [testVariables.commonKeyId]: encryptionResources.commonKey,
         [testVariables.alternativeCommonKeyId]: encryptionResources.commonKey,
       },
@@ -111,7 +112,7 @@ describe('createCryptoService', () => {
     });
     afterEach(() => {
       getCommonKeySpy.restore();
-    })
+    });
 
     it('encrypts a string (happy path) without a provided data key', done => {
       encryptString(encryptionResources.string)
@@ -151,7 +152,7 @@ describe('createCryptoService', () => {
       const encryptedDataKey =
         'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
       const encryptedDataString = 'K/7R2UJVxcOs3oH66868mTO/sGmYeZrJNlx52leEMcrAIA==';
-      const encryptedData = convertBase64ToArrayBufferView(encryptedDataString);
+      const encryptedData = jsCrypto.default.convertBase64ToArrayBufferView(encryptedDataString);
       const decryptedData = new Uint8Array([115, 116, 114, 105, 110, 103]);
 
       createCryptoService(testVariables.userId)
@@ -186,34 +187,36 @@ describe('createCryptoService', () => {
   });
 
   describe('updateKeys', () => {
+    let symDecryptObjectSpy;
+    let symEncryptObjectSpy;
+    let getCommonKeyStub;
+    beforeEach(() => {
+      getCommonKeyStub = sinon.stub(userService, 'getCommonKey');
+      getCommonKeyStub.returns(encryptionResources.commonKey);
+      symDecryptObjectSpy = sinon.spy(jsCrypto.default.symDecryptObject);
+      symEncryptObjectSpy = sinon.spy(jsCrypto.default.symEncryptObject);
+    });
+    afterEach(() => {
+      getCommonKeyStub.restore();
+      symDecryptObjectSpy.resetHistory(); // can't use restore because we are not spying on a method via string
+      symEncryptObjectSpy.resetHistory();
+    });
+
     it('should update a single key with the newest common key', done => {
-      const oldCommonKeyId = 'some old common key id';
-      const oldEncryptedKey = 'old encrypted key';
+      const oldCommonKeyId = testVariables.commonKeyId;
+      const oldEncryptedKey =
+        'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
+
       createCryptoService(testVariables.userId)
         .updateKeys({
-          commonKeyId: oldCommonKeyId,
+          commonKeyId: 'old common key id',
           encryptedKey: oldEncryptedKey,
         })
         .then(updatedKey => {
-          expect(updatedKey).to.deep.equal([
-            {
-              commonKeyId: testVariables.commonKeyId,
-              encryptedKey: encryptionResources.encryptedDataKey,
-            },
-          ]);
-
-          expect(getUserStub).to.be.called;
-
-          expect(getCommonKeyStub).to.be.called;
-          expect(getCommonKeyStub).to.be.calledWith(testVariables.userId, oldCommonKeyId);
-
-          expect(symDecryptObjectStub).to.be.calledOnce;
-          expect(symDecryptObjectStub).to.be.calledWith(
-            encryptionResources.commonKey,
-            oldEncryptedKey
-          );
-
-          expect(symEncryptObjectStub).to.be.calledOnce;
+          // todo: deep equal check or result for encryptedKey itself
+          expect(updatedKey[0].commonKeyId).to.equal(testVariables.commonKeyId);
+          expect(getCommonKeyStub).to.be.calledOnce;
+          expect(getCommonKeyStub).to.be.calledWith(testVariables.userId, 'old common key id');
           done();
         })
         .catch(done);
@@ -229,8 +232,8 @@ describe('createCryptoService', () => {
         .updateKeys(encryptedKeyInfo)
         .then(updatedKey => {
           expect(updatedKey).to.deep.equal([encryptedKeyInfo]);
-          expect(symDecryptObjectStub).to.not.be.called;
-          expect(symEncryptObjectStub).to.not.be.called;
+          expect(symDecryptObjectSpy).to.not.be.called;
+          expect(symEncryptObjectSpy).to.not.be.called;
           done();
         })
         .catch(done);
