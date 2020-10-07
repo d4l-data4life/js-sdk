@@ -103,46 +103,44 @@ describe('createCryptoService', () => {
 
   describe('encryptString', () => {
     let encryptString;
+    let getCommonKeySpy;
     beforeEach(() => {
       // eslint-disable-next-line prefer-destructuring
       encryptString = createCryptoService(testVariables.userId).encryptString;
+      getCommonKeySpy = sinon.spy(userService, 'getCommonKey');
     });
+    afterEach(() => {
+      getCommonKeySpy.restore();
+    })
 
-    it('happyPath', done => {
+    it('encrypts a string (happy path) without a provided data key', done => {
       encryptString(encryptionResources.string)
         .then(([receivedEncryptedData, receivedDataKey]) => {
-          console.log(JSON.stringify(receivedDataKey), receivedEncryptedData);
           expect(receivedEncryptedData.length).to.equal(48);
           expect(receivedDataKey.commonKeyId).to.equal(testVariables.commonKeyId);
           expect(receivedDataKey.encryptedKey.length).to.equal(132);
-          // common key
-          // expect(getUserStub).to.be.calledOnce;
-          // expect(getUserStub).to.be.calledWith(testVariables.userId);
-          // expect(generateSymKeyStub).to.be.calledOnce;
-          // expect(generateSymKeyStub).to.be.calledWith(keyTypes.DATA_KEY);
-          // // encryption
-          // expect(symEncryptStringStub).to.be.calledOnce;
-          // expect(symEncryptStringStub).to.be.calledWith(
-          //   encryptionResources.dataKey,
-          //   encryptionResources.string
-          // );
-
+          expect(getCommonKeySpy).not.to.be.called;
           done();
         })
         .catch(done);
     });
     it('should use the existing data key if provided', done => {
       const customCommonKeyId = testVariables.alternativeCommonKeyId;
+      const encryptedDataKey =
+        'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
 
       encryptString(encryptionResources.string, {
         commonKeyId: customCommonKeyId,
-        encryptedKey: encryptionResources.encryptedDataKey,
-      }).then(([receivedEncryptedData, receivedDataKey]) => {
-        expect(getCommonKeyStub).to.be.calledOnce;
-        expect(getCommonKeyStub).to.be.calledWith(testVariables.userId, customCommonKeyId);
-        expect(generateSymKeyStub).to.not.be.called;
-        done();
-      });
+        encryptedKey: encryptedDataKey,
+      })
+        .then(([receivedEncryptedData, receivedDataKey]) => {
+          expect(receivedEncryptedData.length).to.equal(48);
+          expect(receivedDataKey.commonKeyId).to.equal(testVariables.alternativeCommonKeyId);
+          expect(receivedDataKey.encryptedKey.length).to.equal(132);
+          expect(getCommonKeySpy).to.be.calledOnce;
+          done();
+        })
+        .catch(done);
     });
   });
 
