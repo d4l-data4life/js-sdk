@@ -20,7 +20,7 @@ import testVariables from '../testUtils/testVariables';
 const proxyquire = proxy(require);
 chai.use(sinonChai);
 
-describe.only('createCryptoService', () => {
+describe('createCryptoService', () => {
   // let createCryptoService;
 
   let getUserStub;
