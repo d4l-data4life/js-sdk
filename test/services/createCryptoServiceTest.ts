@@ -53,10 +53,10 @@ describe('createCryptoService', () => {
         })
         .catch(done);
     });
+
     it('should use the existing data key if provided', done => {
       const customCommonKeyId = testVariables.alternativeCommonKeyId;
-      const encryptedDataKey =
-        'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
+      const { encryptedDataKey } = encryptionResources;
 
       encryptString(encryptionResources.string, {
         commonKeyId: customCommonKeyId,
@@ -84,11 +84,9 @@ describe('createCryptoService', () => {
 
     it('should be possible to decrypt a document', done => {
       const customId = testVariables.alternativeCommonKeyId;
-      const encryptedDataKey =
-        'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
-      const encryptedDataString = 'K/7R2UJVxcOs3oH66868mTO/sGmYeZrJNlx52leEMcrAIA==';
-      const encryptedData = convertBase64ToArrayBufferView(encryptedDataString);
-      const decryptedData = new Uint8Array([115, 116, 114, 105, 110, 103]);
+      const { encryptedDataKey } = encryptionResources;
+      const encryptedData = convertBase64ToArrayBufferView(encryptionResources.encryptedData);
+      const decryptedData = encryptionResources.data;
 
       createCryptoService(testVariables.userId)
         .decryptData(
@@ -110,8 +108,7 @@ describe('createCryptoService', () => {
 
   describe('updateKeys', () => {
     let getCommonKeyStub;
-    const oldEncryptedKey =
-      'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
+    const oldEncryptedKey = encryptionResources.encryptedDataKey;
 
     beforeEach(() => {
       getCommonKeyStub = sinon.stub(userService, 'getCommonKey');

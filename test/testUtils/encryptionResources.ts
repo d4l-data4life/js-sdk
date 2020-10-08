@@ -30,24 +30,7 @@ const symHCKey = {
   v: 1,
   sym: rawSymKey,
 };
-const tagEncryptionKey = {
-  t: 'tek',
-  v: 1,
-  sym: '4/wwoE26eIRuGZgowe/TzSMbuGjY3AXoIsgU9raUF0g=',
-};
-const testString = 'Hęłlø črüėl wōrlđ';
-const dataKey = symKey;
-const encryptedDataKey = 'encrypted_data_key';
-const attachmentKey = symKey;
-const encryptedAttachmentKey = 'encrypted_attachment_key';
-const encryptedTagEncryptionKey =
-  'tYML9tI22Tv2ZjydEE0rZs1xFMKukjoozP8h33e0jq5Lp+YRfwfKhrZpbTnsSxe85OXp+IqBJqjxo0p5+tePolN9KdxGe5BJM+DUyPMZYJhEbXyt2ZA2wo5VxUMnG0okaus=';
-const data = new Uint8Array([1, 2, 3, 4, 5, 6]);
-const encryptedData = 'encryptedData';
-const string = 'string';
-const encryptedString = 'encrypted_string';
-const object = {};
-const encryptedObject = 'encrypted_object';
+
 const commonKey = {
   t: 'ck',
   v: 1,
@@ -56,6 +39,38 @@ const commonKey = {
 // encrypted with CUPPublicKey
 const encryptedCommonKey =
   'WbDh/dyA0TSMa/xvT+SEy17OmBphPkv/lursGK7QVAIKoLuHzF1QEIzlT0DIzQ/YxsYT+DIt0GdNFGZDDYxvJ9Q3kgLY8zs0/W525teQo9KsfEyzH0km/8JWXydB1h3MclHtzLVFLxr6gOvFIHtX4uJVbhsVYNOQeWANno4TUMJ7smKEXUy6WNaSx/aavqEdR6Tki0eUTG5dSXKEzi4lV2vdCa8ROKQxCIzdLhhOUqiFyMnuDRTF4Gkaom2olZrxsmPyXuhXs4NMilvQs8Jds0evEHvgiYFvyPPuzMbOwQ8Yttjw+XnxQMY2pMaEDASNY96T8TJkw3yVvLA1j9n/8g==';
+
+const dataKey = {
+  t: 'dk',
+  v: 1,
+  sym: '66h5o2cUlBJsGuwDakZKMXL1xFzMrDEZ0iSezMEtAus=',
+};
+// encrypted with commonKey
+const encryptedDataKey =
+  '+SLyvIVhY+FegQ4KXpICQ5MsvoPB3T0Gfim438kky3nlEYRwAEdC3qJwNO23+xmVZGzXLZx8/1nkNYpp0vi7R0GUvv7iKzUXv5RiS32LGPFbWMtqTeONZwZ9BUyC4fDHHA==';
+
+const attachmentKey = symKey;
+const encryptedAttachmentKey = 'encrypted_attachment_key';
+
+const tagEncryptionKey = {
+  t: 'tek',
+  v: 1,
+  sym: '4/wwoE26eIRuGZgowe/TzSMbuGjY3AXoIsgU9raUF0g=',
+};
+// encrypted with commonKey
+const encryptedTagEncryptionKey =
+  'tYML9tI22Tv2ZjydEE0rZs1xFMKukjoozP8h33e0jq5Lp+YRfwfKhrZpbTnsSxe85OXp+IqBJqjxo0p5+tePolN9KdxGe5BJM+DUyPMZYJhEbXyt2ZA2wo5VxUMnG0okaus=';
+
+const testString = 'Hęłlø črüėl wōrlđ';
+
+const data = new Uint8Array([1, 2, 3, 4, 5, 6]);
+// encrypted with dataKey
+const encryptedData = 'KpbVc7H29wN9Tzntlj8Yy28LBOM/s3Wxhh0dOAUWQzbsZA==';
+
+const string = 'string';
+const encryptedString = 'encrypted_string';
+const object = {};
+const encryptedObject = 'encrypted_object';
 
 const permissionResponse = {
   app_id: testVariables.appId,
