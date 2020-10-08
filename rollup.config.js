@@ -27,7 +27,7 @@ const format = config.format || 'es';
 global.console.log(`Building SDK version ${VERSION} (format: ${format}) ...`);
 
 export default {
-  input: config.sdk === 'crypto' ? `${__dirname}/src/d4l-crypto.js` : `${__dirname}/src/d4l.js`,
+  input: config.sdk === 'crypto' ? `${__dirname}/src/d4l-crypto.ts` : `${__dirname}/src/d4l.ts`,
   output: [
     {
       dir: `${__dirname}/dest`,

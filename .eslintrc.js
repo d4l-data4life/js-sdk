@@ -7,15 +7,6 @@ module.exports = {
     'plugin:prettier/recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  overrides: [
-    {
-      files: ['**/*.ts'],
-      rules: {
-        'no-undef': 'off', // https://github.com/eslint/typescript-eslint-parser/issues/437
-        'no-unused-vars': 'off', // so types do not trigger
-      },
-    },
-  ],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 8,
@@ -38,6 +29,7 @@ module.exports = {
     complexity: ['error', 15], // push down to 10
     curly: 'error',
     'func-names': 'warn',
+    'import/order': 0,
     'import/extensions': ['error', 'never', { json: 'always' }],
     indent: ['error', 2],
     'key-spacing': ['error', { beforeColon: false }],
@@ -50,7 +42,7 @@ module.exports = {
     'no-console': 'warn',
     'no-underscore-dangle': 0,
     'no-multiple-empty-lines': ['error', { max: 1 }],
-    'no-unused-vars': 'error',
+    'no-unused-vars': 'warn',
     'prefer-destructuring': [
       'error',
       {
@@ -68,6 +60,8 @@ module.exports = {
       },
     ],
     semi: 'error',
+    '@typescript-eslint/ban-types': 'warn', // needs fixing, but not in a hurry
+    '@typescript-eslint/interface-name-prefix': 'warn',
     '@typescript-eslint/ban-ts-ignore': 'off', // it's not like we WANT ts-ignore
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-unused-vars': 'off', // so types do not trigger

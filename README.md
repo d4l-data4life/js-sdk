@@ -56,7 +56,7 @@ To run all tests, execute:
 npm test
 ```
 
-It uses eslint and tslint to check and report incorrect indentations and patterns in the project, bundles the project, run unit tests and makes a coverage report.
+It uses eslint to check and report incorrect indentations and patterns in the project, bundles the project, run unit tests and makes a coverage report.
 
 To run the unit tests only, execute:
 
@@ -70,22 +70,10 @@ During development, you can watch for any file changes and rerun the tests on an
 npm run karma:web
 ```
 
-To run eslint and tslint execute:
+To run eslint execute:
 
 ```bash
 npm run lint
-```
-
-To run only eslint execute:
-
-```bash
-npm run eslint
-```
-
-To run only tslint execute:
-
-```bash
-npm run tslint
 ```
 
 ## Development Process

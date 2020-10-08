@@ -14,7 +14,6 @@ export interface PractitionerConstructor {
 }
 
 export default class Practitioner implements fhir.Practitioner {
-  // tslint:disable-next-line variable-name
   public static fromFHIRObject(FHIRObject: fhir.Practitioner): Practitioner {
     if (!FHIRObject) {
       throw new Error('require 1 argument of type fhir Practitioner');

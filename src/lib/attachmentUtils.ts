@@ -1,4 +1,3 @@
-/* tslint:disable:ter-indent */
 // @ts-ignore
 import { hash } from 'js-crypto';
 import find from 'lodash/find';
@@ -10,10 +9,12 @@ import { getCleanAttachmentsFromResource } from '../services/fhirService';
 export const separateOldAndNewAttachments = (newDocumentAttachments, oldDocumentAttachments) =>
   newDocumentAttachments.reduce(
     (accumulator, attachment) => {
+      // eslint-disable-next-line no-shadow
       const { hash = null, id = null } = attachment;
       const match = find(oldDocumentAttachments, { hash }) || find(oldDocumentAttachments, { id });
 
       if (match) {
+        // eslint-disable-next-line no-param-reassign
         attachment.id = match.id;
         accumulator[0].push(attachment);
         return accumulator;
@@ -32,12 +33,8 @@ export const getFileContentsAsBuffer = (file: IBlobFile) =>
     fileReader.readAsArrayBuffer(file);
   });
 
-export const getContentHash = (file: any): Promise<string> =>
-  new Promise(resolve => {
-    getFileContentsAsBuffer(file).then(result => {
-      resolve(hash(result, 'SHA-1'));
-    });
-  });
+export const getContentHash = (file: IBlobFile): Promise<string> =>
+  getFileContentsAsBuffer(file).then(result => hash(result, 'SHA-1'));
 
 const getAttachmentIncrementor = attachment => {
   if (attachment.hasPreview) {
@@ -102,7 +99,6 @@ export const getIdentifierValue = uploadInformation => {
   };
 };
 
-// tslint:disable-next-line:variable-name
 const ImageProcessor = {
   getProcessor() {
     if (this.imageProcessor) {
@@ -110,7 +106,6 @@ const ImageProcessor = {
     }
     return new Promise(resolve => {
       // @ts-ignore
-      // tslint:disable-next-line:import-name
       import('pica').then(({ default: pica }) => {
         this.imageProcessor = pica({ features: ['js'] });
         return resolve(this.imageProcessor);
