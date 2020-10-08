@@ -1,15 +1,7 @@
-/* eslint-disable lodash/prefer-noop */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-unused-expressions */
-/* eslint-disable max-nested-callbacks */
 import 'babel-polyfill';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-// @ts-ignore
-import proxy from 'proxyquireify';
-// @ts-ignore
-import * as jsCrypto from 'js-crypto';
 
 import createCryptoService from '../../src/services/createCryptoService';
 import encryptionResources from '../testUtils/encryptionResources';
@@ -17,82 +9,15 @@ import userService from '../../src/services/userService';
 import userResources from '../testUtils/userResources';
 import testVariables from '../testUtils/testVariables';
 
-const proxyquire = proxy(require);
+import { convertBase64ToArrayBufferView } from 'js-crypto';
+
 chai.use(sinonChai);
 
 describe('createCryptoService', () => {
-  // let createCryptoService;
-
-  let getUserStub;
-  let getCommonKeyStub;
-  let asymDecryptStringStub;
-  let asymEncrypt;
-  let generateSymKeyStub;
-  let symEncryptObjectStub;
-  let symEncryptStub;
-  let symEncryptStringStub;
-  let symDecryptStub;
-  let symDecryptStringStub;
-  let symDecryptObjectStub;
-  let symDecryptDataKey;
-  let symDecryptData;
-
   beforeEach(() => {
-    /*
-    getUserStub = sinon.stub().returns(Promise.resolve(userResources.cryptoUser));
-
-    getCommonKeyStub = sinon.stub().returns(Promise.resolve(encryptionResources.commonKey));
-
-    asymDecryptStringStub = sinon
-      .stub()
-      .returns(Promise.resolve(JSON.stringify(encryptionResources.commonKey)));
-
-    generateSymKeyStub = sinon.stub().returns(Promise.resolve(encryptionResources.dataKey));
-
-    symEncryptStub = sinon.stub().returns(Promise.resolve(encryptionResources.encryptedData));
-
-    symEncryptStringStub = sinon.stub().returns(Promise.resolve(encryptionResources.encryptedData));
-
-    symEncryptObjectStub = sinon
-      .stub()
-      .returns(Promise.resolve(encryptionResources.encryptedDataKey));
-
-    symDecryptObjectStub = sinon.stub().returns(Promise.resolve(encryptionResources.dataKey));
-
-    symDecryptStub = sinon.stub().returns(Promise.resolve(encryptionResources.data));
-
-    symDecryptStringStub = sinon
-      .stub()
-      .returns(Promise.resolve(JSON.stringify(encryptionResources.dataKey)));
-    */
-    /*
-    createCryptoService = proxyquire('../../src/services/createCryptoService', {
-      'js-crypto': {
-        asymDecryptString: asymDecryptStringStub,
-        generateSymKey: generateSymKeyStub,
-        symEncrypt: symEncryptStub,
-        symEncryptString: symEncryptStringStub,
-        symEncryptObject: symEncryptObjectStub,
-        symDecryptObject: symDecryptObjectStub,
-        symDecrypt: symDecryptStub,
-        symDecryptString: symDecryptStringStub,
-        keyTypes,
-      },
-      './userService': {
-        default: {
-          getUser: getUserStub,
-          getCommonKey: getCommonKeyStub,
-          pullUser: getUserStub,
-        },
-      },
-    }).default;
-    */
-
     userService.currentUserId = testVariables.userId;
-    // TODO: maybe use another key as an alternativecommonkey
     userService.commonKeys = {
       [testVariables.userId]: {
-        //'some old common key id': encryptionResources.symHCKey,
         [testVariables.commonKeyId]: encryptionResources.commonKey,
         [testVariables.alternativeCommonKeyId]: encryptionResources.commonKey,
       },
@@ -146,13 +71,20 @@ describe('createCryptoService', () => {
   });
 
   describe('decryptData', () => {
-    it('should be possible to decrypt document', done => {
-      // @Burtchen this test used an alternative commonKey. Maybe it makes sense to also do it here
+    let getCommonKeySpy;
+    beforeEach(() => {
+      getCommonKeySpy = sinon.spy(userService, 'getCommonKey');
+    });
+    afterEach(() => {
+      getCommonKeySpy.restore();
+    });
+
+    it('should be possible to decrypt a document', done => {
       const customId = testVariables.alternativeCommonKeyId;
       const encryptedDataKey =
         'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
       const encryptedDataString = 'K/7R2UJVxcOs3oH66868mTO/sGmYeZrJNlx52leEMcrAIA==';
-      const encryptedData = jsCrypto.default.convertBase64ToArrayBufferView(encryptedDataString);
+      const encryptedData = convertBase64ToArrayBufferView(encryptedDataString);
       const decryptedData = new Uint8Array([115, 116, 114, 105, 110, 103]);
 
       createCryptoService(testVariables.userId)
@@ -165,21 +97,8 @@ describe('createCryptoService', () => {
         )
         .then(receivedData => {
           expect(receivedData).to.deep.equal(decryptedData);
-
-          // // common key
-          // expect(getCommonKeyStub).to.be.calledOnce;
-          // expect(getCommonKeyStub).to.be.calledWith(testVariables.userId, customId);
-          // // decryption
-          // expect(symDecryptObjectStub).to.be.calledOnce;
-          // expect(symDecryptObjectStub).to.be.calledWith(
-          //   encryptionResources.commonKey,
-          //   encryptionResources.encryptedDataKey
-          // );
-          // expect(symDecryptStub).to.be.calledOnce;
-          // expect(symDecryptStub).to.be.calledWith(
-          //   encryptionResources.dataKey,
-          //   encryptionResources.encryptedData
-          // );
+          expect(getCommonKeySpy).to.be.calledOnce;
+          expect(getCommonKeySpy).to.be.calledWith(testVariables.userId, customId);
         })
         .then(() => done())
         .catch(done);
@@ -187,26 +106,19 @@ describe('createCryptoService', () => {
   });
 
   describe('updateKeys', () => {
-    let symDecryptObjectSpy;
-    let symEncryptObjectSpy;
     let getCommonKeyStub;
+    const oldEncryptedKey =
+      'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
+
     beforeEach(() => {
       getCommonKeyStub = sinon.stub(userService, 'getCommonKey');
       getCommonKeyStub.returns(encryptionResources.commonKey);
-      symDecryptObjectSpy = sinon.spy(jsCrypto.default.symDecryptObject);
-      symEncryptObjectSpy = sinon.spy(jsCrypto.default.symEncryptObject);
     });
     afterEach(() => {
       getCommonKeyStub.restore();
-      symDecryptObjectSpy.resetHistory(); // can't use restore because we are not spying on a method via string
-      symEncryptObjectSpy.resetHistory();
     });
 
     it('should update a single key with the newest common key', done => {
-      const oldCommonKeyId = testVariables.commonKeyId;
-      const oldEncryptedKey =
-        'WiLqmhgYAcKWYzRcwxi+ixCsRuqrUF7Z6ShCBt8qlLnDSfLp6mBp/kDs3F1F6FLeCiYlQ1r8HJXzMobM5Y0rAvIltlO68oBVZjv1HUVHxP1efwHnhn5TNGJaEAEWiVTcHw==';
-
       createCryptoService(testVariables.userId)
         .updateKeys({
           commonKeyId: 'old common key id',
@@ -232,8 +144,6 @@ describe('createCryptoService', () => {
         .updateKeys(encryptedKeyInfo)
         .then(updatedKey => {
           expect(updatedKey).to.deep.equal([encryptedKeyInfo]);
-          expect(symDecryptObjectSpy).to.not.be.called;
-          expect(symEncryptObjectSpy).to.not.be.called;
           done();
         })
         .catch(done);
@@ -241,8 +151,8 @@ describe('createCryptoService', () => {
 
     it('should encrypt multiple keys with the same common key', done => {
       const oldCommonKeyId = 'a common key id';
-      const oldEncryptedKey1 = 'encrypted key 1';
-      const oldEncryptedKey2 = 'encrypted key 2';
+      const oldEncryptedKey1 = oldEncryptedKey;
+      const oldEncryptedKey2 = oldEncryptedKey;
       createCryptoService(testVariables.userId)
         .updateKeys(
           { commonKeyId: oldCommonKeyId, encryptedKey: oldEncryptedKey1 },
@@ -250,15 +160,7 @@ describe('createCryptoService', () => {
         )
         .then(updatedKeys => {
           expect(updatedKeys).to.have.length(2);
-          expect(symDecryptObjectStub).to.be.calledTwice;
-          expect(symDecryptObjectStub).to.be.calledWith(
-            encryptionResources.commonKey,
-            oldEncryptedKey1
-          );
-          expect(symDecryptObjectStub).to.be.calledWith(
-            encryptionResources.commonKey,
-            oldEncryptedKey2
-          );
+          expect(getCommonKeyStub).to.be.calledTwice;
           done();
         })
         .catch(done);
