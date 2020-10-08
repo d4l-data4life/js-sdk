@@ -8,61 +8,83 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 
-import * as jsCrypto from 'js-crypto';
+import { convertObjectToArrayBufferView } from 'js-crypto';
 
 import taggingUtils from '../../src/lib/taggingUtils';
+import documentRoutes from '../../src/routes/documentRoutes';
+import userService from '../../src/services/userService';
+import * as fhirValidator from '../../src/lib/fhirValidator';
+import * as createCryptoService from '../../src/services/createCryptoService';
 
 import testVariables from '../testUtils/testVariables';
+import documentResources from '../testUtils/documentResources';
 import userResources from '../testUtils/userResources';
 import fhirResources from '../testUtils/fhirResources';
 import recordResources from '../testUtils/recordResources';
 import encryptionResources from '../testUtils/encryptionResources';
 import recordService from '../../src/services/recordService';
 
-import * as documentRoutes from '../../src/routes/documentRoutes';
-import * as userService from '../../src/services/userService';
-import * as fhirValidator from '../../src/lib/fhirValidator';
-import * as createCryptoService from '../../src/services/createCryptoService';
-
 chai.use(sinonChai);
-
 const { expect } = chai;
 
 describe('services/recordService', () => {
-  let jsCryptoStub;
-  let documentRoutesStub;
-
-  beforeEach(() => {
-    jsCryptoStub = sinon.stub(jsCrypto);
-    documentRoutesStub = sinon.stub(documentRoutes);
-  });
-
-  let createRecordStub = sinon
-    .stub()
-    .returns(Promise.resolve(Object.assign({}, recordResources.documentReferenceEncrypted)));
-
+  let createRecordStub;
   let createCryptoServiceStub;
   let encryptObjectStub;
   let updateKeysStub;
-  let symEncryptStringStub;
-  let symDecryptStringStub;
-  let symEncryptObjectStub;
-  let convertBase64ToArrayBufferViewStub;
-  let convertArrayBufferViewToStringStub;
 
   let decryptDataStub;
   let deleteRecordStub;
   let downloadRecordStub;
-  let fhirServiceUploadRecordSpy;
+  let recordServiceUploadRecordSpy;
 
   let getUserStub;
   let searchRecordsStub;
   let getRecordsCountStub;
   let updateRecordStub;
-  let fhirValidatorImportStub;
   let validateStub;
 
   beforeEach(() => {
+    // USERSERVICE
+    getUserStub = sinon
+      .stub(userService, 'getUser')
+      .returns(Promise.resolve(userResources.cryptoUser));
+
+    // DOCUMENTROUTES
+    createRecordStub = sinon
+      .stub(documentRoutes, 'createRecord')
+      .returns(Promise.resolve(Object.assign({}, recordResources.documentReferenceEncrypted)));
+    deleteRecordStub = sinon.stub(documentRoutes, 'deleteRecord').returns(Promise.resolve());
+    downloadRecordStub = sinon
+      .stub(documentRoutes, 'downloadRecord')
+      .returns(Promise.resolve(Object.assign({}, recordResources.documentReferenceEncrypted)));
+    getRecordsCountStub = sinon.stub(documentRoutes, 'getRecordsCount').returns(
+      Promise.resolve({
+        totalCount: recordResources.count,
+      })
+    );
+    searchRecordsStub = sinon.stub(documentRoutes, 'searchRecords').returns(
+      Promise.resolve({
+        totalCount: recordResources.count,
+        records: [
+          Object.assign({}, recordResources.documentReferenceEncrypted, {
+            tags: [],
+          }),
+        ],
+      })
+    );
+    updateRecordStub = sinon
+      .stub(documentRoutes, 'updateRecord')
+      .returns(Promise.resolve(Object.assign({}, recordResources.documentReferenceEncrypted)));
+
+    // FHIRVALIDATOR
+    validateStub = sinon.stub().returns(Promise.resolve());
+    fhirValidator.default.validate = validateStub;
+
+    // CREATECRYPTOSERVICE
+    decryptDataStub = sinon
+      .stub()
+      .returns(Promise.resolve(convertObjectToArrayBufferView(fhirResources.documentReference)));
     encryptObjectStub = sinon.stub().returns(
       Promise.resolve([
         encryptionResources.encryptedObject,
@@ -72,97 +94,48 @@ describe('services/recordService', () => {
         },
       ])
     );
-
-    decryptDataStub = sinon.stub().returns(Promise.resolve(encryptionResources.data));
-    symEncryptStringStub = sinon
-      .stub()
-      .returns(Promise.resolve(encryptionResources.encryptedString));
-    symDecryptStringStub = sinon.stub().returns(Promise.resolve(encryptionResources.string));
-    symEncryptObjectStub = sinon.stub().returns(Promise.resolve(encryptionResources.string));
-    convertBase64ToArrayBufferViewStub = sinon.stub().returns(encryptionResources.data);
-    convertArrayBufferViewToStringStub = sinon
-      .stub()
-      .returns(JSON.stringify(fhirResources.documentReference));
-
-    getUserStub = sinon.stub().returns(Promise.resolve(userResources.cryptoUser));
-    userService.default.getUser = getUserStub;
-
-    createRecordStub = sinon
-      .stub()
-      .returns(Promise.resolve(Object.assign({}, recordResources.documentReferenceEncrypted)));
-    deleteRecordStub = sinon.stub().returns(Promise.resolve());
     updateKeysStub = sinon
       .stub()
       .returns(
         Promise.resolve([{ commonKeyId: testVariables.commonKeyId, encryptedKey: 'encrypted_key' }])
       );
-    downloadRecordStub = sinon
-      .stub()
-      .returns(Promise.resolve(Object.assign({}, recordResources.documentReferenceEncrypted)));
-    getRecordsCountStub = sinon.stub().returns(
-      Promise.resolve({
-        totalCount: recordResources.count,
-      })
-    );
-    searchRecordsStub = sinon.stub().returns(
-      Promise.resolve({
-        totalCount: recordResources.count,
-        records: [Object.assign({}, recordResources.documentReferenceEncrypted)],
-      })
-    );
-    updateRecordStub = sinon
-      .stub()
-      .returns(Promise.resolve(Object.assign({}, recordResources.documentReferenceEncrypted)));
-
-    fhirValidatorImportStub = sinon.stub(fhirValidator);
-    validateStub = sinon.stub().returns(Promise.resolve());
-    fhirValidatorImportStub.default.validate = validateStub;
-
-    fhirServiceUploadRecordSpy = sinon.spy(recordService, 'uploadRecord');
-
-    createCryptoServiceStub = sinon.stub().returns({
+    // @ts-ignore
+    createCryptoServiceStub = sinon.stub(createCryptoService, 'default').returns({
       decryptData: decryptDataStub,
       encryptObject: encryptObjectStub,
       updateKeys: updateKeysStub,
     });
-    // @ts-ignore
-    createCryptoService.default = createCryptoServiceStub;
 
-    documentRoutesStub.default.createRecord = createRecordStub;
-    documentRoutesStub.default.downloadRecord = downloadRecordStub;
-    documentRoutesStub.default.updateRecord = updateRecordStub;
-    documentRoutesStub.default.searchRecords = searchRecordsStub;
-    documentRoutesStub.default.deleteRecord = deleteRecordStub;
+    recordServiceUploadRecordSpy = sinon.spy(recordService, 'uploadRecord');
 
-    /*
-    console.log(jsCryptoStub.default.symEncryptString);
-    jsCryptoStub.default.symEncryptString = symEncryptStringStub;
-    jsCryptoStub.default.symEncryptObject = symEncryptObjectStub;
-    jsCryptoStub.default.symDecryptString = symDecryptStringStub;
-    jsCryptoStub.default.convertBase64ToArrayBufferView = convertBase64ToArrayBufferViewStub;
-    jsCryptoStub.default.convertArrayBufferViewToString = convertArrayBufferViewToStringStub;
-    */
-
+    taggingUtils.setPartnerId(testVariables.partnerId);
     // @ts-ignore
     global.__DATA_MODEL_VERSION__ = testVariables.dataModelVersion;
   });
 
   afterEach(() => {
+    // USERSERVICE
+    getUserStub.restore();
+    // DOCUMENTROUTES
+    createRecordStub.restore();
+    deleteRecordStub.restore();
+    downloadRecordStub.restore();
+    getRecordsCountStub.restore();
+    searchRecordsStub.restore();
+    updateRecordStub.restore();
+    // CREATECRYPTOSERVICE
+    updateKeysStub.reset();
+    createCryptoServiceStub.restore();
+    // FHIRVALIDATOR
     validateStub.reset();
-    downloadRecordStub.reset();
-    searchRecordsStub.reset();
-    updateRecordStub.reset();
-    getRecordsCountStub.reset();
-    createRecordStub.reset();
-    deleteRecordStub.reset();
-    fhirServiceUploadRecordSpy.restore();
 
     taggingUtils.reset();
+
+    recordServiceUploadRecordSpy.restore();
   });
 
   describe('createRecord', () => {
     it('should resolve when called with userId and correct fhirResource', done => {
-      taggingUtils.setPartnerId(testVariables.partnerId);
       const tags = [
         taggingUtils.generateCreationTag(),
         ...taggingUtils.generateTagsFromFhir(fhirResources.documentReference),
@@ -182,7 +155,7 @@ describe('services/recordService', () => {
           expect(validateStub).to.be.calledWith(fhirResources.documentReference);
           expect(getUserStub).to.be.calledOnce;
           expect(getUserStub).to.be.calledWith(testVariables.userId);
-          expect(fhirServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
+          expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
             fhirResource: fhirResources.documentReference,
             tags,
           });
@@ -208,7 +181,7 @@ describe('services/recordService', () => {
         .catch(done);
     });
   });
-  /*
+
   describe('updateRecord', () => {
     it('should resolve when called with userId, recordId and fhirResource ', done => {
       recordService
@@ -274,7 +247,6 @@ describe('services/recordService', () => {
       const tags = [
         ...taggingUtils.generateCustomTags(documentResources.annotations),
         taggingUtils.generateUpdateTag(),
-        ...[encryptionResources.string],
         ...taggingUtils.generateTagsFromFhir(fhirResources.documentReference),
       ];
 
@@ -287,7 +259,13 @@ describe('services/recordService', () => {
         .then(res => {
           expect(res.id).to.deep.equal(testVariables.recordId);
           expect(updateRecordStub).to.be.calledOnce;
-          expect(fhirServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
+          expect(recordServiceUploadRecordSpy.args[0][0]).to.equal(testVariables.userId);
+          expect(Object.keys(recordServiceUploadRecordSpy.args[0][1])).have.members([
+            'id',
+            'fhirResource',
+            'tags',
+          ]);
+          expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
             id: testVariables.recordId,
             fhirResource: fhirResources.documentReference,
             tags,
@@ -331,8 +309,8 @@ describe('services/recordService', () => {
         offset: 20,
         start_date: '2017-06-06',
         end_date: '2017-08-08',
-        exclude_tags: [encryptionResources.encryptedString],
-        tags: [encryptionResources.encryptedString, encryptionResources.encryptedString],
+        exclude_tags: [testVariables.encryptedAppDataFlag],
+        tags: [testVariables.encryptedTag, testVariables.encryptedSecondTag],
       };
 
       recordService
@@ -366,12 +344,12 @@ describe('services/recordService', () => {
 
     it('returns only count when one of params is countOnly', done => {
       const params = {
-        tags: [testVariables.partnerId],
+        tags: [testVariables.tag],
       };
 
       const expectedParamsForRoute = {
         exclude_tags: [],
-        tags: [encryptionResources.encryptedString],
+        tags: [testVariables.encryptedTag],
       };
 
       recordService
@@ -389,7 +367,6 @@ describe('services/recordService', () => {
         .catch(done);
     });
   });
-  */
 
   describe('deleteRecord', () => {
     it('should resolve, when called with userId and recordId', done => {

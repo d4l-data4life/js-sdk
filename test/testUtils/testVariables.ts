@@ -25,15 +25,22 @@ const testVariables = {
   wrongPassword: 'wrong_password',
   dateString: '2017-12-15',
   dateTimeString: '2017-12-15T10:35:52.492',
-  tag: 'resourceType=documentReference',
+  tag: 'resourcetype=documentreference',
+  // encrypted with encryptionResources.tagEncryptionKey
+  encryptedTag: 'oEYB2yHZ26/+mdqTDOIjQnwU7cl49Ldf3HjATcNofnk=',
+
   secondTag: 'partner=1',
+  // encrypted with encryptionResources.tagEncryptionKey
+  encryptedSecondTag: 'Qg6IQzTvmxuYfE9PyqU7zg==',
+
   updatedByPartnerTag: 'updatedbypartner=2',
   encodedTag: 'client=ann%5Fotation',
   customTag: 'custom=annotation',
+
   appDataFlag: 'flag=appdata',
-  encryptedTag: 'encrypted_tag',
-  tek: 'tag_encryption_key',
-  encryptedTek: 'encrypted_tag_encryption_key',
+  // encrypted with encryptionResources.tagEncryptionKey
+  encryptedAppDataFlag: 'ktpQgkX9xenHcax0IhbvAQ==',
+
   encryptedUserData: 'encrypted_user_data',
   string: 'string',
   encryptedString: 'encrypted_string',

@@ -3,7 +3,6 @@ import {
   convertBase64ToArrayBufferView,
   symDecryptString,
   symEncryptString,
-  // @ts-ignore
 } from 'js-crypto';
 
 import isError from 'lodash/isError';
@@ -255,7 +254,6 @@ const recordService = {
     const tagsPromise = Promise.all<string>(
       record.encrypted_tags.map(tag => symDecryptString(tagKey, tag))
     );
-
     const recordPromise = createCryptoService(record.user_id)
       .decryptData(
         {
@@ -265,7 +263,6 @@ const recordService = {
         convertBase64ToArrayBufferView(record.encrypted_body)
       )
       .then(convertArrayBufferViewToString)
-      // @ts-ignore
       .then(JSON.parse);
     return Promise.all([recordPromise, tagsPromise]).then(([decryptedRecord, decryptedTags]) => {
       const commonKeyId = populateCommonKeyId(record.common_key_id);

@@ -6,118 +6,76 @@ import 'babel-polyfill';
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-// @ts-ignore
-import proxy from 'proxyquireify';
-import 'js-crypto';
 
-import '../../src/services/userService';
-import '../../src/routes/userRoutes';
+import userService from '../../src/services/userService';
+import userRoutes from '../../src/routes/userRoutes';
 import { NOT_SETUP } from '../../src/lib/errors/SetupError';
 import testVariables from '../testUtils/testVariables';
 import userResources from '../testUtils/userResources';
 import encryptionResources from '../testUtils/encryptionResources';
 
 chai.use(sinonChai);
-const proxyquire = proxy(require);
 
 const { expect } = chai;
 
 describe('services/userService', () => {
-  let userService;
-  let importKeyStub;
-  let asymDecryptStub;
-  let symDecryptStub;
-  let getGrantedPermissionsStub;
-  let getUserDetailsStub;
   let getCommonKeyStub;
-  let userInfoStub;
-  let resolveUserIdStub;
+  let fetchUserInfoStub;
   let getReceivedPermissionsStub;
   let getCAPsStub;
   let grantPermissionStub;
 
   beforeEach(() => {
-    asymDecryptStub = sinon.stub();
-    symDecryptStub = sinon.stub();
-    importKeyStub = sinon.stub();
-
-    // output is set to this.privateKey
-    importKeyStub
-      .withArgs(
-        // argument is JSON.parse(atob(privateKey))
-        encryptionResources.privateKeyClientUser
-      )
-      .returns(Promise.resolve(encryptionResources.privateKeyClientUser));
-
-    asymDecryptStub
-      .withArgs(encryptionResources.privateKeyClientUser, encryptionResources.encryptedCommonKey)
-      .returns(Promise.resolve(JSON.stringify(encryptionResources.commonKey)));
-
-    symDecryptStub
-      .withArgs(encryptionResources.commonKey, encryptionResources.encryptedTagEncryptionKey)
-      .returns(Promise.resolve(encryptionResources.symHCKey));
-
-    getGrantedPermissionsStub = sinon
-      .stub()
-      .returns(Promise.resolve([{ owner_id: 'a', grantee_id: 'b' }]));
-    getUserDetailsStub = sinon.stub().returns(Promise.resolve(userResources.userDetails));
-    userInfoStub = sinon.stub().returns(Promise.resolve(userResources.fetchUserInfo));
-    resolveUserIdStub = sinon.stub().returns(
-      Promise.resolve({
-        uid: testVariables.userId,
-      })
-    );
+    // USERROUTES
+    fetchUserInfoStub = sinon
+      .stub(userRoutes, 'fetchUserInfo')
+      .returns(Promise.resolve(userResources.userInfo));
+    getCommonKeyStub = sinon
+      .stub(userRoutes, 'getCommonKey')
+      .returns(Promise.resolve({ common_key: encryptionResources.encryptedCommonKey }));
     getReceivedPermissionsStub = sinon
-      .stub()
+      .stub(userRoutes, 'getReceivedPermissions')
+      .returns(Promise.resolve([encryptionResources.permissionResponse]));
+    grantPermissionStub = sinon.stub(userRoutes, 'grantPermission').returns(Promise.resolve());
+    getCAPsStub = sinon
+      .stub(userRoutes, 'getCAPs')
       .returns(Promise.resolve([encryptionResources.permissionResponse]));
 
-    getCommonKeyStub = sinon
-      .stub()
-      .returns(Promise.resolve({ common_key: encryptionResources.encryptedCommonKey }));
+    userService.setPrivateKey(encryptionResources.CUPPrivateKey);
+  });
 
-    getCAPsStub = sinon.stub().returns(Promise.resolve([encryptionResources.permissionResponse]));
-    grantPermissionStub = sinon.stub().returns(Promise.resolve());
-
-    userService = proxyquire('../../src/services/userService', {
-      'js-crypto': {
-        importKey: importKeyStub,
-        asymDecrypt: asymDecryptStub,
-        asymDecryptString: asymDecryptStub,
-        symDecrypt: symDecryptStub,
-        symDecryptObject: symDecryptStub,
-      },
-      '../routes/userRoutes': {
-        default: {
-          getGrantedPermissions: getGrantedPermissionsStub,
-          getUserDetails: getUserDetailsStub,
-          getCommonKey: getCommonKeyStub,
-          fetchUserInfo: userInfoStub,
-          resolveUserId: resolveUserIdStub,
-          getCAPs: getCAPsStub,
-          getReceivedPermissions: getReceivedPermissionsStub,
-          grantPermission: grantPermissionStub,
-        },
-      },
-    }).default;
+  afterEach(() => {
+    userService.resetUser();
+    // USERROUTES
+    fetchUserInfoStub.restore();
+    getCommonKeyStub.restore();
+    getReceivedPermissionsStub.restore();
+    grantPermissionStub.restore();
+    getCAPsStub.restore();
   });
 
   describe('pullUser', () => {
-    it('should pull the currentUser when private key is set with cryptoKey', async () => {
-      userService.setPrivateKey(encryptionResources.privateKeyClientUser);
-      const res = await userService.pullUser();
-      const userId = userService.currentUserId;
-      const appId = userService.currentAppId;
-      expect(userId).to.equal(testVariables.userId);
-      expect(appId).to.equal(testVariables.appId);
-      expect(res).to.deep.equal(userResources.cryptoUser);
-      const commonKey = await userService.commonKeys[testVariables.userId][
-        testVariables.commonKeyId
-      ];
+    it('should pull the currentUser when private key is set with cryptoKey', done => {
+      userService
+        .pullUser()
+        .then(user => {
+          expect(user).to.deep.equal(userResources.cryptoUser);
 
-      expect(commonKey).to.deep.equal(encryptionResources.commonKey);
+          const userId = userService.currentUserId;
+          expect(userId).to.equal(testVariables.userId);
+
+          const appId = userService.currentAppId;
+          expect(appId).to.equal(testVariables.appId);
+
+          const commonKey = userService.commonKeys[testVariables.userId][testVariables.commonKeyId];
+          expect(commonKey).to.deep.equal(encryptionResources.commonKey);
+          done();
+        })
+        .catch(done);
     });
 
     it('should fail when private key is not set', done => {
+      userService.privateKey = null;
       userService.pullUser().catch(error => {
         expect(error.message).to.equal(NOT_SETUP);
         done();
@@ -138,7 +96,6 @@ describe('services/userService', () => {
     });
 
     it('should return pullUser, when user is not set yet', done => {
-      userService.setPrivateKey(encryptionResources.privateKeyClientUser);
       userService.users[testVariables.userId] = null;
       userService
         .getUser(testVariables.userId)
@@ -153,7 +110,6 @@ describe('services/userService', () => {
   // @ts-ignore
   describe('isCurrentUser', done => {
     it('Happy Path', () => {
-      userService.setPrivateKey(encryptionResources.privateKeyClientUser);
       userService.pullUser().then(() => {
         const isCurrentUser = userService.isCurrentUser(testVariables.userId);
         expect(isCurrentUser).to.equal(true);
@@ -173,7 +129,6 @@ describe('services/userService', () => {
 
   describe('getCommonKey', () => {
     it('should fetch the common key from the backend if required', done => {
-      userService.setPrivateKey(encryptionResources.privateKeyClientUser);
       userService
         .getCommonKey(testVariables.userId, testVariables.commonKeyId)
         .then(key => {
@@ -190,11 +145,8 @@ describe('services/userService', () => {
 
     it('should not fetch the common key if it already exists', done => {
       const fakeCommonKey = 'common key goes here';
-      userService.setPrivateKey(encryptionResources.privateKeyClientUser);
       userService.commonKeys[testVariables.userId] = {};
-      userService.commonKeys[testVariables.userId][testVariables.commonKeyId] = Promise.resolve(
-        fakeCommonKey
-      );
+      userService.commonKeys[testVariables.userId][testVariables.commonKeyId] = fakeCommonKey;
       userService
         .getCommonKey(testVariables.userId, testVariables.commonKeyId)
         .then(key => {
@@ -261,7 +213,8 @@ describe('services/userService', () => {
         .catch(done);
     });
 
-    it('should reject with not setup error when currentUserId is null', done => {
+    it('should reject with not setup error when SDK is not setup', done => {
+      userService.resetUser();
       userService
         .grantPermission(testVariables.appId, [testVariables.annotation, testVariables.annotation])
         .catch(err => {

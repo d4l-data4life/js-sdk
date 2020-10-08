@@ -114,39 +114,44 @@ const userService = {
 
     // Fetch user info. userId == null is a valid value. It seems to fetch
     // the users data.
-    return userRoutes.fetchUserInfo(userId).then(res => {
-      if (!userId) {
-        this.currentUserId = res.sub;
-        this.currentAppId = res.app_id;
+    return userRoutes
+      .fetchUserInfo(userId)
+      .then(res => {
+        if (!userId) {
+          this.currentUserId = res.sub;
+          this.currentAppId = res.app_id;
 
-        // This wouldn't be necessary, if fetch would be used with
-        // this.currentUserId instead of null.
-        // eslint-disable-next-line no-param-reassign
-        userId = this.currentUserId;
-      }
-      return asymDecryptString(this.privateKey, res.common_key)
-        .then(key => {
-          commonKey = JSON.parse(key);
-          commonKeyId = populateCommonKeyId(res.common_key_id);
+          // This wouldn't be necessary, if fetch would be used with
+          // this.currentUserId instead of null.
+          // eslint-disable-next-line no-param-reassign
+          userId = this.currentUserId;
+        }
+        return res;
+      })
+      .then(res =>
+        asymDecryptString(this.privateKey, res.common_key)
+          .then(key => {
+            commonKey = JSON.parse(key);
+            commonKeyId = populateCommonKeyId(res.common_key_id);
 
-          if (!this.commonKeys[userId]) {
-            this.commonKeys[userId] = {};
-          }
-          this.commonKeys[userId][commonKeyId] = Promise.resolve(commonKey);
+            if (!this.commonKeys[userId]) {
+              this.commonKeys[userId] = {};
+            }
+            this.commonKeys[userId][commonKeyId] = commonKey;
 
-          return symDecryptObject(commonKey, res.tag_encryption_key);
-        })
-        .then(tek => {
-          this.users[userId] = {
-            id: userId,
-            commonKey,
-            commonKeyId,
-            tek,
-          };
+            return symDecryptObject(commonKey, res.tag_encryption_key);
+          })
+          .then(tek => {
+            this.users[userId] = {
+              id: userId,
+              commonKey,
+              commonKeyId,
+              tek,
+            };
 
-          return this.users[userId];
-        });
-    });
+            return this.users[userId];
+          })
+      );
   },
 
   /**
@@ -154,7 +159,7 @@ const userService = {
    *  @param {String} keyId - ID of key to retrieve
    *  @returns {Promise} Resolves to the (decrypted) common key
    */
-  getCommonKey(userId: string, keyId: string): Promise<Record<string, any>> {
+  async getCommonKey(userId: string, keyId: string): Promise<Record<string, any>> {
     if (!this.commonKeys[userId]) {
       this.commonKeys[userId] = {};
     }
@@ -165,7 +170,7 @@ const userService = {
       // the method multiple times in a short period with the same arguments,
       // only one endpoint call will be made.
       // TODO: Terra often makes multiple calls to the same endpoint. Is a similar issue to blame?
-      this.commonKeys[userId][keyId] = userRoutes
+      this.commonKeys[userId][keyId] = await userRoutes
         .getCommonKey(userId, keyId)
         .then(res => asymDecryptString(this.privateKey, res.common_key))
         .then(JSON.parse);

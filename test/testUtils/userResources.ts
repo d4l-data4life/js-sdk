@@ -13,10 +13,10 @@ const userResources = {
     id: testVariables.userId,
     alias: testVariables.userAlias,
     state: testVariables.state,
-    tek: testVariables.tek,
+    tek: encryptionResources.tagEncryptionKey,
     userData: testVariables.userData,
   },
-  fetchUserInfo: {
+  userInfo: {
     sub: testVariables.userId,
     common_key: encryptionResources.encryptedCommonKey,
     common_key_id: testVariables.commonKeyId,
@@ -29,7 +29,7 @@ const userResources = {
       email: testVariables.userAlias,
       state: testVariables.state,
       // TODO encryptedUserData, when encryption works
-      tag_encryption_key: testVariables.tek,
+      tag_encryption_key: encryptionResources.tagEncryptionKey,
       // TODO encryptedUserData, when encryption works
       user_data: { encrypted_data: JSON.stringify(testVariables.userData) },
     },
@@ -37,7 +37,7 @@ const userResources = {
   cryptoUser: {
     id: testVariables.userId,
     commonKey: encryptionResources.commonKey,
-    tek: encryptionResources.symHCKey,
+    tek: encryptionResources.tagEncryptionKey,
     commonKeyId: testVariables.commonKeyId,
   },
   scopeArray: ['rec:r', 'rec:w', 'attachment:r', 'attachment:w', 'user:r', 'user:w', 'user:q'],

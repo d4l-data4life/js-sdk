@@ -215,7 +215,7 @@ describe('D4L', () => {
         // @ts-ignore
         Promise.resolve({
           id: testVariables.userId,
-          tek: testVariables.tek,
+          tek: encryptionResources.tagEncryptionKey,
           commonKey: {},
           commonKeyId: testVariables.commonKeyId,
         })
@@ -226,7 +226,7 @@ describe('D4L', () => {
       D4LSDK.setup(
         testVariables.clientId,
         'development',
-        btoa(JSON.stringify(encryptionResources.hcPrivateKey)),
+        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
         requestAccessTokenStub
       )
         .then(res => {
@@ -259,7 +259,7 @@ describe('D4L', () => {
       D4LSDK.setup(
         testVariables.clientId,
         'development',
-        btoa(JSON.stringify(encryptionResources.hcPrivateKey)),
+        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
         requestAccessTokenStub
       )
         .then(res => {
@@ -276,7 +276,7 @@ describe('D4L', () => {
       D4LSDK.setup(
         234,
         'development',
-        btoa(JSON.stringify(encryptionResources.hcPrivateKey)),
+        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
         requestAccessTokenStub
       ).catch(error => {
         expect(error.name).to.equal('ValidationError');
@@ -288,7 +288,7 @@ describe('D4L', () => {
       D4LSDK.setup(
         'invalid_client_id',
         'development',
-        btoa(JSON.stringify(encryptionResources.hcPrivateKey)),
+        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
         requestAccessTokenStub
       ).catch(error => {
         expect(error.name).to.equal('ValidationError');
