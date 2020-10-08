@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-expressions */
+/* eslint-disable max-nested-callbacks */
+
 import 'babel-polyfill';
 import chai, { expect } from 'chai';
 import sinon from 'sinon';
