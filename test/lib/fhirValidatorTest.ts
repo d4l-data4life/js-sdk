@@ -135,6 +135,18 @@ import observationExampleSTU31MinuteApgarScore from './resources/stu3/observatio
 
 import researchSubjectExampleSTU3 from './resources/stu3/researchsubject-example.json';
 
+import encounterExampleR4 from './resources/r4/encounter-example.json';
+// includes 'Location'
+// import encounterExampleR4Home from './resources/r4/encounter-home-example.json';
+import encounterExampleR4RealWorldF201 from './resources/r4/encounter-example-f201-20130404.json';
+import encounterExampleR4RealWorldF202WithExtension from './resources/r4/encounter-example-f202-20130128.json';
+import encounterExampleR4RealWorldF203 from './resources/r4/encounter-example-f203-20130311.json';
+import encounterExampleR4RealWorldF001Heart from './resources/r4/encounter-example-f001-heart.json';
+import encounterExampleR4RealWorldF002Lung from './resources/r4/encounter-example-f002-lung.json';
+import encounterExampleR4RealWorldF003Abscess from './resources/r4/encounter-example-f003-abscess.json';
+import encounterExampleR4XCDA from './resources/r4/encounter-example-xcda.json';
+import encounterExampleR4EmergencyInpatient from './resources/r4/encounter-example-emergency-inpatient.json';
+
 import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../src/services/fhirService';
 import sinon from 'sinon';
 
@@ -302,7 +314,7 @@ describe('fhir validator', () => {
         .catch(done);
     });
 
-    const exampleCollection = {
+    const exampleSTU3Collection = {
       DiagnosticReport: [
         { diagnosticReportExampleSTU3DXABoneDensity },
         { diagnosticReportExampleSTU3BrainCT },
@@ -412,7 +424,7 @@ describe('fhir validator', () => {
     };
 
     // eslint-disable-next-line no-restricted-syntax
-    for (const [exampleDomainName, resourceExamples] of Object.entries(exampleCollection)) {
+    for (const [exampleDomainName, resourceExamples] of Object.entries(exampleSTU3Collection)) {
       describe(exampleDomainName, () => {
         resourceExamples.forEach(resourceExample => {
           it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
@@ -515,5 +527,36 @@ describe('fhir validator', () => {
         done();
       }
     });
+
+    const exampleR4Collection = {
+      Encounter: [
+        { encounterExampleR4 },
+        { encounterExampleR4RealWorldF201 },
+        { encounterExampleR4RealWorldF202WithExtension },
+        { encounterExampleR4RealWorldF203 },
+        { encounterExampleR4RealWorldF001Heart },
+        { encounterExampleR4RealWorldF002Lung },
+        { encounterExampleR4RealWorldF003Abscess },
+        { encounterExampleR4XCDA },
+        { encounterExampleR4EmergencyInpatient },
+      ],
+    };
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [exampleDomainName, resourceExamples] of Object.entries(exampleR4Collection)) {
+      describe(exampleDomainName, () => {
+        resourceExamples.forEach(resourceExample => {
+          it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
+            fhirValidator
+              .validate(Object.values(resourceExample)[0])
+              .then(res => {
+                expect(res).to.equal(true);
+                done();
+              })
+              .catch(done);
+          });
+        });
+      });
+    }
   });
 });

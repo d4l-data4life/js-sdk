@@ -26,6 +26,14 @@ const fhirValidator = {
 
     let returnPromise = Promise.resolve(false);
 
+    // todo: this needs to be distinguished by the currenty used fhirVersion
+    if (resourceType === 'Encounter') {
+      returnPromise = import('../../fhir/r4/encounter').then(bundle => {
+        this.validator[resourceType] = bundle.default;
+        return this.validator[resourceType];
+      });
+    }
+
     if (resourceType === 'DocumentReference') {
       returnPromise = import('../../fhir/stu3/documentreference').then(bundle => {
         this.validator[resourceType] = bundle.default;
