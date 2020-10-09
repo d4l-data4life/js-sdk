@@ -25,11 +25,14 @@ To revoke the received refresh token, post to '/oauth/revoke' with the refresh t
 
 1. To initialize the SDK by providing your client ID:
 ```javascript
-    D4L.SDK.setup(
+    D4L.SDK.setup({
         clientId,               // clientId of the application that uses the SDK
         environment,            // The environment the SDK should run in. The options are 'development' and 'production'
         privateKey,             // Private key of the logged-in user
-        requestAccessToken);    // Callback for requesting a valid access token
+        requestAccessToken,     // Callback for requesting a valid access token
+        extendedEnvConfig,     // additional environment configuration options
+        fhirVersion
+        });
 ```
 
 4. The following methods are available:
