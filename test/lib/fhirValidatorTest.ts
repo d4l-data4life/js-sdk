@@ -134,6 +134,8 @@ import observationExample2MinuteApgarScore from './resources/observation-example
 import observationExample1MinuteApgarScore from './resources/observation-example-1minute-apgar-score.json';
 
 import researchsubjectExample from './resources/researchsubject-example.json';
+import fhirService, { FHIR_VERSION_STU3 } from '../../src/services/fhirService';
+import sinon from 'sinon';
 
 // @ts-ignore-disable
 
@@ -198,213 +200,225 @@ describe('fhir validator', () => {
     });
   });
 
-  it('fails isValidResourceType for an invalid resource', () => {
-    const valid = fhirValidator.isValidResourceType('Document');
-    expect(valid).to.not.be.null;
-    expect(valid).to.equal(false);
-  });
-  it('fails to validate with an explicit message if no parameter is provided', done => {
-    try {
-      // @ts-ignore
-      fhirValidator.validate();
-      done();
-    } catch (err) {
-      expect(err).to.not.be.null;
-      expect(err instanceof Error).to.be.true;
-      expect(Array.isArray(err.errors)).to.be.true;
-      expect(err.toString()).to.contain('No resource provided');
-      done();
-    }
-  });
+  describe('version 3.01 (STU3)', () => {
+    let fhirVersionStub;
+    beforeEach(() => {
+      fhirVersionStub = sinon.stub(fhirService, 'getFhirVersion');
+      fhirVersionStub.returns(FHIR_VERSION_STU3);
+    });
+    afterEach(() => {
+      fhirVersionStub.restore();
+    });
 
-  it('fails to validate with an explicit message if a non-string, non-object parameter is provided', done => {
-    try {
-      // @ts-ignore
-      fhirValidator.validate([]);
-      done();
-    } catch (err) {
-      expect(err).to.not.be.null;
-      expect(err instanceof Error).to.be.true;
-      expect(Array.isArray(err.errors)).to.be.true;
-      expect(err.toString()).to.contain('Resource needs to be an object.');
-      done();
-    }
-  });
+    it('fails isValidResourceType for an invalid resource', () => {
+      const valid = fhirValidator.isValidResourceType('Document');
+      expect(valid).to.not.be.null;
+      expect(valid).to.equal(false);
+    });
 
-  it('fails to validate with an explicit message if a parameter without a resourceType property is provided', done => {
-    try {
-      fhirValidator.validate({
+    it('fails to validate with an explicit message if no parameter is provided', done => {
+      try {
         // @ts-ignore
-        uselessProperty: 'not a resource type',
-      });
-      done();
-    } catch (err) {
-      expect(err).to.not.be.null;
-      expect(err instanceof Error).to.be.true;
-      expect(Array.isArray(err.errors)).to.be.true;
-      expect(err.toString()).to.contain('Resource object does not have a resource type.');
-      expect(err.toString()).to.not.contain('Did you mean to submit the .fhirResource property?');
-      done();
-    }
-  });
-
-  it('fails to validate with an explicit message if a parameter without a resourceType property is provided but a fhirResource property exists on the object', done => {
-    try {
-      fhirValidator.validate({
-        // @ts-ignore
-        uselessProperty: 'not a resource type',
-        fhirResource: {
-          why: 'You might want to submit me though',
-        },
-      });
-      done();
-    } catch (err) {
-      expect(err).to.not.be.null;
-      expect(err instanceof Error).to.be.true;
-      expect(Array.isArray(err.errors)).to.be.true;
-      expect(err.toString()).to.contain('Resource object does not have a resource type.');
-      expect(err.toString()).to.contain('Did you mean to submit the .fhirResource property?');
-      done();
-    }
-  });
-
-  it("fails to validate if object passed doesn't match the schema", done => {
-    const dummyObject = { resourceType: 'DocumentReference', id: 1 };
-
-    fhirValidator
-      // @ts-ignore
-      .validate(dummyObject)
-      .then(() => done(new Error('should have been rejected')))
-      .catch(err => {
-        expect(err).to.not.be.null;
+        fhirValidator.validate();
         done();
-      })
-      .catch(done);
-  });
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('No resource provided');
+        done();
+      }
+    });
 
-  const exampleCollection = {
-    DiagnosticReport: [
-      { diagnosticReportExampleDXABoneDensity },
-      { diagnosticReportExampleBrainCT },
-      { diagnosticReportExampleGinGivalMass },
-      { diagnosticReportExamplePapSmear },
-      { diagnosticReportExamplePGX },
-      { diagnosticReportExampleUltraSound },
-    ],
-    DocumentReference: [{ documentReferenceExample }],
-    Organization: [
-      { organizationExample1 },
-      { organizationExampleBurgersUniversity },
-      { organizationExampleBurgersCardiologyUnit },
-      { organizationExampleBurgersENTUnit },
-      { organizationExampleArtisUniversity },
-      { organizationExampleBlijdorpMedicalCenter },
-      { organizationExampleGastroenterology },
-      { organizationExampleGoodHealth },
-      { organizationExampleInsurance },
-      { organizationExampleClinicalLab },
-      { organizationExampleACME },
-    ],
-    Patient: [
-      { patientExample1 },
-      { patientExample2 },
-      { patientExampleAnimal },
-      { patientExample4 },
-      { patientExample5 },
-      { patientExample6 },
-      { patientExample7 },
-      { patientExample8 },
-      { patientExample9 },
-      { patientExample10 },
-      { patientExample11 },
-      { patientExampleProband },
-      { patientExample13 },
-      { patientExample14 },
-      { patientExample17 },
-      { patientExample18 },
-    ],
-    Practitioner: [
-      { practitionerExample1 },
-      { practitionerExample2 },
-      { practitionerExample3 },
-      { practitionerExample4 },
-      { practitionerExample5 },
-      { practitionerExample6 },
-      { practitionerExample7 },
-      { practitionerExample8 },
-      { practitionerExample9 },
-      { practitionerExample10 },
-      { practitionerExample11 },
-      { practitionerExample12 },
-      { practitionerExample13 },
-      { practitionerExample14 },
-    ],
-    Questionnaire: [
-      { questionnaireExampleCancer },
-      { questionnaireExampleBluebook },
-      { questionnaireExampleLifelines },
-    ],
-    QuestionnaireResponse: [
-      { questionnaireResponseExampleBluebook },
-      { questionnaireResponseExampleLifelines },
-      { questionnaireResponseExampleGCS },
-      { questionnaireResponseExampleFHT },
-    ],
-    Observation: [
-      { observationExample },
-      { observationExampleVisualsPanel },
-      { observationExampleUnsat },
-      { observationExampleSatO2 },
-      { observationExampleSampleData },
-      { observationExampleRespiratoryRate },
-      { observationExampleMbp },
-      { observationExampleHeartRate },
-      { observationExampleHeadCircumference },
-      { observationExampleGlasgow },
-      { observationExampleGlasgowQa },
-      { observationExampleF206Staphylococcus },
-      { observationExampleF205Egfr },
-      { observationExampleF204Creatinine },
-      { observationExampleF203Bicarbonate },
-      { observationExampleF202Temperature },
-      { observationExampleF005Hemoglobin },
-      { observationExampleF004Erythrocyte },
-      { observationExampleF003Co2 },
-      { observationExampleF002Excess },
-      { observationExampleF001Glucose },
-      { observationExampleEyeColor },
-      { observationExampleDateLastmp },
-      { observationExampleBodyTemperature },
-      { observationExampleBodyLength },
-      { observationExampleBodyHeight },
-      { observationExampleBmi },
-      { observationExampleBmd },
-      { observationExampleBloodpressure },
-      { observationExampleBloodpressureDar },
-      { observationExampleBloodpressureCancel },
-      { observationExample20MinuteApgarScore },
-      { observationExample10MinuteApgarScore },
-      { observationExample5MinuteApgarScore },
-      { observationExample2MinuteApgarScore },
-      { observationExample1MinuteApgarScore },
-    ],
-    ResearchSubject: [{ researchsubjectExample }],
-  };
+    it('fails to validate with an explicit message if a non-string, non-object parameter is provided', done => {
+      try {
+        // @ts-ignore
+        fhirValidator.validate([]);
+        done();
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('Resource needs to be an object.');
+        done();
+      }
+    });
 
-  // eslint-disable-next-line no-restricted-syntax
-  for (const [exampleDomainName, resourceExamples] of Object.entries(exampleCollection)) {
-    describe(exampleDomainName, () => {
-      resourceExamples.forEach(resourceExample => {
-        it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
-          fhirValidator
-            .validate(Object.values(resourceExample)[0])
-            .then(res => {
-              expect(res).to.equal(true);
-              done();
-            })
-            .catch(done);
+    it('fails to validate with an explicit message if a parameter without a resourceType property is provided', done => {
+      try {
+        fhirValidator.validate({
+          // @ts-ignore
+          uselessProperty: 'not a resource type',
+        });
+        done();
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('Resource object does not have a resource type.');
+        expect(err.toString()).to.not.contain('Did you mean to submit the .fhirResource property?');
+        done();
+      }
+    });
+
+    it('fails to validate with an explicit message if a parameter without a resourceType property is provided but a fhirResource property exists on the object', done => {
+      try {
+        fhirValidator.validate({
+          // @ts-ignore
+          uselessProperty: 'not a resource type',
+          fhirResource: {
+            why: 'You might want to submit me though',
+          },
+        });
+        done();
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('Resource object does not have a resource type.');
+        expect(err.toString()).to.contain('Did you mean to submit the .fhirResource property?');
+        done();
+      }
+    });
+
+    it("fails to validate if object passed doesn't match the schema", done => {
+      const dummyObject = { resourceType: 'DocumentReference', id: 1 };
+
+      fhirValidator
+        // @ts-ignore
+        .validate(dummyObject)
+        .then(() => done(new Error('should have been rejected')))
+        .catch(err => {
+          expect(err).to.not.be.null;
+          done();
+        })
+        .catch(done);
+    });
+
+    const exampleCollection = {
+      DiagnosticReport: [
+        { diagnosticReportExampleDXABoneDensity },
+        { diagnosticReportExampleBrainCT },
+        { diagnosticReportExampleGinGivalMass },
+        { diagnosticReportExamplePapSmear },
+        { diagnosticReportExamplePGX },
+        { diagnosticReportExampleUltraSound },
+      ],
+      DocumentReference: [{ documentReferenceExample }],
+      Organization: [
+        { organizationExample1 },
+        { organizationExampleBurgersUniversity },
+        { organizationExampleBurgersCardiologyUnit },
+        { organizationExampleBurgersENTUnit },
+        { organizationExampleArtisUniversity },
+        { organizationExampleBlijdorpMedicalCenter },
+        { organizationExampleGastroenterology },
+        { organizationExampleGoodHealth },
+        { organizationExampleInsurance },
+        { organizationExampleClinicalLab },
+        { organizationExampleACME },
+      ],
+      Patient: [
+        { patientExample1 },
+        { patientExample2 },
+        { patientExampleAnimal },
+        { patientExample4 },
+        { patientExample5 },
+        { patientExample6 },
+        { patientExample7 },
+        { patientExample8 },
+        { patientExample9 },
+        { patientExample10 },
+        { patientExample11 },
+        { patientExampleProband },
+        { patientExample13 },
+        { patientExample14 },
+        { patientExample17 },
+        { patientExample18 },
+      ],
+      Practitioner: [
+        { practitionerExample1 },
+        { practitionerExample2 },
+        { practitionerExample3 },
+        { practitionerExample4 },
+        { practitionerExample5 },
+        { practitionerExample6 },
+        { practitionerExample7 },
+        { practitionerExample8 },
+        { practitionerExample9 },
+        { practitionerExample10 },
+        { practitionerExample11 },
+        { practitionerExample12 },
+        { practitionerExample13 },
+        { practitionerExample14 },
+      ],
+      Questionnaire: [
+        { questionnaireExampleCancer },
+        { questionnaireExampleBluebook },
+        { questionnaireExampleLifelines },
+      ],
+      QuestionnaireResponse: [
+        { questionnaireResponseExampleBluebook },
+        { questionnaireResponseExampleLifelines },
+        { questionnaireResponseExampleGCS },
+        { questionnaireResponseExampleFHT },
+      ],
+      Observation: [
+        { observationExample },
+        { observationExampleVisualsPanel },
+        { observationExampleUnsat },
+        { observationExampleSatO2 },
+        { observationExampleSampleData },
+        { observationExampleRespiratoryRate },
+        { observationExampleMbp },
+        { observationExampleHeartRate },
+        { observationExampleHeadCircumference },
+        { observationExampleGlasgow },
+        { observationExampleGlasgowQa },
+        { observationExampleF206Staphylococcus },
+        { observationExampleF205Egfr },
+        { observationExampleF204Creatinine },
+        { observationExampleF203Bicarbonate },
+        { observationExampleF202Temperature },
+        { observationExampleF005Hemoglobin },
+        { observationExampleF004Erythrocyte },
+        { observationExampleF003Co2 },
+        { observationExampleF002Excess },
+        { observationExampleF001Glucose },
+        { observationExampleEyeColor },
+        { observationExampleDateLastmp },
+        { observationExampleBodyTemperature },
+        { observationExampleBodyLength },
+        { observationExampleBodyHeight },
+        { observationExampleBmi },
+        { observationExampleBmd },
+        { observationExampleBloodpressure },
+        { observationExampleBloodpressureDar },
+        { observationExampleBloodpressureCancel },
+        { observationExample20MinuteApgarScore },
+        { observationExample10MinuteApgarScore },
+        { observationExample5MinuteApgarScore },
+        { observationExample2MinuteApgarScore },
+        { observationExample1MinuteApgarScore },
+      ],
+      ResearchSubject: [{ researchsubjectExample }],
+    };
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [exampleDomainName, resourceExamples] of Object.entries(exampleCollection)) {
+      describe(exampleDomainName, () => {
+        resourceExamples.forEach(resourceExample => {
+          it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
+            fhirValidator
+              .validate(Object.values(resourceExample)[0])
+              .then(res => {
+                expect(res).to.equal(true);
+                done();
+              })
+              .catch(done);
+          });
         });
       });
-    });
-  }
+    }
+  });
 });

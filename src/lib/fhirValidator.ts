@@ -6,6 +6,7 @@ import omit from 'lodash/omit';
 
 import ValidationError from './errors/ValidationError';
 import { SUPPORTED_RESOURCES } from './models/fhir/helper';
+import fhirService from '../services/fhirService';
 
 const fhirValidator = {
   getRefName(definitionName: string): string {
@@ -13,7 +14,7 @@ const fhirValidator = {
   },
 
   isValidResourceType(resourceType: string): boolean {
-    return SUPPORTED_RESOURCES.includes(resourceType);
+    return SUPPORTED_RESOURCES[fhirService.getFhirVersion()].includes(resourceType);
   },
 
   getValidator(resourceType: string): Promise<boolean> {
@@ -120,7 +121,9 @@ const fhirValidator = {
 
     if (!this.isValidResourceType(resourceType)) {
       throw new ValidationError(
-        `"${resourceType}" is not a valid resource type. Supported types are ${SUPPORTED_RESOURCES.join(
+        `"${resourceType}" is not a valid resource type. Supported types for FHIR Version ${fhirService.getFhirVersion()} are ${
+          SUPPORTED_RESOURCES[fhirService.getFhirVersion()]
+        }.join(
           ', '
         )}.}`
       );

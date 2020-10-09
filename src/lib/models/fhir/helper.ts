@@ -1,7 +1,8 @@
 import find from 'lodash/find';
 import isEmpty from 'lodash/isEmpty';
 import omitBy from 'lodash/omitBy';
-import { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../../services/fhirService';
+// todo: figure out why these imports weren't working
+// import { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../../services/fhirService';
 
 export const createCodeableConcept = (
   display?: string,
@@ -26,7 +27,8 @@ export const getResource = (ref: fhir.Reference, resources: FHIRResource[]): FHI
   find(resources, { id: ref.reference.substring(1) });
 
 export const SUPPORTED_RESOURCES = {
-  [FHIR_VERSION_R4]: [
+  // todo: use imported constants
+  ['4.0.1']: [
     'Encounter',
     'DocumentReference',
     'DiagnosticReport',
@@ -38,7 +40,7 @@ export const SUPPORTED_RESOURCES = {
     'QuestionnaireResponse',
     'ResearchSubject',
   ],
-  [FHIR_VERSION_STU3]: [
+  ['3.0.1']: [
     'DocumentReference',
     'DiagnosticReport',
     'Patient',
