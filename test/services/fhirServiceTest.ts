@@ -11,6 +11,7 @@ import fhirService, {
   setAttachmentsToResource,
   getCleanAttachmentsFromResource,
   FHIR_VERSION_R4,
+  FHIR_VERSION_STU3,
 } from '../../src/services/fhirService';
 import testVariables from '../testUtils/testVariables';
 import fhirValidator from '../../src/lib/fhirValidator';
@@ -711,7 +712,8 @@ describe('fhirService', () => {
   });
 
   describe('createResource', () => {
-    it('should create resource with a valid input', done => {
+    it('should create resource with a valid input and tag it with the correct FHIR version (STU3)', done => {
+      fhirService.setFhirVersion(FHIR_VERSION_STU3);
       const d4lResource = { resourceType: 'CarePlan', id: 'record_id' };
       fhirService
         .createResource(userId, d4lResource)
@@ -719,6 +721,22 @@ describe('fhirService', () => {
           expect(createRecordStub).to.be.calledWith(userId);
           const { args } = createRecordStub.getCall(0);
           expect(args[1].tags.toString()).to.contain('fhirversion=3%2e0%2e1');
+          expect(createRecordStub).to.be.calledOnce;
+          expect(res).to.deep.equal(record);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should create resource with a valid input and tag it with the correct FHIR version (R4)', done => {
+      fhirService.setFhirVersion(FHIR_VERSION_R4);
+      const d4lResource = { resourceType: 'Encounter', id: 'record_id' };
+      fhirService
+        .createResource(userId, d4lResource)
+        .then(res => {
+          expect(createRecordStub).to.be.calledWith(userId);
+          const { args } = createRecordStub.getCall(0);
+          expect(args[1].tags.toString()).to.contain('fhirversion=4%2e0%2e1');
           expect(createRecordStub).to.be.calledOnce;
           expect(res).to.deep.equal(record);
           done();
