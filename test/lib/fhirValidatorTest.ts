@@ -8,133 +8,134 @@ import sinonChai from 'sinon-chai';
 import fhirValidator from '../../src/lib/fhirValidator';
 
 // includes 'Observation' resource, not supported
-// import diagnosticReportExample1 from './resources/diagnosticreport-example.json';
-import diagnosticReportExampleDXABoneDensity from './resources/diagnosticreport-example-dxa.json';
+// import diagnosticReportExampleSTU31 from './resources/diagnosticreport-example.json';
+import diagnosticReportExampleSTU3DXABoneDensity from './resources/stu3/diagnosticreport-example-dxa.json';
 // includes 'ProcedureRequest' resource, not supported
-// import diagnosticReportExampleBloodExam from './resources/diagnosticreport-example-f001-bloodexam.json';
-import diagnosticReportExampleBrainCT from './resources/diagnosticreport-example-f201-brainct.json';
+// import diagnosticReportExampleSTU3BloodExam from './resources/diagnosticreport-example-f001-bloodexam.json';
+import diagnosticReportExampleSTU3BrainCT from './resources/stu3/diagnosticreport-example-f201-brainct.json';
 // includes 'ProcedureRequest' resource, not supported
-// import diagnosticReportExampleBloodCulture from './resources/diagnosticreport-example-f202-bloodculture.json';
+// import diagnosticReportExampleSTU3BloodCulture from './resources/diagnosticreport-example-f202-bloodculture.json';
 // includes 'Specimen' resource, not supported
-// import diagnosticReportExampleBloodGHP from './resources/diagnosticreport-example-ghp.json';
-import diagnosticReportExampleGinGivalMass from './resources/diagnosticreport-example-gingival-mass.json';
+// import diagnosticReportExampleSTU3BloodGHP from './resources/diagnosticreport-example-ghp.json';
+import diagnosticReportExampleSTU3GinGivalMass from './resources/stu3/diagnosticreport-example-gingival-mass.json';
 // includes 'Observation' resource, not supported
-// import diagnosticReportExampleLipids from './resources/diagnosticreport-example-lipids.json';
-import diagnosticReportExamplePapSmear from './resources/diagnosticreport-example-papsmear.json';
-import diagnosticReportExamplePGX from './resources/diagnosticreport-example-pgx.json';
-import diagnosticReportExampleUltraSound from './resources/diagnosticreport-example-ultrasound.json';
+// import diagnosticReportExampleSTU3Lipids from './resources/diagnosticreport-example-lipids.json';
+import diagnosticReportExampleSTU3PapSmear from './resources/stu3/diagnosticreport-example-papsmear.json';
+import diagnosticReportExampleSTU3PGX from './resources/stu3/diagnosticreport-example-pgx.json';
+import diagnosticReportExampleSTU3UltraSound from './resources/stu3/diagnosticreport-example-ultrasound.json';
 // includes 'Bundle' resource, not supported
-// import diagnosticReportExampleGeneral from './resources/diagnosticreport-examples-general.json';
+// import diagnosticReportExampleSTU3General from './resources/diagnosticreport-examples-general.json';
 // includes 'FamilyMemberHistory' resource, not supported
-// import diagnosticReportExampleWithFamilyHistory from './resources/diagnosticreport-genetics-example-2-familyhistory.json';
+// import diagnosticReportExampleSTU3WithFamilyHistory from './resources/diagnosticreport-genetics-example-2-familyhistory.json';
 // includes 'Bundle' resource, not supported
-// import diagnosticReportExampleGenetics from './resources/diagnosticreport-hla-genetics-results-example.json';
+// import diagnosticReportExampleSTU3Genetics from './resources/diagnosticreport-hla-genetics-results-example.json';
 
-import documentReferenceExample from './resources/documentreference-example.json';
+import documentReferenceExampleSTU3 from './resources/stu3/documentreference-example.json';
 
 // as we currently have a simplified validation for organizations, not restrictions needed
-import organizationExample1 from './resources/organization-example.json';
-import organizationExampleBurgersUniversity from './resources/organization-example-f001-burgers.json';
-import organizationExampleBurgersCardiologyUnit from './resources/organization-example-f002-burgers-card.json';
-import organizationExampleBurgersENTUnit from './resources/organization-example-f003-burgers-ENT.json';
-import organizationExampleArtisUniversity from './resources/organization-example-f201-aumc.json';
-import organizationExampleBlijdorpMedicalCenter from './resources/organization-example-f203-bumc.json';
-import organizationExampleGastroenterology from './resources/organization-example-gastro.json';
-import organizationExampleGoodHealth from './resources/organization-example-good-health-care.json';
-import organizationExampleInsurance from './resources/organization-example-insurer.json';
-import organizationExampleClinicalLab from './resources/organization-example-lab.json';
-import organizationExampleACME from './resources/organization-example-mmanu.json';
+import organizationExampleSTU31 from './resources/stu3/organization-example.json';
+import organizationExampleSTU3BurgersUniversity from './resources/stu3/organization-example-f001-burgers.json';
+import organizationExampleSTU3BurgersCardiologyUnit from './resources/stu3/organization-example-f002-burgers-card.json';
+import organizationExampleSTU3BurgersENTUnit from './resources/stu3/organization-example-f003-burgers-ENT.json';
+import organizationExampleSTU3ArtisUniversity from './resources/stu3/organization-example-f201-aumc.json';
+import organizationExampleSTU3BlijdorpMedicalCenter from './resources/stu3/organization-example-f203-bumc.json';
+import organizationExampleSTU3Gastroenterology from './resources/stu3/organization-example-gastro.json';
+import organizationExampleSTU3GoodHealth from './resources/stu3/organization-example-good-health-care.json';
+import organizationExampleSTU3Insurance from './resources/stu3/organization-example-insurer.json';
+import organizationExampleSTU3ClinicalLab from './resources/stu3/organization-example-lab.json';
+import organizationExampleSTU3ACME from './resources/stu3/organization-example-mmanu.json';
 
-import patientExample1 from './resources/patient-example.json';
-import patientExample2 from './resources/patient-example-a.json';
-import patientExampleAnimal from './resources/patient-example-animal.json';
-import patientExample4 from './resources/patient-example-b.json';
-import patientExample5 from './resources/patient-example-c.json';
-import patientExample6 from './resources/patient-example-chinese.json';
-import patientExample7 from './resources/patient-example-d.json';
-import patientExample8 from './resources/patient-example-dicom.json';
-import patientExample9 from './resources/patient-example-f001-pieter.json';
-import patientExample10 from './resources/patient-example-f201-roel.json';
-import patientExample11 from './resources/patient-example-ihe-pcd.json';
-import patientExampleProband from './resources/patient-example-proband.json';
-import patientExample13 from './resources/patient-example-xcda.json';
-import patientExample14 from './resources/patient-example-xds.json';
+import patientExampleSTU31 from './resources/stu3/patient-example.json';
+import patientExampleSTU32 from './resources/stu3/patient-example-a.json';
+import patientExampleSTU3Animal from './resources/stu3/patient-example-animal.json';
+import patientExampleSTU34 from './resources/stu3/patient-example-b.json';
+import patientExampleSTU35 from './resources/stu3/patient-example-c.json';
+import patientExampleSTU36 from './resources/stu3/patient-example-chinese.json';
+import patientExampleSTU37 from './resources/stu3/patient-example-d.json';
+import patientExampleSTU38 from './resources/stu3/patient-example-dicom.json';
+import patientExampleSTU39 from './resources/stu3/patient-example-f001-pieter.json';
+import patientExampleSTU310 from './resources/stu3/patient-example-f201-roel.json';
+import patientExampleSTU311 from './resources/stu3/patient-example-ihe-pcd.json';
+import patientExampleSTU3Proband from './resources/stu3/patient-example-proband.json';
+import patientExampleSTU313 from './resources/stu3/patient-example-xcda.json';
+import patientExampleSTU314 from './resources/stu3/patient-example-xds.json';
 // includes 'Bundle' resource, not supported
-// import patientExample15 from './resources/patient-examples-cypress-template.json';
+// import patientExampleSTU315 from './resources/patient-examples-cypress-template.json';
 // includes 'Bundle' resource, not supported
-// import patientExample16 from './resources/patient-examples-general.json';
-import patientExample17 from './resources/patient-genetics-example1.json';
-import patientExample18 from './resources/patient-glossy-example.json';
+// import patientExampleSTU316 from './resources/patient-examples-general.json';
+import patientExampleSTU317 from './resources/stu3/patient-genetics-example1.json';
+import patientExampleSTU318 from './resources/stu3/patient-glossy-example.json';
 
-import practitionerExample1 from './resources/practitioner-example.json';
-import practitionerExample2 from './resources/practitioner-example-f001-evdb.json';
-import practitionerExample3 from './resources/practitioner-example-f002-pv.json';
-import practitionerExample4 from './resources/practitioner-example-f003-mv.json';
-import practitionerExample5 from './resources/practitioner-example-f004-rb.json';
-import practitionerExample6 from './resources/practitioner-example-f005-al.json';
-import practitionerExample7 from './resources/practitioner-example-f006-rvdb.json';
-import practitionerExample8 from './resources/practitioner-example-f007-sh.json';
-import practitionerExample9 from './resources/practitioner-example-f201-ab.json';
-import practitionerExample10 from './resources/practitioner-example-f202-lm.json';
-import practitionerExample11 from './resources/practitioner-example-f203-jvg.json';
-import practitionerExample12 from './resources/practitioner-example-f204-ce.json';
-import practitionerExample13 from './resources/practitioner-example-xcda1.json';
-import practitionerExample14 from './resources/practitioner-example-xcda-author.json';
+import practitionerExampleSTU31 from './resources/stu3/practitioner-example.json';
+import practitionerExampleSTU32 from './resources/stu3/practitioner-example-f001-evdb.json';
+import practitionerExampleSTU33 from './resources/stu3/practitioner-example-f002-pv.json';
+import practitionerExampleSTU34 from './resources/stu3/practitioner-example-f003-mv.json';
+import practitionerExampleSTU35 from './resources/stu3/practitioner-example-f004-rb.json';
+import practitionerExampleSTU36 from './resources/stu3/practitioner-example-f005-al.json';
+import practitionerExampleSTU37 from './resources/stu3/practitioner-example-f006-rvdb.json';
+import practitionerExampleSTU38 from './resources/stu3/practitioner-example-f007-sh.json';
+import practitionerExampleSTU39 from './resources/stu3/practitioner-example-f201-ab.json';
+import practitionerExampleSTU310 from './resources/stu3/practitioner-example-f202-lm.json';
+import practitionerExampleSTU311 from './resources/stu3/practitioner-example-f203-jvg.json';
+import practitionerExampleSTU312 from './resources/stu3/practitioner-example-f204-ce.json';
+import practitionerExampleSTU313 from './resources/stu3/practitioner-example-xcda1.json';
+import practitionerExampleSTU314 from './resources/stu3/practitioner-example-xcda-author.json';
 // includes 'Bundle' resource, not supported
-// import practitionerExample15 from './resources/practitioner-examples-general.json';
+// import practitionerExampleSTU315 from './resources/practitioner-examples-general.json';
 
-import questionnaireExampleCancer from './resources/questionnaire-example.json';
-import questionnaireExampleBluebook from './resources/questionnaire-example-bluebook.json';
-import questionnaireExampleLifelines from './resources/questionnaire-example-f201-lifelines.json';
+import questionnaireExampleSTU3Cancer from './resources/stu3/questionnaire-example.json';
+import questionnaireExampleSTU3Bluebook from './resources/stu3/questionnaire-example-bluebook.json';
+import questionnaireExampleSTU3Lifelines from './resources/stu3/questionnaire-example-f201-lifelines.json';
 // includes 'ValueSet' resource, not supported
-// import questionnaireExampleGCS from './resources/questionnaire-example-gcs.json';
+// import questionnaireExampleSTU3GCS from './resources/questionnaire-example-gcs.json';
 
 // includes 'ReferralRequest' resource, not supported
-// import questionnaireResponseExampleCancer from './resources/questionnaireresponse-example.json';
-import questionnaireResponseExampleBluebook from './resources/questionnaireresponse-example-bluebook.json';
-import questionnaireResponseExampleLifelines from './resources/questionnaireresponse-example-f201-lifelines.json';
-import questionnaireResponseExampleGCS from './resources/questionnaireresponse-example-gcs.json';
-import questionnaireResponseExampleFHT from './resources/questionnaireresponse-example-ussg-fht-answers.json';
+// import questionnaireResponseExampleSTU3Cancer from './resources/questionnaireresponse-example.json';
+import questionnaireResponseExampleSTU3Bluebook from './resources/stu3/questionnaireresponse-example-bluebook.json';
+import questionnaireResponseExampleSTU3Lifelines from './resources/stu3/questionnaireresponse-example-f201-lifelines.json';
+import questionnaireResponseExampleSTU3GCS from './resources/stu3/questionnaireresponse-example-gcs.json';
+import questionnaireResponseExampleSTU3FHT from './resources/stu3/questionnaireresponse-example-ussg-fht-answers.json';
 
-import observationExample from './resources/observation-example.json';
-import observationExampleVisualsPanel from './resources/observation-example-vitals-panel.json';
-import observationExampleUnsat from './resources/observation-example-unsat.json';
-import observationExampleSatO2 from './resources/observation-example-satO2.json';
-import observationExampleSampleData from './resources/observation-example-sample-data.json';
-import observationExampleRespiratoryRate from './resources/observation-example-respiratory-rate.json';
-import observationExampleMbp from './resources/observation-example-mbp.json';
-import observationExampleHeartRate from './resources/observation-example-heart-rate.json';
-import observationExampleHeadCircumference from './resources/observation-example-head-circumference.json';
-import observationExampleGlasgow from './resources/observation-example-glasgow.json';
-import observationExampleGlasgowQa from './resources/observation-example-glasgow-qa.json';
-import observationExampleF206Staphylococcus from './resources/observation-example-f206-staphylococcus.json';
-import observationExampleF205Egfr from './resources/observation-example-f205-egfr.json';
-import observationExampleF204Creatinine from './resources/observation-example-f204-creatinine.json';
-import observationExampleF203Bicarbonate from './resources/observation-example-f203-bicarbonate.json';
-import observationExampleF202Temperature from './resources/observation-example-f202-temperature.json';
-import observationExampleF005Hemoglobin from './resources/observation-example-f005-hemoglobin.json';
-import observationExampleF004Erythrocyte from './resources/observation-example-f004-erythrocyte.json';
-import observationExampleF003Co2 from './resources/observation-example-f003-co2.json';
-import observationExampleF002Excess from './resources/observation-example-f002-excess.json';
-import observationExampleF001Glucose from './resources/observation-example-f001-glucose.json';
-import observationExampleEyeColor from './resources/observation-example-eye-color.json';
-import observationExampleDateLastmp from './resources/observation-example-date-lastmp.json';
-import observationExampleBodyTemperature from './resources/observation-example-body-temperature.json';
-import observationExampleBodyLength from './resources/observation-example-body-length.json';
-import observationExampleBodyHeight from './resources/observation-example-body-height.json';
-import observationExampleBmi from './resources/observation-example-bmi.json';
-import observationExampleBmd from './resources/observation-example-bmd.json';
-import observationExampleBloodpressure from './resources/observation-example-bloodpressure.json';
-import observationExampleBloodpressureDar from './resources/observation-example-bloodpressure-dar.json';
-import observationExampleBloodpressureCancel from './resources/observation-example-bloodpressure-cancel.json';
-import observationExample20MinuteApgarScore from './resources/observation-example-20minute-apgar-score.json';
-import observationExample10MinuteApgarScore from './resources/observation-example-10minute-apgar-score.json';
-import observationExample5MinuteApgarScore from './resources/observation-example-5minute-apgar-score.json';
-import observationExample2MinuteApgarScore from './resources/observation-example-2minute-apgar-score.json';
-import observationExample1MinuteApgarScore from './resources/observation-example-1minute-apgar-score.json';
+import observationExampleSTU3 from './resources/stu3/observation-example.json';
+import observationExampleSTU3VisualsPanel from './resources/stu3/observation-example-vitals-panel.json';
+import observationExampleSTU3Unsat from './resources/stu3/observation-example-unsat.json';
+import observationExampleSTU3SatO2 from './resources/stu3/observation-example-satO2.json';
+import observationExampleSTU3SampleData from './resources/stu3/observation-example-sample-data.json';
+import observationExampleSTU3RespiratoryRate from './resources/stu3/observation-example-respiratory-rate.json';
+import observationExampleSTU3Mbp from './resources/stu3/observation-example-mbp.json';
+import observationExampleSTU3HeartRate from './resources/stu3/observation-example-heart-rate.json';
+import observationExampleSTU3HeadCircumference from './resources/stu3/observation-example-head-circumference.json';
+import observationExampleSTU3Glasgow from './resources/stu3/observation-example-glasgow.json';
+import observationExampleSTU3GlasgowQa from './resources/stu3/observation-example-glasgow-qa.json';
+import observationExampleSTU3F206Staphylococcus from './resources/stu3/observation-example-f206-staphylococcus.json';
+import observationExampleSTU3F205Egfr from './resources/stu3/observation-example-f205-egfr.json';
+import observationExampleSTU3F204Creatinine from './resources/stu3/observation-example-f204-creatinine.json';
+import observationExampleSTU3F203Bicarbonate from './resources/stu3/observation-example-f203-bicarbonate.json';
+import observationExampleSTU3F202Temperature from './resources/stu3/observation-example-f202-temperature.json';
+import observationExampleSTU3F005Hemoglobin from './resources/stu3/observation-example-f005-hemoglobin.json';
+import observationExampleSTU3F004Erythrocyte from './resources/stu3/observation-example-f004-erythrocyte.json';
+import observationExampleSTU3F003Co2 from './resources/stu3/observation-example-f003-co2.json';
+import observationExampleSTU3F002Excess from './resources/stu3/observation-example-f002-excess.json';
+import observationExampleSTU3F001Glucose from './resources/stu3/observation-example-f001-glucose.json';
+import observationExampleSTU3EyeColor from './resources/stu3/observation-example-eye-color.json';
+import observationExampleSTU3DateLastmp from './resources/stu3/observation-example-date-lastmp.json';
+import observationExampleSTU3BodyTemperature from './resources/stu3/observation-example-body-temperature.json';
+import observationExampleSTU3BodyLength from './resources/stu3/observation-example-body-length.json';
+import observationExampleSTU3BodyHeight from './resources/stu3/observation-example-body-height.json';
+import observationExampleSTU3Bmi from './resources/stu3/observation-example-bmi.json';
+import observationExampleSTU3Bmd from './resources/stu3/observation-example-bmd.json';
+import observationExampleSTU3Bloodpressure from './resources/stu3/observation-example-bloodpressure.json';
+import observationExampleSTU3BloodpressureDar from './resources/stu3/observation-example-bloodpressure-dar.json';
+import observationExampleSTU3BloodpressureCancel from './resources/stu3/observation-example-bloodpressure-cancel.json';
+import observationExampleSTU320MinuteApgarScore from './resources/stu3/observation-example-20minute-apgar-score.json';
+import observationExampleSTU310MinuteApgarScore from './resources/stu3/observation-example-10minute-apgar-score.json';
+import observationExampleSTU35MinuteApgarScore from './resources/stu3/observation-example-5minute-apgar-score.json';
+import observationExampleSTU32MinuteApgarScore from './resources/stu3/observation-example-2minute-apgar-score.json';
+import observationExampleSTU31MinuteApgarScore from './resources/stu3/observation-example-1minute-apgar-score.json';
 
-import researchsubjectExample from './resources/researchsubject-example.json';
-import fhirService, { FHIR_VERSION_STU3 } from '../../src/services/fhirService';
+import researchSubjectExampleSTU3 from './resources/stu3/researchsubject-example.json';
+
+import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../src/services/fhirService';
 import sinon from 'sinon';
 
 // @ts-ignore-disable
@@ -212,6 +213,12 @@ describe('fhir validator', () => {
 
     it('fails isValidResourceType for an invalid resource', () => {
       const valid = fhirValidator.isValidResourceType('Document');
+      expect(valid).to.not.be.null;
+      expect(valid).to.equal(false);
+    });
+
+    it('fails isValidResourceType for a resource not support in STU3 mode', () => {
+      const valid = fhirValidator.isValidResourceType('Encounter');
       expect(valid).to.not.be.null;
       expect(valid).to.equal(false);
     });
@@ -297,111 +304,111 @@ describe('fhir validator', () => {
 
     const exampleCollection = {
       DiagnosticReport: [
-        { diagnosticReportExampleDXABoneDensity },
-        { diagnosticReportExampleBrainCT },
-        { diagnosticReportExampleGinGivalMass },
-        { diagnosticReportExamplePapSmear },
-        { diagnosticReportExamplePGX },
-        { diagnosticReportExampleUltraSound },
+        { diagnosticReportExampleSTU3DXABoneDensity },
+        { diagnosticReportExampleSTU3BrainCT },
+        { diagnosticReportExampleSTU3GinGivalMass },
+        { diagnosticReportExampleSTU3PapSmear },
+        { diagnosticReportExampleSTU3PGX },
+        { diagnosticReportExampleSTU3UltraSound },
       ],
-      DocumentReference: [{ documentReferenceExample }],
+      DocumentReference: [{ documentReferenceExample: documentReferenceExampleSTU3 }],
       Organization: [
-        { organizationExample1 },
-        { organizationExampleBurgersUniversity },
-        { organizationExampleBurgersCardiologyUnit },
-        { organizationExampleBurgersENTUnit },
-        { organizationExampleArtisUniversity },
-        { organizationExampleBlijdorpMedicalCenter },
-        { organizationExampleGastroenterology },
-        { organizationExampleGoodHealth },
-        { organizationExampleInsurance },
-        { organizationExampleClinicalLab },
-        { organizationExampleACME },
+        { organizationExampleSTU31 },
+        { organizationExampleSTU3BurgersUniversity },
+        { organizationExampleSTU3BurgersCardiologyUnit },
+        { organizationExampleSTU3BurgersENTUnit },
+        { organizationExampleSTU3ArtisUniversity },
+        { organizationExampleSTU3BlijdorpMedicalCenter },
+        { organizationExampleSTU3Gastroenterology },
+        { organizationExampleSTU3GoodHealth },
+        { organizationExampleSTU3Insurance },
+        { organizationExampleSTU3ClinicalLab },
+        { organizationExampleSTU3ACME },
       ],
       Patient: [
-        { patientExample1 },
-        { patientExample2 },
-        { patientExampleAnimal },
-        { patientExample4 },
-        { patientExample5 },
-        { patientExample6 },
-        { patientExample7 },
-        { patientExample8 },
-        { patientExample9 },
-        { patientExample10 },
-        { patientExample11 },
-        { patientExampleProband },
-        { patientExample13 },
-        { patientExample14 },
-        { patientExample17 },
-        { patientExample18 },
+        { patientExampleSTU31 },
+        { patientExampleSTU32 },
+        { patientExampleSTU3Animal },
+        { patientExampleSTU34 },
+        { patientExampleSTU35 },
+        { patientExampleSTU36 },
+        { patientExampleSTU37 },
+        { patientExampleSTU38 },
+        { patientExampleSTU39 },
+        { patientExampleSTU310 },
+        { patientExampleSTU311 },
+        { patientExampleSTU3Proband },
+        { patientExampleSTU313 },
+        { patientExampleSTU314 },
+        { patientExampleSTU317 },
+        { patientExampleSTU318 },
       ],
       Practitioner: [
-        { practitionerExample1 },
-        { practitionerExample2 },
-        { practitionerExample3 },
-        { practitionerExample4 },
-        { practitionerExample5 },
-        { practitionerExample6 },
-        { practitionerExample7 },
-        { practitionerExample8 },
-        { practitionerExample9 },
-        { practitionerExample10 },
-        { practitionerExample11 },
-        { practitionerExample12 },
-        { practitionerExample13 },
-        { practitionerExample14 },
+        { practitionerExampleSTU31 },
+        { practitionerExampleSTU32 },
+        { practitionerExampleSTU33 },
+        { practitionerExampleSTU34 },
+        { practitionerExampleSTU35 },
+        { practitionerExampleSTU36 },
+        { practitionerExampleSTU37 },
+        { practitionerExampleSTU38 },
+        { practitionerExampleSTU39 },
+        { practitionerExampleSTU310 },
+        { practitionerExampleSTU311 },
+        { practitionerExampleSTU312 },
+        { practitionerExampleSTU313 },
+        { practitionerExampleSTU314 },
       ],
       Questionnaire: [
-        { questionnaireExampleCancer },
-        { questionnaireExampleBluebook },
-        { questionnaireExampleLifelines },
+        { questionnaireExampleSTU3Cancer },
+        { questionnaireExampleSTU3Bluebook },
+        { questionnaireExampleSTU3Lifelines },
       ],
       QuestionnaireResponse: [
-        { questionnaireResponseExampleBluebook },
-        { questionnaireResponseExampleLifelines },
-        { questionnaireResponseExampleGCS },
-        { questionnaireResponseExampleFHT },
+        { questionnaireResponseExampleSTU3Bluebook },
+        { questionnaireResponseExampleSTU3Lifelines },
+        { questionnaireResponseExampleSTU3GCS },
+        { questionnaireResponseExampleSTU3FHT },
       ],
       Observation: [
-        { observationExample },
-        { observationExampleVisualsPanel },
-        { observationExampleUnsat },
-        { observationExampleSatO2 },
-        { observationExampleSampleData },
-        { observationExampleRespiratoryRate },
-        { observationExampleMbp },
-        { observationExampleHeartRate },
-        { observationExampleHeadCircumference },
-        { observationExampleGlasgow },
-        { observationExampleGlasgowQa },
-        { observationExampleF206Staphylococcus },
-        { observationExampleF205Egfr },
-        { observationExampleF204Creatinine },
-        { observationExampleF203Bicarbonate },
-        { observationExampleF202Temperature },
-        { observationExampleF005Hemoglobin },
-        { observationExampleF004Erythrocyte },
-        { observationExampleF003Co2 },
-        { observationExampleF002Excess },
-        { observationExampleF001Glucose },
-        { observationExampleEyeColor },
-        { observationExampleDateLastmp },
-        { observationExampleBodyTemperature },
-        { observationExampleBodyLength },
-        { observationExampleBodyHeight },
-        { observationExampleBmi },
-        { observationExampleBmd },
-        { observationExampleBloodpressure },
-        { observationExampleBloodpressureDar },
-        { observationExampleBloodpressureCancel },
-        { observationExample20MinuteApgarScore },
-        { observationExample10MinuteApgarScore },
-        { observationExample5MinuteApgarScore },
-        { observationExample2MinuteApgarScore },
-        { observationExample1MinuteApgarScore },
+        { observationExampleSTU3 },
+        { observationExampleSTU3VisualsPanel },
+        { observationExampleSTU3Unsat },
+        { observationExampleSTU3SatO2 },
+        { observationExampleSTU3SampleData },
+        { observationExampleSTU3RespiratoryRate },
+        { observationExampleSTU3Mbp },
+        { observationExampleSTU3HeartRate },
+        { observationExampleSTU3HeadCircumference },
+        { observationExampleSTU3Glasgow },
+        { observationExampleSTU3GlasgowQa },
+        { observationExampleSTU3F206Staphylococcus },
+        { observationExampleSTU3F205Egfr },
+        { observationExampleSTU3F204Creatinine },
+        { observationExampleSTU3F203Bicarbonate },
+        { observationExampleSTU3F202Temperature },
+        { observationExampleSTU3F005Hemoglobin },
+        { observationExampleSTU3F004Erythrocyte },
+        { observationExampleSTU3F003Co2 },
+        { observationExampleSTU3F002Excess },
+        { observationExampleSTU3F001Glucose },
+        { observationExampleSTU3EyeColor },
+        { observationExampleSTU3DateLastmp },
+        { observationExampleSTU3BodyTemperature },
+        { observationExampleSTU3BodyLength },
+        { observationExampleSTU3BodyHeight },
+        { observationExampleSTU3Bmi },
+        { observationExampleSTU3Bmd },
+        { observationExampleSTU3Bloodpressure },
+        { observationExampleSTU3BloodpressureDar },
+        { observationExampleSTU3BloodpressureCancel },
+        { observationExampleSTU320MinuteApgarScore },
+        { observationExampleSTU310MinuteApgarScore },
+        { observationExampleSTU35MinuteApgarScore },
+        { observationExampleSTU32MinuteApgarScore },
+        { observationExampleSTU31MinuteApgarScore },
       ],
-      ResearchSubject: [{ researchsubjectExample }],
+      ResearchSubject: [{ researchsubjectExample: researchSubjectExampleSTU3 }],
     };
 
     // eslint-disable-next-line no-restricted-syntax
@@ -420,5 +427,93 @@ describe('fhir validator', () => {
         });
       });
     }
+  });
+
+  describe('version 4.01 (R4)', () => {
+    let fhirVersionStub;
+    beforeEach(() => {
+      fhirVersionStub = sinon.stub(fhirService, 'getFhirVersion');
+      fhirVersionStub.returns(FHIR_VERSION_R4);
+    });
+    afterEach(() => {
+      fhirVersionStub.restore();
+    });
+
+    it('fails isValidResourceType for an invalid resource', () => {
+      const valid = fhirValidator.isValidResourceType('Document');
+      expect(valid).to.not.be.null;
+      expect(valid).to.equal(false);
+    });
+
+    it('passes isValidResourceType for a resource not supported in STU3 mode', () => {
+      const valid = fhirValidator.isValidResourceType('Encounter');
+      expect(valid).to.not.be.null;
+      expect(valid).to.equal(true);
+    });
+
+    it('fails to validate with an explicit message if no parameter is provided', done => {
+      try {
+        // @ts-ignore
+        fhirValidator.validate();
+        done();
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('No resource provided');
+        done();
+      }
+    });
+
+    it('fails to validate with an explicit message if a non-string, non-object parameter is provided', done => {
+      try {
+        // @ts-ignore
+        fhirValidator.validate([]);
+        done();
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('Resource needs to be an object.');
+        done();
+      }
+    });
+
+    it('fails to validate with an explicit message if a parameter without a resourceType property is provided', done => {
+      try {
+        fhirValidator.validate({
+          // @ts-ignore
+          uselessProperty: 'not a resource type',
+        });
+        done();
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('Resource object does not have a resource type.');
+        expect(err.toString()).to.not.contain('Did you mean to submit the .fhirResource property?');
+        done();
+      }
+    });
+
+    it('fails to validate with an explicit message if a parameter without a resourceType property is provided but a fhirResource property exists on the object', done => {
+      try {
+        fhirValidator.validate({
+          // @ts-ignore
+          uselessProperty: 'not a resource type',
+          fhirResource: {
+            why: 'You might want to submit me though',
+          },
+        });
+        done();
+      } catch (err) {
+        expect(err).to.not.be.null;
+        expect(err instanceof Error).to.be.true;
+        expect(Array.isArray(err.errors)).to.be.true;
+        expect(err.toString()).to.contain('Resource object does not have a resource type.');
+        expect(err.toString()).to.contain('Did you mean to submit the .fhirResource property?');
+        done();
+      }
+    });
   });
 });
