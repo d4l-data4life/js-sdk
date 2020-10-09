@@ -37,7 +37,6 @@ import {
 } from './lib/models/fhir/helper';
 import { throttle } from './lib/requestUtils';
 import Attachment from './lib/models/fhir/Attachment';
-import ValidationError from './lib/errors/ValidationError';
 import appDataService from './services/appDataService';
 import SetupError from './lib/errors/SetupError';
 
