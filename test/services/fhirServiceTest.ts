@@ -10,6 +10,7 @@ import fhirService, {
   prepareSearchParameters,
   setAttachmentsToResource,
   getCleanAttachmentsFromResource,
+  FHIR_VERSION_R4,
 } from '../../src/services/fhirService';
 import testVariables from '../testUtils/testVariables';
 import fhirValidator from '../../src/lib/fhirValidator';
@@ -680,6 +681,12 @@ describe('fhirService', () => {
         records: [decryptedRecord],
       })
     );
+  });
+
+  it('sets and gets the fhirVersion correctly', done => {
+    fhirService.setFhirVersion(FHIR_VERSION_R4);
+    expect(fhirService.getFhirVersion()).to.equal(FHIR_VERSION_R4);
+    done();
   });
 
   describe('fetchResource', () => {
