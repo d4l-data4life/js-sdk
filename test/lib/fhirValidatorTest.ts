@@ -178,6 +178,8 @@ import diagnosticReportExampleR4UltraSound from './resources/r4/diagnosticreport
 import diagnosticReportExampleR4PapSmear from './resources/r4/diagnosticreport-example-papsmear.json';
 import diagnosticReportExampleR4GingavalMass from './resources/r4/diagnosticreport-example-gingival-mass.json';
 
+import ResearchSubjectExampleR4 from './resources/r4/researchsubject-example.json';
+
 import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../src/services/fhirService';
 import sinon from 'sinon';
 
@@ -598,6 +600,7 @@ describe('fhir validator', () => {
         { diagnosticReportExampleR4PapSmear },
         { diagnosticReportExampleR4GingavalMass },
       ],
+      ResearchSubject: [{ ResearchSubjectExampleR4 }],
     };
 
     // todo: refactor to share

@@ -70,6 +70,12 @@ const fhirValidator = {
             return this.validator[resourceType];
           });
         }
+        if (resourceType === 'ResearchSubject') {
+          returnPromise = import('../../fhir/r4/researchsubject').then(bundle => {
+            this.validator[resourceType] = bundle.default;
+            return this.validator[resourceType];
+          });
+        }
       } else {
         if (resourceType === 'DocumentReference') {
           returnPromise = import('../../fhir/stu3/documentreference').then(bundle => {
