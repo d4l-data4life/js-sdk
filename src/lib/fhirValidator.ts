@@ -63,6 +63,13 @@ const fhirValidator = {
             return this.validator[resourceType];
           });
         }
+
+        if (resourceType === 'DiagnosticReport') {
+          returnPromise = import('../../fhir/r4/diagnosticreport').then(bundle => {
+            this.validator[resourceType] = bundle.default;
+            return this.validator[resourceType];
+          });
+        }
       } else {
         if (resourceType === 'DocumentReference') {
           returnPromise = import('../../fhir/stu3/documentreference').then(bundle => {
@@ -149,11 +156,9 @@ const fhirValidator = {
 
     if (!this.isValidResourceType(resourceType)) {
       throw new ValidationError(
-        `"${resourceType}" is not a valid resource type. Supported types for FHIR Version ${fhirService.getFhirVersion()} are ${(
-          SUPPORTED_RESOURCES[fhirService.getFhirVersion()]
-        ).join(
-          ', '
-        )}.`
+        `"${resourceType}" is not a valid resource type. Supported types for FHIR Version ${fhirService.getFhirVersion()} are ${SUPPORTED_RESOURCES[
+          fhirService.getFhirVersion()
+        ].join(', ')}.`
       );
     }
 

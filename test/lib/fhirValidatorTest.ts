@@ -170,6 +170,14 @@ import practitionerExampleR4F006RVDB from './resources/r4/practitioner-example-f
 import practitionerExampleR4F007SH from './resources/r4/practitioner-example-f007-sh.json';
 import practitionerExampleR4XCDA2 from './resources/r4/practitioner-example-xcda1.json';
 
+// includes 'Bundle', as do many other examples from the HL7 site not in the repo
+// import diagnosticReportExampleR4 from './resources/r4/diagnosticreport-example.json';
+import diagnosticReportExampleR4F201BrainCT from './resources/r4/diagnosticreport-example-f201-brainct.json';
+import diagnosticReportExampleR4DXA from './resources/r4/diagnosticreport-example-dxa.json';
+import diagnosticReportExampleR4UltraSound from './resources/r4/diagnosticreport-example-ultrasound.json';
+import diagnosticReportExampleR4PapSmear from './resources/r4/diagnosticreport-example-papsmear.json';
+import diagnosticReportExampleR4GingavalMass from './resources/r4/diagnosticreport-example-gingival-mass.json';
+
 import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../src/services/fhirService';
 import sinon from 'sinon';
 
@@ -582,6 +590,13 @@ describe('fhir validator', () => {
         { practitionerExampleR4F006RVDB },
         { practitionerExampleR4F007SH },
         { practitionerExampleR4XCDA2 },
+      ],
+      DiagnosticReport: [
+        { diagnosticReportExampleR4F201BrainCT },
+        { diagnosticReportExampleR4DXA },
+        { diagnosticReportExampleR4UltraSound },
+        { diagnosticReportExampleR4PapSmear },
+        { diagnosticReportExampleR4GingavalMass },
       ],
     };
 
