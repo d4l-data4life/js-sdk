@@ -7,6 +7,8 @@ import sinonChai from 'sinon-chai';
 
 import fhirValidator from '../../src/lib/fhirValidator';
 
+// STU3 examples
+
 // includes 'Observation' resource, not supported
 // import diagnosticReportExampleSTU31 from './resources/diagnosticreport-example.json';
 import diagnosticReportExampleSTU3DXABoneDensity from './resources/stu3/diagnosticreport-example-dxa.json';
@@ -135,6 +137,10 @@ import observationExampleSTU31MinuteApgarScore from './resources/stu3/observatio
 
 import researchSubjectExampleSTU3 from './resources/stu3/researchsubject-example.json';
 
+// R4 examples
+
+import documentReferenceExampleR4 from './resources/r4/documentreference-example.json';
+
 import encounterExampleR4 from './resources/r4/encounter-example.json';
 // includes 'Location'
 // import encounterExampleR4Home from './resources/r4/encounter-home-example.json';
@@ -146,6 +152,23 @@ import encounterExampleR4RealWorldF002Lung from './resources/r4/encounter-exampl
 import encounterExampleR4RealWorldF003Abscess from './resources/r4/encounter-example-f003-abscess.json';
 import encounterExampleR4XCDA from './resources/r4/encounter-example-xcda.json';
 import encounterExampleR4EmergencyInpatient from './resources/r4/encounter-example-emergency-inpatient.json';
+
+import practitionerExampleR4 from './resources/r4/practitioner-example.json';
+import practitionerExampleR4XCDA from './resources/r4/practitioner-example-xcda-author.json';
+// includes 'Bundle'
+// import practitionerExampleR4General from './resources/r4/practitioner-example-general.json';
+import practitionerExampleR4F001EVDB from './resources/r4/practitioner-example-f001-evdb.json';
+import practitionerExampleR4F002PV from './resources/r4/practitioner-example-f002-pv.json';
+import practitionerExampleR4F003MV from './resources/r4/practitioner-example-f003-mv.json';
+import practitionerExampleR4F004RB from './resources/r4/practitioner-example-f004-rb.json';
+import practitionerExampleR4F005AL from './resources/r4/practitioner-example-f005-al.json';
+import practitionerExampleR4F201AB from './resources/r4/practitioner-example-f201-ab.json';
+import practitionerExampleR4F202LM from './resources/r4/practitioner-example-f202-lm.json';
+import practitionerExampleR4F203JVG from './resources/r4/practitioner-example-f203-jvg.json';
+import practitionerExampleR4F204CE from './resources/r4/practitioner-example-f204-ce.json';
+import practitionerExampleR4F006RVDB from './resources/r4/practitioner-example-f006-rvdb.json';
+import practitionerExampleR4F007SH from './resources/r4/practitioner-example-f007-sh.json';
+import practitionerExampleR4XCDA2 from './resources/r4/practitioner-example-xcda1.json';
 
 import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../src/services/fhirService';
 import sinon from 'sinon';
@@ -426,6 +449,9 @@ describe('fhir validator', () => {
     // eslint-disable-next-line no-restricted-syntax
     for (const [exampleDomainName, resourceExamples] of Object.entries(exampleSTU3Collection)) {
       describe(exampleDomainName, () => {
+        afterEach(() => {
+          fhirValidator.clearValidator(exampleDomainName);
+        });
         resourceExamples.forEach(resourceExample => {
           it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
             fhirValidator
@@ -529,6 +555,7 @@ describe('fhir validator', () => {
     });
 
     const exampleR4Collection = {
+      DocumentReference: [{ documentReferenceExampleR4 }],
       Encounter: [
         { encounterExampleR4 },
         { encounterExampleR4RealWorldF201 },
@@ -540,7 +567,25 @@ describe('fhir validator', () => {
         { encounterExampleR4XCDA },
         { encounterExampleR4EmergencyInpatient },
       ],
+      Practitioner: [
+        { practitionerExampleR4 },
+        { practitionerExampleR4XCDA },
+        { practitionerExampleR4F001EVDB },
+        { practitionerExampleR4F002PV },
+        { practitionerExampleR4F003MV },
+        { practitionerExampleR4F004RB },
+        { practitionerExampleR4F005AL },
+        { practitionerExampleR4F201AB },
+        { practitionerExampleR4F202LM },
+        { practitionerExampleR4F203JVG },
+        { practitionerExampleR4F204CE },
+        { practitionerExampleR4F006RVDB },
+        { practitionerExampleR4F007SH },
+        { practitionerExampleR4XCDA2 },
+      ],
     };
+
+    // todo: refactor to share
 
     // eslint-disable-next-line no-restricted-syntax
     for (const [exampleDomainName, resourceExamples] of Object.entries(exampleR4Collection)) {
