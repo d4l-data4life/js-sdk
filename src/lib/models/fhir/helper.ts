@@ -1,3 +1,5 @@
+/* eslint-disable no-useless-computed-key */
+
 import find from 'lodash/find';
 import isEmpty from 'lodash/isEmpty';
 import omitBy from 'lodash/omitBy';

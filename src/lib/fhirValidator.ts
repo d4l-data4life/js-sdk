@@ -17,6 +17,7 @@ const fhirValidator = {
     return SUPPORTED_RESOURCES[fhirService.getFhirVersion()].includes(resourceType);
   },
 
+  // eslint-disable-next-line complexity
   getValidator(resourceType: string): Promise<boolean> {
     const version = fhirService.getFhirVersion();
     if (this.validator && this.validator[version] && this.validator[version][resourceType]) {
@@ -39,6 +40,7 @@ const fhirValidator = {
       this.validator[version][resourceType] = resource => resource.id && resource.id.length;
       returnPromise = Promise.resolve(this.validator[version][resourceType]);
     } else {
+      // eslint-disable-next-line no-lonely-if
       if (version === FHIR_VERSION_R4) {
         if (resourceType === 'Encounter') {
           returnPromise = import('../../fhir/r4/encounter').then(bundle => {

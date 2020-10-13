@@ -147,9 +147,7 @@ export const D4LSDK = {
     }
     if (!clientId.includes('#')) {
       return Promise.reject(
-        new SetupError(
-          `Not a valid clientId - valid clientIds contain a #, ${clientId} submitted.`
-        )
+        new SetupError(`Not a valid clientId - valid clientIds contain a #, ${clientId} submitted.`)
       );
     }
     taggingUtils.setPartnerId(clientId.split('#')[0]);
