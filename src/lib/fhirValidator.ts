@@ -83,6 +83,12 @@ const fhirValidator = {
             return this.validator[resourceType];
           });
         }
+        if (resourceType === 'Observation') {
+          returnPromise = import('../../fhir/r4/observation').then(bundle => {
+            this.validator[resourceType] = bundle.default;
+            return this.validator[resourceType];
+          });
+        }
       } else {
         if (resourceType === 'DocumentReference') {
           returnPromise = import('../../fhir/stu3/documentreference').then(bundle => {

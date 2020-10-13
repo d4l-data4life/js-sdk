@@ -151,6 +151,54 @@ import encounterExampleR4RealWorldF003Abscess from './resources/r4/encounter-exa
 import encounterExampleR4XCDA from './resources/r4/encounter-example-xcda.json';
 import encounterExampleR4EmergencyInpatient from './resources/r4/encounter-example-emergency-inpatient.json';
 
+import observationExampleR4 from './resources/r4/observation-example.json';
+import observationExampleR4Apgar1 from './resources/r4/observation-example-1minute-apgar-score.json';
+import observationExampleR4Apgar20 from './resources/r4/observation-example-20minute-apgar-score.json';
+import observationExampleR4AbdomenTender from './resources/r4/observation-example-abdo-tender.json';
+import observationExampleR4Alcohol from './resources/r4/observation-example-alcohol-type.json';
+import observationExampleR4BgPanel from './resources/r4/observation-example-bgpanel.json';
+import observationExampleR4BloodGroup from './resources/r4/observation-example-bloodgroup.json';
+import observationExampleR4BloodPressure from './resources/r4/observation-example-bloodpressure.json';
+import observationExampleR4BloodPressureCancel from './resources/r4/observation-example-bloodpressure-cancel.json';
+import observationExampleR4BloodPressureDar from './resources/r4/observation-example-bloodpressure-dar.json';
+import observationExampleR4BMD from './resources/r4/observation-example-bmd.json';
+import observationExampleR4BMI from './resources/r4/observation-example-bmi.json';
+import observationExampleR4BMIRelated from './resources/r4/observation-example-bmi-using-related.json';
+import observationExampleR4BodyHeight from './resources/r4/observation-example-body-height.json';
+import observationExampleR4BodyLength from './resources/r4/observation-example-body-length.json';
+import observationExampleR4BodyTemperature from './resources/r4/observation-example-body-temperature.json';
+import observationExampleR4ClincalGender from './resources/r4/observation-example-clinical-gender.json';
+import observationExampleR4LastMP from './resources/r4/observation-example-date-lastmp.json';
+import observationExampleR4EyeColor from './resources/r4/observation-example-eye-color.json';
+import observationExampleR4F001Glucose from './resources/r4/observation-example-f001-glucose.json';
+import observationExampleR4F002Excess from './resources/r4/observation-example-f002-excess.json';
+import observationExampleR4F003CO2 from './resources/r4/observation-example-f003-co2.json';
+import observationExampleR4F004Erythrocytes from './resources/r4/observation-example-f004-erythrocyte.json';
+import observationExampleR4F005Hemoglobin from './resources/r4/observation-example-f005-hemoglobin.json';
+import observationExampleR4F202Temperature from './resources/r4/observation-example-f202-temperature.json';
+import observationExampleR4F203Bicarbonate from './resources/r4/observation-example-f203-bicarbonate.json';
+import observationExampleR4F204Creatinine from './resources/r4/observation-example-f204-creatinine.json';
+import observationExampleR4F205EGFR from './resources/r4/observation-example-f205-egfr.json';
+import observationExampleR4F206Staphylococcus from './resources/r4/observation-example-f206-staphylococcus.json';
+import observationExampleR4Glasgow from './resources/r4/observation-example-glasgow.json';
+import observationExampleR4GlasgowGA from './resources/r4/observation-example-glasgow-qa.json';
+import observationExampleR4HeadCircumference from './resources/r4/observation-example-head-circumference.json';
+import observationExampleR4HeartRate from './resources/r4/observation-example-heart-rate.json';
+import observationExampleR4Herd1 from './resources/r4/observation-example-herd1.json';
+import observationExampleR4MapSitting from './resources/r4/observation-example-map-sitting.json';
+import observationExampleR4BMP from './resources/r4/observation-example-mbp.json';
+import observationExampleR4RespiratoryRate from './resources/r4/observation-example-respiratory-rate.json';
+import observationExampleR4RHStatus from './resources/r4/observation-example-rhstatus.json';
+import observationExampleR4SampleData from './resources/r4/observation-example-sample-data.json';
+import observationExampleR4Sat002 from './resources/r4/observation-example-satO2.json';
+import observationExampleR4SecondSmoke from './resources/r4/observation-example-secondsmoke.json';
+import observationExampleR4Spirometry from './resources/r4/observation-example-spirometry.json';
+import observationExampleR4TrachCare from './resources/r4/observation-example-trachcare.json';
+import observationExampleR4Unsat from './resources/r4/observation-example-unsat.json';
+import observationExampleR4VitalsPanel from './resources/r4/observation-example-vitals-panel.json';
+import observationExampleR4Vomiting from './resources/r4/observation-example-vomiting.json';
+import observationExampleR4VPOyster from './resources/r4/observation-example-vp-oyster.json';
+
 import patientExampleR4 from './resources/r4/patient-example.json';
 import patientExampleR4A from './resources/r4/patient-example-a.json';
 import patientExampleR4B from './resources/r4/patient-example-b.json';
@@ -593,6 +641,55 @@ describe('fhir validator', () => {
         { encounterExampleR4RealWorldF003Abscess },
         { encounterExampleR4XCDA },
         { encounterExampleR4EmergencyInpatient },
+      ],
+      Observation: [
+        { observationExampleR4 },
+        { observationExampleR4Apgar1 },
+        { observationExampleR4Apgar20 },
+        { observationExampleR4AbdomenTender },
+        { observationExampleR4Alcohol },
+        { observationExampleR4BgPanel },
+        { observationExampleR4BloodGroup },
+        { observationExampleR4BloodPressure },
+        { observationExampleR4BloodPressureCancel },
+        { observationExampleR4BloodPressureDar },
+        { observationExampleR4BMD },
+        { observationExampleR4BMI },
+        { observationExampleR4BMIRelated },
+        { observationExampleR4BodyHeight },
+        { observationExampleR4BodyLength },
+        { observationExampleR4BodyTemperature },
+        { observationExampleR4ClincalGender },
+        { observationExampleR4LastMP },
+        { observationExampleR4EyeColor },
+        { observationExampleR4F001Glucose },
+        { observationExampleR4F002Excess },
+        { observationExampleR4F003CO2 },
+        { observationExampleR4F004Erythrocytes },
+        { observationExampleR4F005Hemoglobin },
+        { observationExampleR4F202Temperature },
+        { observationExampleR4F203Bicarbonate },
+        { observationExampleR4F204Creatinine },
+        { observationExampleR4F205EGFR },
+        { observationExampleR4F206Staphylococcus },
+        { observationExampleR4Glasgow },
+        { observationExampleR4GlasgowGA },
+        { observationExampleR4HeadCircumference },
+        { observationExampleR4HeartRate },
+        { observationExampleR4Herd1 },
+        { observationExampleR4MapSitting },
+        { observationExampleR4BMP },
+        { observationExampleR4RespiratoryRate },
+        { observationExampleR4RHStatus },
+        { observationExampleR4SampleData },
+        { observationExampleR4Sat002 },
+        { observationExampleR4SecondSmoke },
+        { observationExampleR4Spirometry },
+        { observationExampleR4TrachCare },
+        { observationExampleR4Unsat },
+        { observationExampleR4VitalsPanel },
+        { observationExampleR4Vomiting },
+        { observationExampleR4VPOyster },
       ],
       Practitioner: [
         { practitionerExampleR4 },
