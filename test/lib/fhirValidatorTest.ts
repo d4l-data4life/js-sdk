@@ -541,9 +541,6 @@ describe('fhir validator', () => {
     // eslint-disable-next-line no-restricted-syntax
     for (const [exampleDomainName, resourceExamples] of Object.entries(exampleSTU3Collection)) {
       describe(exampleDomainName, () => {
-        afterEach(() => {
-          fhirValidator.clearValidator(exampleDomainName);
-        });
         resourceExamples.forEach(resourceExample => {
           it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
             fhirValidator
