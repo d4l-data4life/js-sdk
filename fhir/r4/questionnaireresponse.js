@@ -1,6 +1,6 @@
 'use strict';
 var formats = require('ajv/lib/compile/formats')();
-var equal = require('ajv/lib/compile/equal');
+import equal from 'ajv/lib/compile/equal';
 var validate = (function() {
   var pattern0 = new RegExp('^[A-Za-z0-9\\-\\.]{1,64}$');
   var pattern1 = new RegExp('^[ \\r\\n\\t\\S]+$');
@@ -17838,10 +17838,10 @@ var validate = (function() {
       var vErrors = null;
       var errors = 0;
       if (rootData === undefined) rootData = data;
-      var errs__0 = errors,
-        prevValid0 = false,
-        valid0 = false,
-        passingSchemas0 = null;
+      var errs__0 = errors;
+      var prevValid0 = false;
+      var valid0 = false;
+      var passingSchemas0 = null;
       var errs_1 = errors;
       if (!refVal[1](data, (dataPath || ''), parentData, parentDataProperty, rootData)) {
         if (vErrors === null) vErrors = refVal[1].errors;
@@ -19054,14 +19054,14 @@ var validate = (function() {
   refVal60.errors = null;
   refVal[60] = refVal60;
   return function validate(data, dataPath, parentData, parentDataProperty, rootData) {
-    'use strict'; /*# sourceURL=http://hl7.org/fhir/json-schema/4.0 */
+    'use strict';/*# sourceURL=http://hl7.org/fhir/json-schema/4.0 */
     var vErrors = null;
     var errors = 0;
     if (rootData === undefined) rootData = data;
-    var errs__0 = errors,
-      prevValid0 = false,
-      valid0 = false,
-      passingSchemas0 = null;
+    var errs__0 = errors;
+    var prevValid0 = false;
+    var valid0 = false;
+    var passingSchemas0 = null;
     var errs_1 = errors;
     if (!refVal1(data, (dataPath || ''), parentData, parentDataProperty, rootData)) {
       if (vErrors === null) vErrors = refVal1.errors;
