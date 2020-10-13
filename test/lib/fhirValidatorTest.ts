@@ -153,8 +153,25 @@ import encounterExampleR4RealWorldF003Abscess from './resources/r4/encounter-exa
 import encounterExampleR4XCDA from './resources/r4/encounter-example-xcda.json';
 import encounterExampleR4EmergencyInpatient from './resources/r4/encounter-example-emergency-inpatient.json';
 
+import patientExampleR4 from './resources/r4/patient-example.json';
+import patientExampleR4A from './resources/r4/patient-example-a.json';
+import patientExampleR4B from './resources/r4/patient-example-b.json';
+import patientExampleR4C from './resources/r4/patient-example-c.json';
+import patientExampleR4D from './resources/r4/patient-example-d.json';
+// includes 'Bundle'
+// import patientExampleR4General from './resources/r4/patient-examples-general.json';
+import patientExampleR4CDA from './resources/r4/patient-example-xcda.json';
+import patientExampleR4XDS from './resources/r4/patient-example-xds.json';
+import patientExampleR4Animal from './resources/r4/patient-example-animal.json';
+import patientExampleR4Dicom from './resources/r4/patient-example-dicom.json';
+import patientExampleR4IhePcd from './resources/r4/patient-example-ihe-pcd.json';
+import patientExampleR4F001 from './resources/r4/patient-example-f001.json';
+import patientExampleR4F002 from './resources/r4/patient-example-f002.json';
+import patientExampleR4Proband from './resources/r4/patient-example-proband.json';
+
 import practitionerExampleR4 from './resources/r4/practitioner-example.json';
 import practitionerExampleR4XCDA from './resources/r4/practitioner-example-xcda-author.json';
+
 // includes 'Bundle'
 // import practitionerExampleR4General from './resources/r4/practitioner-example-general.json';
 import practitionerExampleR4F001EVDB from './resources/r4/practitioner-example-f001-evdb.json';
@@ -599,6 +616,21 @@ describe('fhir validator', () => {
         { diagnosticReportExampleR4UltraSound },
         { diagnosticReportExampleR4PapSmear },
         { diagnosticReportExampleR4GingavalMass },
+      ],
+      Patient: [
+        { patientExampleR4 },
+        { patientExampleR4A },
+        { patientExampleR4B },
+        { patientExampleR4C },
+        { patientExampleR4D },
+        { patientExampleR4CDA },
+        { patientExampleR4XDS },
+        { patientExampleR4Animal },
+        { patientExampleR4Dicom },
+        { patientExampleR4IhePcd },
+        { patientExampleR4F001 },
+        { patientExampleR4F002 },
+        { patientExampleR4Proband },
       ],
       ResearchSubject: [{ ResearchSubjectExampleR4 }],
     };
