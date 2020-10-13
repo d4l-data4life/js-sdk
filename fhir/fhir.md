@@ -6,21 +6,23 @@ While the validation itself happens during runtime, the validation function per 
 
 ## Adding the schema for a new resource type
 
+The SDK supports STU3 and R4. In the text below, "(version)" will refer to the version you want to include
+
 The FHIR schema file requires both the definition for the resource you actually want to add and any resources used, referenced or extended by it.
 
 To make this easy, we recommend basing a new schema on the existing file for documentreference because it contains a reasonable base amount of auxilliary definitions.
 
 Save a new json file based on the documentreference file with your resource type as the file name. In line 4, change the value from of the $ref to the name of your resource type, for example `"$ref": "#/definitions/MedicalPlan"` if you want to add support for MedicalPlan.definitions. Do the same for "ResourceList" definition, which is the last one before the resource type.
 
-Now go the "fhir.schema.v301.json" and find the definition of the resource type you want to add. Copy the entire JSON branch and replace the existing "DocumentReference" branch with it.
+Now go the "fhir.schema.(version).json"  and find the definition of the resource type you want to add. Copy the entire JSON branch and replace the existing "DocumentReference" branch with it.
 
 Depending on the complexity of your resource, you will need additional types that are referenced in your type. For DocumentReference, this is "DocumentReference_RelatesTo", "DocumentReference_Content", "DocumentReference_Context" and "DocumentReference_Related". Delete these branches and replace them with the ones you need. If you do not know whether you need additional resources, proceed to the next step as the tool will tell you about any missing definitions.
 
 ## Compile the schema into a javascript function
 
-On the terminal inside the `fhir`directory, run
+On the terminal inside the `fhir/(version)` directory, run
 
-```npx ajv compile -s fhir-careplan.schema.v301.json -0 careplan.js```
+```npx ajv compile -s fhir-careplan.schema.(version).json -0 careplan.js```
 
 to compile the modified JSON file into a javascript file.
 
@@ -38,12 +40,16 @@ Two small modifications are required for the integration of the javascript file.
 
 ## Add the javascript file to the javascript
 
-Add the JSON and JS files to the repository. In the file `fhirValidator.js`, add support  for the resource type by copying and adapting an `if (resourceType ===)` block inside `getValidator`. In `helper.ts`, add the new resource type to the `SUPPORTED_RESOURCES` array.
+Add the JSON and JS files to the repository. In the file `fhirValidator.js`, add support for the resource type by copying and adapting an `if (resourceType ===)` block inside `getValidator`. In `helper.ts`, add the new resource type to the `SUPPORTED_RESOURCES` array for the FHIR version (STU3 or R4).
 
 ## Run unbabel the javascript file
 
-"Lebab" is "babel" but the other way around. Therefore it transforms es5 into es6.
+"Lebab" is "babel" but the other way around: it transforms es5 into es6.
 
 1. Run `npm run lebab-fhir`
 
 2. lebab might miss a `require`. Therefore in the new file change `var formats = require('ajv/lib/compile/formats')();` to `import formatsFn from 'ajv/lib/compile/formats';` and add `const formats = formatsFn();`.
+
+# Add test resources
+
+Use the official examples from the HL7 website to validate the generated validation functions. Unless these include resources we don't support such as "Bundle", they should all pass.
