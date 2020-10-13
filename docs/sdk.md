@@ -1,7 +1,7 @@
-# The data4life web SDK
-The data4life JavaScript web SDK lets you store and access user health data on the data4life Personal Health Data Platform (PHDP). You can share PHDP data between users and applications.
+# The Data4Life web SDK
+The Data4Life JavaScript web SDK lets you store and access user health data on the Data4Life Personal Health Data Platform (PHDP). You can share PHDP data between users and applications.
 
-For more information about the data4life platform, visit [d4l.io](https://www.d4l.io/).
+For more information about the Data4Life platform, visit [d4l.io](https://www.d4l.io/).
 
 ## Before you get started
 To use the SDK, you must have a data4life client ID. To obtain a client ID, get in touch with us at contact@data4life.care.
@@ -18,7 +18,7 @@ You can then import the named export `D4LSDK` wherever you need it. It is an obj
 
 It is also possible to build the SDK yourself Read more about building the SDK in the README.md file.
 
-2. To log in a user, implement the OAuth 2.0 code grant flow which redirects the user to the data4life web app for login.
+2. To log in a user, implement the OAuth 2.0 code grant flow which redirects the user to the Data4Life web app for login.
 Thereby, you must also create an asymmetric key pair by calling `D4L.SDK.createCAP`. The public key of the user must be sent to our backend, while the private key needs to be stored in your OAuth backend.
 
 To revoke the received refresh token, post to '/oauth/revoke' with the refresh token as a parameter.
@@ -134,7 +134,7 @@ D4L.SDK.getReceivedPermissions().then(...)
 
 ### createCAP
 
-To create an asymmetric key pair that contains a data4life-specific version tag, use the `createCAP` method. The result is an object that contains the properties `privateKey` and `publicKey`. The values are cryptographic keys which are stringified, base-64 encoded, and data4life-versioned.
+To create an asymmetric key pair that contains a Data4Life-specific version tag, use the `createCAP` method. The result is an object that contains the properties `privateKey` and `publicKey`. The values are cryptographic keys which are stringified, base-64 encoded, and Data4Life-versioned.
 
 **IMPORTANT:** Use the string properties to store the keys in your backend. Don't store those strings in the browser.
 
@@ -142,7 +142,7 @@ To make the strings storable in the browser, use the `sealCAP` method. You can i
 
 ### sealCAP
 
-The `sealCAP` method imports the custom data4life cryptographic key into [the crypto key standard](https://www.w3.org/TR/WebCryptoAPI/#dfn-CryptoKey) in an unexportable way. You can store the object in the IndexedDB and use it to initialize the SDK. This is a safer format than storing exportable cryptographic keys or using the data4life cryptographic key format.
+The `sealCAP` method imports the custom Data4Life cryptographic key into [the crypto key standard](https://www.w3.org/TR/WebCryptoAPI/#dfn-CryptoKey) in an unexportable way. You can store the object in the IndexedDB and use it to initialize the SDK. This is a safer format than storing exportable cryptographic keys or using the Data4Life cryptographic key format.
 
 #### Parameters
 This method has no parameters.
@@ -167,7 +167,7 @@ D4L.SDK.createCAP()
 
 ### sealCAP
 
-Imports the custom data4life crypto key into [the crypto key standard](https://www.w3.org/TR/WebCryptoAPI/#dfn-CryptoKey) in an unexportable fashion. The object within the output Promise can be stored in the indexedDB and used to initialize the SDK. It is considered to be a safer format than storing the data4life crypto key itself, which is only meant for storing purposes.
+Imports the custom Data4Life crypto key into [the crypto key standard](https://www.w3.org/TR/WebCryptoAPI/#dfn-CryptoKey) in an unexportable fashion. The object within the output Promise can be stored in the indexedDB and used to initialize the SDK. It is considered to be a safer format than storing the Data4Life crypto key itself, which is only meant for storing purposes.
 
 #### Sample Call
 ```javascript
@@ -254,7 +254,7 @@ To reset the SDK, use the `reset` method. Resetting sets all user information, i
 ```
 
 ### isAllowedFileType
-To check the file format of files uploaded to the data4life platform, use the `isAllowedFileType` method. The SDK allows the upload of the following file formats to the data4life platform:
+To check the file format of files uploaded to the Data4Life platform, use the `isAllowedFileType` method. The SDK allows the upload of the following file formats to the Data4Life platform:
 - JPEG,including JPEG/JFIF
 - PNG – Portable Network Graphics
 - TIFF – Tagged Image File Format
@@ -652,7 +652,7 @@ D4L.SDK.countResources('1cf5ee52-88dc-406a-bf7b-bc5e26a17b47', {
 
 ### Models
 
-The data4life platform supports multiple resource types. The resource types are reflected in the models.
+The Data4Life platform supports multiple resource types. The resource types are reflected in the models.
 
 #### DocumentReference
 To describe a document that's made available to a healthcare system, use the `DocumentReference` resource.
