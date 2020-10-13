@@ -233,6 +233,16 @@ import practitionerExampleR4F006RVDB from './resources/r4/practitioner-example-f
 import practitionerExampleR4F007SH from './resources/r4/practitioner-example-f007-sh.json';
 import practitionerExampleR4XCDA2 from './resources/r4/practitioner-example-xcda1.json';
 
+import questionnaireExampleR4 from './resources/r4/questionnaire-example.json';
+import questionnaireExampleR4CQF from './resources/r4/questionnaire-cqf-example.json';
+import questionnaireExampleR4Bluebook from './resources/r4/questionnaire-example-bluebook.json';
+import questionnaireExampleR4F201Lifelines from './resources/r4/questionnaire-example-f201-lifelines.json';
+// includes ValueSet
+// import questionnaireExampleR4GCS from './resources/r4/questionnaire-example-gcs.json';
+// includes Bundle
+// import questionnaireExampleR4Profile from './resources/r4/questionnaire-profile-example-ussg-fht.json';
+import questionnaireExampleR4Zika from './resources/r4/questionnaire-zika-virus-exposure-assessment.json';
+
 // includes 'Bundle', as do many other examples from the HL7 site not in the repo
 // import diagnosticReportExampleR4 from './resources/r4/diagnosticreport-example.json';
 import diagnosticReportExampleR4F201BrainCT from './resources/r4/diagnosticreport-example-f201-brainct.json';
@@ -713,6 +723,13 @@ describe('fhir validator', () => {
         { diagnosticReportExampleR4UltraSound },
         { diagnosticReportExampleR4PapSmear },
         { diagnosticReportExampleR4GingavalMass },
+      ],
+      Questionnaire: [
+        { questionnaireExampleR4 },
+        { questionnaireExampleR4CQF },
+        { questionnaireExampleR4Bluebook },
+        { questionnaireExampleR4F201Lifelines },
+        { questionnaireExampleR4Zika },
       ],
       Patient: [
         { patientExampleR4 },

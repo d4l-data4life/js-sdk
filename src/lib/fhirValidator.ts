@@ -71,6 +71,13 @@ const fhirValidator = {
           });
         }
 
+        if (resourceType === 'Questionnaire') {
+          returnPromise = import('../../fhir/r4/questionnaire').then(bundle => {
+            this.validator[resourceType] = bundle.default;
+            return this.validator[resourceType];
+          });
+        }
+
         if (resourceType === 'DiagnosticReport') {
           returnPromise = import('../../fhir/r4/diagnosticreport').then(bundle => {
             this.validator[resourceType] = bundle.default;
