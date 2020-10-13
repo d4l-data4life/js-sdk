@@ -9,8 +9,7 @@ import fhirValidator from '../../src/lib/fhirValidator';
 
 // STU3 examples
 
-// includes 'Observation' resource, not supported
-// import diagnosticReportExampleSTU31 from './resources/diagnosticreport-example.json';
+import diagnosticReportExampleSTU31 from './resources/stu3/diagnosticreport-example.json';
 import diagnosticReportExampleSTU3DXABoneDensity from './resources/stu3/diagnosticreport-example-dxa.json';
 // includes 'ProcedureRequest' resource, not supported
 // import diagnosticReportExampleSTU3BloodExam from './resources/diagnosticreport-example-f001-bloodexam.json';
@@ -20,8 +19,7 @@ import diagnosticReportExampleSTU3BrainCT from './resources/stu3/diagnosticrepor
 // includes 'Specimen' resource, not supported
 // import diagnosticReportExampleSTU3BloodGHP from './resources/diagnosticreport-example-ghp.json';
 import diagnosticReportExampleSTU3GinGivalMass from './resources/stu3/diagnosticreport-example-gingival-mass.json';
-// includes 'Observation' resource, not supported
-// import diagnosticReportExampleSTU3Lipids from './resources/diagnosticreport-example-lipids.json';
+import diagnosticReportExampleSTU3Lipids from './resources/stu3/diagnosticreport-example-lipids.json';
 import diagnosticReportExampleSTU3PapSmear from './resources/stu3/diagnosticreport-example-papsmear.json';
 import diagnosticReportExampleSTU3PGX from './resources/stu3/diagnosticreport-example-pgx.json';
 import diagnosticReportExampleSTU3UltraSound from './resources/stu3/diagnosticreport-example-ultrasound.json';
@@ -366,9 +364,11 @@ describe('fhir validator', () => {
 
     const exampleSTU3Collection = {
       DiagnosticReport: [
+        { diagnosticReportExampleSTU31 },
         { diagnosticReportExampleSTU3DXABoneDensity },
         { diagnosticReportExampleSTU3BrainCT },
         { diagnosticReportExampleSTU3GinGivalMass },
+        { diagnosticReportExampleSTU3Lipids },
         { diagnosticReportExampleSTU3PapSmear },
         { diagnosticReportExampleSTU3PGX },
         { diagnosticReportExampleSTU3UltraSound },
