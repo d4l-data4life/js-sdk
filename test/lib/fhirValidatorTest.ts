@@ -270,59 +270,69 @@ chai.use(sinonChai);
 const { expect } = chai;
 
 describe('fhir validator', () => {
-  it('successfully calls getValidator for a DocumentReference', done => {
-    fhirValidator.getValidator('DocumentReference').then(res => {
-      expect(typeof res).to.equal('function');
-      done();
+  describe('getValidator', () => {
+    let fhirVersionStub;
+    beforeEach(() => {
+      fhirVersionStub = sinon.stub(fhirService, 'getFhirVersion');
+      fhirVersionStub.returns(FHIR_VERSION_STU3);
     });
-  });
-
-  it('successfully calls getValidator for a Questionnaire', done => {
-    fhirValidator.getValidator('Questionnaire').then(res => {
-      expect(typeof res).to.equal('function');
-      done();
+    afterEach(() => {
+      fhirVersionStub.restore();
     });
-  });
-
-  it('successfully calls getValidator for a QuestionnaireResponse', done => {
-    fhirValidator.getValidator('QuestionnaireResponse').then(res => {
-      expect(typeof res).to.equal('function');
-      done();
+    it('successfully calls getValidator for a DocumentReference', done => {
+      fhirValidator.getValidator('DocumentReference').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
     });
-  });
 
-  it('successfully calls getValidator for a DiagnosticReport', done => {
-    fhirValidator.getValidator('DiagnosticReport').then(res => {
-      expect(typeof res).to.equal('function');
-      done();
+    it('successfully calls getValidator for a Questionnaire', done => {
+      fhirValidator.getValidator('Questionnaire').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
     });
-  });
 
-  it('successfully calls getValidator for a Patient', done => {
-    fhirValidator.getValidator('Patient').then(res => {
-      expect(typeof res).to.equal('function');
-      done();
+    it('successfully calls getValidator for a QuestionnaireResponse', done => {
+      fhirValidator.getValidator('QuestionnaireResponse').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
     });
-  });
 
-  it('successfully calls getValidator for an Practitioner', done => {
-    fhirValidator.getValidator('Practitioner').then(res => {
-      expect(typeof res).to.equal('function');
-      done();
+    it('successfully calls getValidator for a DiagnosticReport', done => {
+      fhirValidator.getValidator('DiagnosticReport').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
     });
-  });
 
-  it('successfully calls getValidator for an Organization', done => {
-    fhirValidator.getValidator('Organization').then(res => {
-      expect(typeof res).to.equal('function');
-      done();
+    it('successfully calls getValidator for a Patient', done => {
+      fhirValidator.getValidator('Patient').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
     });
-  });
 
-  it('throws an error when calling getValidator for a MedicalPlan', done => {
-    fhirValidator.getValidator('MedicalPlan').then(result => {
-      expect(result).to.be.false;
-      done();
+    it('successfully calls getValidator for an Practitioner', done => {
+      fhirValidator.getValidator('Practitioner').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
+    });
+
+    it('successfully calls getValidator for an Organization', done => {
+      fhirValidator.getValidator('Organization').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
+    });
+
+    it('throws an error when calling getValidator for a MedicalPlan', done => {
+      fhirValidator.getValidator('MedicalPlan').then(result => {
+        expect(result).to.be.false;
+        done();
+      });
     });
   });
 

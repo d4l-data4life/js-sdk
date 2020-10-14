@@ -6,7 +6,7 @@ import omit from 'lodash/omit';
 
 import ValidationError from './errors/ValidationError';
 import { SUPPORTED_RESOURCES } from './models/fhir/helper';
-import fhirService, { FHIR_VERSION_R4 } from '../services/fhirService';
+import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../services/fhirService';
 
 const fhirValidator = {
   getRefName(definitionName: string): string {
@@ -42,120 +42,125 @@ const fhirValidator = {
     } else {
       // eslint-disable-next-line no-lonely-if
       if (version === FHIR_VERSION_R4) {
-        if (resourceType === 'Encounter') {
-          returnPromise = import('../../fhir/r4/encounter').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
-        if (resourceType === 'DocumentReference') {
-          returnPromise = import('../../fhir/r4/documentreference').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+        switch (resourceType) {
+          case 'Encounter':
+            returnPromise = import('../../fhir/r4/encounter').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+          case 'DocumentReference':
+            returnPromise = import('../../fhir/r4/documentreference').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'Practitioner') {
-          returnPromise = import('../../fhir/r4/practitioner').then(bundle => {
-            this.validator[resourceType] = bundle.default;
-            return this.validator[resourceType];
-          });
-        }
+          case 'Practitioner':
+            returnPromise = import('../../fhir/r4/practitioner').then(bundle => {
+              this.validator[resourceType] = bundle.default;
+              return this.validator[resourceType];
+            });
+            break;
 
-        if (resourceType === 'Patient') {
-          returnPromise = import('../../fhir/r4/patient').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'Patient':
+            returnPromise = import('../../fhir/r4/patient').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'Questionnaire') {
-          returnPromise = import('../../fhir/r4/questionnaire').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'Questionnaire':
+            returnPromise = import('../../fhir/r4/questionnaire').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'QuestionnaireResponse') {
-          returnPromise = import('../../fhir/r4/questionnaireresponse').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'QuestionnaireResponse':
+            returnPromise = import('../../fhir/r4/questionnaireresponse').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'DiagnosticReport') {
-          returnPromise = import('../../fhir/r4/diagnosticreport').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
-        if (resourceType === 'ResearchSubject') {
-          returnPromise = import('../../fhir/r4/researchsubject').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
-        if (resourceType === 'Observation') {
-          returnPromise = import('../../fhir/r4/observation').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
-      } else {
-        if (resourceType === 'DocumentReference') {
-          returnPromise = import('../../fhir/stu3/documentreference').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'DiagnosticReport':
+            returnPromise = import('../../fhir/r4/diagnosticreport').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'Patient') {
-          returnPromise = import('../../fhir/stu3/patient').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
+          case 'ResearchSubject':
+            returnPromise = import('../../fhir/r4/researchsubject').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+          case 'Observation':
+            returnPromise = import('../../fhir/r4/observation').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
         }
+      } else if (version === FHIR_VERSION_STU3) {
+        switch (resourceType) {
+          case 'DocumentReference':
+            returnPromise = import('../../fhir/stu3/documentreference').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'Practitioner') {
-          returnPromise = import('../../fhir/stu3/practitioner').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'Patient':
+            returnPromise = import('../../fhir/stu3/patient').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'Observation') {
-          returnPromise = import('../../fhir/stu3/observation').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'Practitioner':
+            returnPromise = import('../../fhir/stu3/practitioner').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'DiagnosticReport') {
-          returnPromise = import('../../fhir/stu3/diagnosticreport').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'Observation':
+            returnPromise = import('../../fhir/stu3/observation').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'Questionnaire') {
-          returnPromise = import('../../fhir/stu3/questionnaire').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'DiagnosticReport':
+            returnPromise = import('../../fhir/stu3/diagnosticreport').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'QuestionnaireResponse') {
-          returnPromise = import('../../fhir/stu3/questionnaireresponse').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
-        }
+          case 'Questionnaire':
+            returnPromise = import('../../fhir/stu3/questionnaire').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
 
-        if (resourceType === 'ResearchSubject') {
-          returnPromise = import('../../fhir/stu3/researchsubject').then(bundle => {
-            this.validator[version][resourceType] = bundle.default;
-            return this.validator[version][resourceType];
-          });
+          case 'QuestionnaireResponse':
+            returnPromise = import('../../fhir/stu3/questionnaireresponse').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+
+          case 'ResearchSubject':
+            returnPromise = import('../../fhir/stu3/researchsubject').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
         }
       }
     }
