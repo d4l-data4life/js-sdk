@@ -10,7 +10,7 @@ import {
   importKey,
   // @ts-ignore
 } from 'js-crypto';
-import fhirService  from './services/fhirService';
+import fhirService from './services/fhirService';
 import createCryptoService from './services/createCryptoService';
 import {
   createChangePasswordPayload,
@@ -31,7 +31,8 @@ import D4LSpecialty from './lib/models/D4LSpecialty';
 import Practitioner from './lib/models/fhir/Practitioner';
 import DocumentReference from './lib/models/fhir/DocumentReference';
 import {
-  createCodeableConcept, FHIR_VERSION_STU3,
+  createCodeableConcept,
+  FHIR_VERSION_STU3,
   getCodeFromCodeableConcept,
   getDisplayFromCodeableConcept,
 } from './lib/models/fhir/helper';
