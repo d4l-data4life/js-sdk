@@ -10,8 +10,6 @@ import fhirService, {
   prepareSearchParameters,
   setAttachmentsToResource,
   getCleanAttachmentsFromResource,
-  FHIR_VERSION_R4,
-  FHIR_VERSION_STU3,
 } from '../../src/services/fhirService';
 import testVariables from '../testUtils/testVariables';
 import fhirValidator from '../../src/lib/fhirValidator';
@@ -20,6 +18,8 @@ import recordService from '../../src/services/recordService';
 import { D4LSDK } from '../../src/d4l';
 import documentRoutes from '../../src/routes/documentRoutes';
 import DocumentReference from '../../src/lib/models/fhir/DocumentReference';
+import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
+
 
 chai.use(sinonChai);
 

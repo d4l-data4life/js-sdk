@@ -260,7 +260,8 @@ import diagnosticReportExampleR4GingavalMass from './resources/r4/diagnosticrepo
 
 import ResearchSubjectExampleR4 from './resources/r4/researchsubject-example.json';
 
-import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../src/services/fhirService';
+import fhirService from '../../src/services/fhirService';
+import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
 import sinon from 'sinon';
 
 // @ts-ignore-disable

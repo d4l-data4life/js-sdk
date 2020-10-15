@@ -1,10 +1,9 @@
-/* eslint-disable no-useless-computed-key */
-
 import find from 'lodash/find';
 import isEmpty from 'lodash/isEmpty';
 import omitBy from 'lodash/omitBy';
-// todo: figure out why these imports weren't working
-// import { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../../../services/fhirService';
+
+export const FHIR_VERSION_STU3 = '3.0.1';
+export const FHIR_VERSION_R4 = '4.0.1';
 
 export const createCodeableConcept = (
   display?: string,
@@ -29,8 +28,7 @@ export const getResource = (ref: fhir.Reference, resources: FHIRResource[]): FHI
   find(resources, { id: ref.reference.substring(1) });
 
 export const SUPPORTED_RESOURCES = {
-  // todo: use imported constants
-  ['4.0.1']: [
+  [FHIR_VERSION_R4]: [
     'Encounter',
     'DocumentReference',
     'DiagnosticReport',
@@ -42,7 +40,7 @@ export const SUPPORTED_RESOURCES = {
     'QuestionnaireResponse',
     'ResearchSubject',
   ],
-  ['3.0.1']: [
+  [FHIR_VERSION_STU3]: [
     'DocumentReference',
     'DiagnosticReport',
     'Patient',

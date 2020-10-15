@@ -7,8 +7,8 @@ import isUndefined from 'lodash/isUndefined';
 import omit from 'lodash/omit';
 
 import ValidationError from './errors/ValidationError';
-import { SUPPORTED_RESOURCES } from './models/fhir/helper';
-import fhirService, { FHIR_VERSION_R4, FHIR_VERSION_STU3 } from '../services/fhirService';
+import { FHIR_VERSION_STU3, FHIR_VERSION_R4, SUPPORTED_RESOURCES } from './models/fhir/helper';
+import fhirService from '../services/fhirService';
 
 const fhirValidator = {
   getRefName(definitionName: string): string {
