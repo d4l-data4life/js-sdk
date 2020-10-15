@@ -1,3 +1,5 @@
+/* eslint-disable default-case, indent */
+
 import cloneDeep from 'lodash/cloneDeep';
 import isObjectLike from 'lodash/isObjectLike';
 import isArray from 'lodash/isArray';
