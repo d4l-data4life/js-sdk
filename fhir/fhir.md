@@ -44,7 +44,7 @@ Add the JSON and JS files to the repository. In the file `fhirValidator.js`, add
 
 ## Run unbabel the javascript file
 
-"Lebab" is "babel" but the other way around: it transforms es5 into es6.
+"Lebab" is "babel" spelled backwards and transforms ES5 into ES6.
 
 1. Run `npm run lebab-fhir`
 
