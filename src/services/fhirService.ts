@@ -410,9 +410,13 @@ const convertToExposedRecord = (decryptedRecord: DecryptedRecord) => {
   return exposedRecord;
 };
 
-export const CURRENT_FHIR_VERSION = '3.0.1';
-
 const fhirService = {
+  setFhirVersion(fhirVersion: string): void {
+    this.fhirVersion = fhirVersion;
+  },
+  getFhirVersion(): string {
+    return this.fhirVersion;
+  },
   async createResource(
     ownerId: string,
     fhirResource: fhir.DomainResource,

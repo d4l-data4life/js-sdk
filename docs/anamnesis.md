@@ -15,7 +15,7 @@
 
 
 ## About the medical history
-data4life implementations can feature a questionnaire about a user's _medical history_, also called anamnesis or health history (German: medizinische Vorgeschichte, Anamnese). The questionnaire contains questions about the medial history of a person. The information is usually entered at the beginning of the user journey. For example, the medical history contains information about the following for a person:
+Data4Life implementations can feature a questionnaire about a user's _medical history_, also called anamnesis or health history (German: medizinische Vorgeschichte, Anamnese). The questionnaire contains questions about the medial history of a person. The information is usually entered at the beginning of the user journey. For example, the medical history contains information about the following for a person:
 - Personal data
 - Conditions and diagnoses
 - Risk factors
@@ -32,7 +32,7 @@ See ['when to use questionnaires'](#when-to-use-questionnaires).
 Application integrators can display an overview of a patient's medical history or display data like a doctor's form. With the help of the SDK, you can customize the aggregation and display of these resources as a coherent `medical history` section.
 
 The SDK passes through any valid FHIR resource sent to the SDK, not restricted to the ones mentioned above. The current approach is to use minimal number of attributes that the respective FHIR resource or an application design requires.
-You can provide additional information as long as it is valid FHIR. But it will not be displayed in data4life apps and might be lost when the provided resources are updated through an application other than your client.
+You can provide additional information as long as it is valid FHIR. But it will not be displayed in Data4Life apps and might be lost when the provided resources are updated through an application other than your client.
 
 
 ## Example: Patient resource
@@ -73,7 +73,7 @@ const userId = D4L.SDK.getCurrentUserId();
  const thePatient = {
      ...getCurrentPatientResource() // When updating information, avoid using a reference to your stored version
  };
- 
+
 thePatient.birthDate = document.getElementById('birthDate').value;
 
 D4L.SDK.updateResource(userId, thePatient); // Returns a promise with the new record which you could use to update your store
@@ -82,7 +82,7 @@ D4L.SDK.updateResource(userId, thePatient); // Returns a promise with the new re
 ### Creating a new Patient resource
 Below is a sample implementation for how an application creates a new patient resource by using the `createRecource` method.
 
-**Note**: Patient resources created by clients other than data4life are not processed by data4life apps.
+**Note**: Patient resources created by clients other than Data4Life are not processed by Data4Life apps.
 
 ```javascript
 
@@ -126,7 +126,7 @@ if (questionnaireResource && questionnaireResource.records && questionnaireResou
     const questionnaireRecords = questionnaireResource.records.map(
         record => record['fhirResource']
       );
-        
+
     // Find a questionnaire with the medical history title
     const anamnesisQuestionnaire =
         questionnaireRecords.find(questionnaire => questionnaire.title === 'Anamnesis')
@@ -146,7 +146,7 @@ if (questionnaireResponseResource && questionnaireResponseResource.records && qu
     const questionnaireResponseRecords = questionnaireResponseResource.records.map(
             record => record['fhirResource']
           );
-    
+
     // Find a questionnaireResponse whose reference is the questionnaire's id
     const anamnesisQuestionnaireResponse =
         questionnaireResponseRecords.find(response => response.reference === anamnesisQuestionnaire.id)
@@ -185,7 +185,7 @@ function addQuestionToQuestionnaire(question) {
 
 ```
 
-New or changed answers require an update to the `QuestionnaireResponse` object. To implement the object update: 
+New or changed answers require an update to the `QuestionnaireResponse` object. To implement the object update:
 ```javascript
 function addQuestionAnswerToQuestionnaireResponse(response) {
     const userId = D4L.SDK.getCurrentUserId();
@@ -223,7 +223,7 @@ function addQuestionAnswerToQuestionnaireResponse(response) {
 
 The SDK allows the creation of `Questionnaire` and `QuestionnaireResponse` objects. The objects must be valid FHIR resources.
 
-**IMPORTANT:** To ensure compatibility, third-party providers should contact data4life before creating their own medical history questionnaires. 
+**IMPORTANT:** To ensure compatibility, third-party providers should contact Data4Life before creating their own medical history questionnaires.
 
 To create the resources:
 
@@ -262,7 +262,7 @@ function createQuestionnaireResponseAndAddResponse(response) {
         identifier: response.identifier,
         valueBoolean: [response.value], // Questionnaire response requires an array
     };
-    
+
     const questionnaireRecord = getCurrentQuestionnaireRecord(); // Retrieve from your store
 
     const newQuestionnaireResponse = {

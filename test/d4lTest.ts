@@ -223,12 +223,12 @@ describe('D4L', () => {
     });
 
     it('makes its calls with hcKey', done => {
-      D4LSDK.setup(
-        testVariables.clientId,
-        'development',
-        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
-        requestAccessTokenStub
-      )
+      D4LSDK.setup({
+        clientId: testVariables.clientId,
+        environment: 'development',
+        privateKey: btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
+        requestAccessToken: requestAccessTokenStub,
+      })
         .then(res => {
           expect(res).to.equal(testVariables.userId);
           expect(taggingUtils.partnerId).to.equal(testVariables.partnerId);
@@ -243,7 +243,12 @@ describe('D4L', () => {
       D4LSDK.createCAP()
         .then(({ privateKey }) => importKey(JSON.parse(atob(privateKey))))
         .then(cryptoKey =>
-          D4LSDK.setup(testVariables.clientId, 'development', cryptoKey, requestAccessTokenStub)
+          D4LSDK.setup({
+            clientId: testVariables.clientId,
+            environment: 'development',
+            privateKey: cryptoKey,
+            requestAccessToken: requestAccessTokenStub,
+          })
         )
         .then(res => {
           expect(res).to.equal(testVariables.userId);
@@ -256,12 +261,12 @@ describe('D4L', () => {
     });
 
     it('makes its calls', done => {
-      D4LSDK.setup(
-        testVariables.clientId,
-        'development',
-        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
-        requestAccessTokenStub
-      )
+      D4LSDK.setup({
+        clientId: testVariables.clientId,
+        environment: 'development',
+        privateKey: btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
+        requestAccessToken: requestAccessTokenStub,
+      })
         .then(res => {
           expect(res).to.equal(testVariables.userId);
           expect(taggingUtils.partnerId).to.equal(testVariables.partnerId);
@@ -272,26 +277,40 @@ describe('D4L', () => {
         .catch(done);
     });
 
+    it('fails when the setup params are given in the legacy non-named format', done => {
+      const key = btoa(JSON.stringify(encryptionResources.CUPPrivateKey));
+      // @ts-ignore
+      D4LSDK.setup(testVariables.clientId, 'development', key, requestAccessTokenStub).catch(
+        error => {
+          expect(error.name).to.equal('SetupError');
+          expect(error.message).to.contain('Supplied more than one argument');
+          done();
+        }
+      );
+    });
+
     it('fails when a non-string clientId is used as parameter', done => {
-      D4LSDK.setup(
-        234,
-        'development',
-        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
-        requestAccessTokenStub
-      ).catch(error => {
-        expect(error.name).to.equal('ValidationError');
+      D4LSDK.setup({
+        clientId: 234,
+        environment: 'development',
+        privateKey: btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
+        requestAccessToken: requestAccessTokenStub,
+      }).catch(error => {
+        expect(error.name).to.equal('SetupError');
+        expect(error.message).to.contain('Not a valid clientId - must be a string');
         done();
       });
     });
 
     it('fails when an invalid clientId - no # - is used as parameter', done => {
-      D4LSDK.setup(
-        'invalid_client_id',
-        'development',
-        btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
-        requestAccessTokenStub
-      ).catch(error => {
-        expect(error.name).to.equal('ValidationError');
+      D4LSDK.setup({
+        clientId: 'invalid_client_id',
+        environment: 'development',
+        privateKey: btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
+        requestAccessToken: requestAccessTokenStub,
+      }).catch(error => {
+        expect(error.name).to.equal('SetupError');
+        expect(error.message).to.contain('Not a valid clientId - valid clientIds contain a #');
         done();
       });
     });

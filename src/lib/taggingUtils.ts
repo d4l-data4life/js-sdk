@@ -1,6 +1,6 @@
 import isString from 'lodash/isString';
 import stringUtils from './stringUtils';
-import { CURRENT_FHIR_VERSION } from '../services/fhirService';
+import fhirService from '../services/fhirService';
 import SetupError, { NOT_SETUP } from './errors/SetupError';
 
 const TAG_DELIMITER = '=';
@@ -52,7 +52,7 @@ const taggingUtils = {
   },
 
   generateFhirVersionTag(): string {
-    return this.buildTag(tagKeys.fhirVersion, CURRENT_FHIR_VERSION);
+    return this.buildTag(tagKeys.fhirVersion, fhirService.getFhirVersion());
   },
 
   generateTagsFromFhir(fhirObject: Record<string, any>): string[] {

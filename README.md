@@ -89,7 +89,7 @@ Releases are automatically created when the version in the `package.json` is inc
 
 ## License
 
-(c) 2020 D4L data4life gGmbH / All rights reserved. Please refer to our [License](./LICENSE) for further details.
+(c) 2020 D4L Data4Life gGmbH / All rights reserved. Please refer to our [License](./LICENSE) for further details.
 
 ## Code of conduct
 

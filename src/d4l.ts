@@ -32,13 +32,14 @@ import Practitioner from './lib/models/fhir/Practitioner';
 import DocumentReference from './lib/models/fhir/DocumentReference';
 import {
   createCodeableConcept,
+  FHIR_VERSION_STU3,
   getCodeFromCodeableConcept,
   getDisplayFromCodeableConcept,
 } from './lib/models/fhir/helper';
 import { throttle } from './lib/requestUtils';
 import Attachment from './lib/models/fhir/Attachment';
-import ValidationError from './lib/errors/ValidationError';
 import appDataService from './services/appDataService';
+import SetupError from './lib/errors/SetupError';
 
 export const D4LSDK = {
   getCurrentUserId: userService.getCurrentUserId.bind(userService),
@@ -120,26 +121,40 @@ export const D4LSDK = {
    * @param {Function} requestAccessToken - () => Promise<String>: returns a new valid accessToken
    *      of the logged in user
    * @param {Object} extendedEnvConfig - environment config to extend the base config
+   * @param {String} fhirVersion - the FHIR Version in use
    * @returns {Promise<String>} the id of the logged in user
    */
-  setup(clientId, environment, privateKey, requestAccessToken, extendedEnvConfig = {}) {
+  setup({
+    clientId,
+    environment,
+    privateKey,
+    requestAccessToken,
+    extendedEnvConfig = {},
+    fhirVersion = FHIR_VERSION_STU3,
+  }) {
+    if (arguments.length > 1) {
+      return Promise.reject(
+        new SetupError(
+          'Supplied more than one argument - starting with version 3.0.0, the SDK takes one object for its configuration as the parameter.'
+        )
+      );
+    }
     if (!isString(clientId)) {
       return Promise.reject(
-        new ValidationError(
+        new SetupError(
           `Not a valid clientId - must be a string, submitted  ${clientId} with type ${typeof clientId}.`
         )
       );
     }
     if (!clientId.includes('#')) {
       return Promise.reject(
-        new ValidationError(
-          `Not a valid clientId - valid clientIds contain a #, ${clientId} submitted.`
-        )
+        new SetupError(`Not a valid clientId - valid clientIds contain a #, ${clientId} submitted.`)
       );
     }
     taggingUtils.setPartnerId(clientId.split('#')[0]);
     config.environmentConfig = Object.assign({}, envConfig[environment], extendedEnvConfig);
     d4lRequest.requestAccessToken = requestAccessToken;
+    fhirService.setFhirVersion(fhirVersion);
     userService.setPrivateKey(privateKey);
     return requestAccessToken()
       .then(accessToken => {
