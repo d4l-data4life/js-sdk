@@ -138,8 +138,23 @@ import researchSubjectExampleSTU3 from './resources/stu3/researchsubject-example
 // R4 examples
 
 import documentReferenceExampleR4 from './resources/r4/documentreference-example.json';
+import documentReferenceExampleS4HTreatmentSeries from './resources/r4/treatment-series-post-session-force-test.documentreference.json';
+import documentReferenceExampleS4HTreatmentSeriesPreSession from './resources/r4/treatment-series-pre-session-force-test.documentreference.json';
+import documentReferenceExampleS4HAttachment from './resources/r4/s4h-docref-with-png-example.documentreference.json';
+
+// includes "Attachment" resource, not supported
+// import documentReferenceExampleS4HAttachmentLegacy from './resources/r4/s4h-attachment-with-png-example.attachment.json';
 
 import encounterExampleR4 from './resources/r4/encounter-example.json';
+import encounterExampleR4S4H from './resources/r4/s4h-encounter-example.encounter.json';
+import encounterExampleR4S4HPostSession from './resources/r4/treatment-series-post-session-encounter.encounter.json';
+import encounterExampleR4S4HPreSession from './resources/r4/treatment-series-pre-session-encounter.encounter.json';
+import encounterExampleR4S4HTraining1 from './resources/r4/treatment-series-training-encounter-1.encounter.json';
+import encounterExampleR4S4HTraining2 from './resources/r4/treatment-series-training-encounter-2.encounter.json';
+import encounterExampleR4S4HTraining3 from './resources/r4/treatment-series-training-encounter-3.encounter.json';
+import encounterExampleR4S4HTraining4 from './resources/r4/treatment-series-training-encounter-4.encounter.json';
+import encounterExampleR4S4HTraining5 from './resources/r4/treatment-series-training-encounter-5.encounter.json';
+
 // includes 'Location'
 // import encounterExampleR4Home from './resources/r4/encounter-home-example.json';
 import encounterExampleR4RealWorldF201 from './resources/r4/encounter-example-f201-20130404.json';
@@ -198,6 +213,8 @@ import observationExampleR4Unsat from './resources/r4/observation-example-unsat.
 import observationExampleR4VitalsPanel from './resources/r4/observation-example-vitals-panel.json';
 import observationExampleR4Vomiting from './resources/r4/observation-example-vomiting.json';
 import observationExampleR4VPOyster from './resources/r4/observation-example-vp-oyster.json';
+import observationExampleR4S4HBloodGroup from './resources/r4/s4h-blood-group-example-en.observation.json';
+import observationExampleR4S4HRhesus from './resources/r4/s4h-blood-rh-factor-example-en.observation.json';
 
 import patientExampleR4 from './resources/r4/patient-example.json';
 import patientExampleR4A from './resources/r4/patient-example-a.json';
@@ -214,6 +231,7 @@ import patientExampleR4IhePcd from './resources/r4/patient-example-ihe-pcd.json'
 import patientExampleR4F001 from './resources/r4/patient-example-f001.json';
 import patientExampleR4F002 from './resources/r4/patient-example-f002.json';
 import patientExampleR4Proband from './resources/r4/patient-example-proband.json';
+import patientExampleR4S4H from './resources/r4/s4h-patient-example.patient.json';
 
 import practitionerExampleR4 from './resources/r4/practitioner-example.json';
 import practitionerExampleR4XCDA from './resources/r4/practitioner-example-xcda-author.json';
@@ -249,6 +267,22 @@ import questionnaireResponseExampleR4Bluebook from './resources/r4/questionnaire
 import questionnaireResponseExampleR4F201Lifelines from './resources/r4/questionnaireresponse-example-f201-lifelines.json';
 import questionnaireResponseExampleR4GCS from './resources/r4/questionnaireresponse-example-gcs.json';
 import questionnaireResponseExampleR4FHT from './resources/r4/questionnaireresponse-example-ussg-fht-answers.json';
+import questionnaireResponseExampleR4BackPainPreSession from './resources/r4/back-pain-pre-session-response-example-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4BackPainPostSession from './resources/r4/back-pain-post-session-response-example-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4BackPainPreTraining from './resources/r4/back-pain-pre-training-response-example-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4BackPainPostTraining from './resources/r4/back-pain-post-training-response-example-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4TreatmentSession from './resources/r4/treatment-series-post-session-response-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4Training1 from './resources/r4/treatment-series-post-training-response-1-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4Training2 from './resources/r4/treatment-series-post-training-response-2-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4Training3 from './resources/r4/treatment-series-post-training-response-3-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4Training4 from './resources/r4/treatment-series-post-training-response-4-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4Training5 from './resources/r4/treatment-series-post-training-response-5-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4PreSession from './resources/r4/treatment-series-pre-session-response-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4PreTraining1 from './resources/r4/treatment-series-pre-training-response-1-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4PreTraining2 from './resources/r4/treatment-series-pre-training-response-2-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4PreTraining3 from './resources/r4/treatment-series-pre-training-response-3-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4PreTraining4 from './resources/r4/treatment-series-pre-training-response-4-en.questionnaireresponse.json';
+import questionnaireResponseExampleR4PreTraining5 from './resources/r4/treatment-series-pre-training-response-5-en.questionnaireresponse.json';
 
 // includes 'Bundle', as do many other examples from the HL7 site not in the repo
 // import diagnosticReportExampleR4 from './resources/r4/diagnosticreport-example.json';
@@ -655,7 +689,12 @@ describe('fhir validator', () => {
     });
 
     const exampleR4Collection = {
-      DocumentReference: [{ documentReferenceExampleR4 }],
+      DocumentReference: [
+        { documentReferenceExampleR4 },
+        { documentReferenceExampleS4HTreatmentSeries },
+        { documentReferenceExampleS4HAttachment },
+        { documentReferenceExampleS4HTreatmentSeriesPreSession },
+      ],
       Encounter: [
         { encounterExampleR4 },
         { encounterExampleR4RealWorldF201 },
@@ -666,6 +705,14 @@ describe('fhir validator', () => {
         { encounterExampleR4RealWorldF003Abscess },
         { encounterExampleR4XCDA },
         { encounterExampleR4EmergencyInpatient },
+        { encounterExampleR4S4H },
+        { encounterExampleR4S4HPostSession },
+        { encounterExampleR4S4HPreSession },
+        { encounterExampleR4S4HTraining1 },
+        { encounterExampleR4S4HTraining2 },
+        { encounterExampleR4S4HTraining3 },
+        { encounterExampleR4S4HTraining4 },
+        { encounterExampleR4S4HTraining5 },
       ],
       Observation: [
         { observationExampleR4 },
@@ -751,6 +798,24 @@ describe('fhir validator', () => {
         { questionnaireResponseExampleR4F201Lifelines },
         { questionnaireResponseExampleR4GCS },
         { questionnaireResponseExampleR4FHT },
+        { questionnaireResponseExampleR4BackPainPreSession },
+        { questionnaireResponseExampleR4BackPainPostSession },
+        { questionnaireResponseExampleR4BackPainPreTraining },
+        { questionnaireResponseExampleR4BackPainPostTraining },
+        { questionnaireResponseExampleR4TreatmentSession },
+        { questionnaireResponseExampleR4Training1 },
+        { questionnaireResponseExampleR4Training2 },
+        { questionnaireResponseExampleR4Training3 },
+        { questionnaireResponseExampleR4Training4 },
+        { questionnaireResponseExampleR4Training5 },
+        { questionnaireResponseExampleR4PreSession },
+        { questionnaireResponseExampleR4PreTraining1 },
+        { questionnaireResponseExampleR4PreTraining2 },
+        { questionnaireResponseExampleR4PreTraining3 },
+        { questionnaireResponseExampleR4PreTraining4 },
+        { questionnaireResponseExampleR4PreTraining5 },
+        { observationExampleR4S4HBloodGroup },
+        { observationExampleR4S4HRhesus },
       ],
       Patient: [
         { patientExampleR4 },
@@ -766,6 +831,7 @@ describe('fhir validator', () => {
         { patientExampleR4F001 },
         { patientExampleR4F002 },
         { patientExampleR4Proband },
+        { patientExampleR4S4H },
       ],
       ResearchSubject: [{ ResearchSubjectExampleR4 }],
     };

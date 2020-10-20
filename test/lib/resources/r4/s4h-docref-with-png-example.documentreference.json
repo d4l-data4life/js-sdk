@@ -1,0 +1,45 @@
+{
+    "resourceType": "DocumentReference",
+    "id": "s4h-docref-example-with-png",
+    "meta": {
+        "profile": [
+            "http://fhir.smart4health.eu/StructureDefinition/s4h-documentreference"
+        ]
+    },
+    "status": "current",
+    "type": {
+        "coding": [{
+            "system": "http://loinc.org",
+            "code": "19002-5",
+            "display": "Physical therapy service attachment"
+        }]
+    },
+    "subject": {
+        "reference": "Patient/CD9B26EA-234E-46BB-91A1-D67B23064396",
+        "display": "John Doe"
+    },
+    "date": "2020-02-03T09:57:34.2112Z",
+    "author": [{
+        "identifier": {
+            "system": "http://fhir.smart4health.eu/CodeSystem/data-provider-location-id",
+            "value": "clinic-xyz"
+        },
+        "display": "Data Provider clinic XYZ"
+    }],
+    "description": "Initial force test documentation",
+    "content": [{
+        "attachment": {
+            "contentType": "image/png",
+            "title": "Test PNG image",
+            "data": "iVBORw0KGgoAAAANSUhEUgAAAPIAAADICAYAAADSibxvAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAABmJLR0QAAAAAAAD5Q7t/AAAACXBIWXMAAAsSAAALEgHS3X78AAAF20lEQVR42u3brXIbWR6H4f9sTVXExCwmJjExiwma+WpyJbmDwDCHhTnMTGbNFCbWBq4S66BZsHU6kuNJJju7I+eX5yGypT6W7Kq3z+kP//b4+PhHAT+1f537AwB/n5AhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhgJAhwO/n/gC/sr7v6/7+vna7XVVVrVar2mw2NZlMTrbruq5ub2+rqur169c/NPY5u92u7u/vq+/7mkwmdXl5Wev1+qv3vLu7q2EYarPZnLx+OBzq9va29vt9TafTur6+rtlsdu4/5y/NjHxG+/1+DLHqSzxPdV33X499Ttd11fd9VVUNw1B3d3cn79FCHYahqqru7u5qv9+Pr3/48GH8/nA41Pv378dtOQ8hn9F0Oq3lclmbzWac0Z5G2/f9GN2Pjv0zs9ms1uv1yQx+vFPYbrfjdvP5/ORn73a7cSZv44dh+Mvvzf+HpfUZLZfLWi6X49dv376tqv/MtscBtdiOZ73vjX337l31fV+r1aqurq7q5uam9vv9GHAzmUzGZXLTvm7b7ff78bn2uFqtar1e1+fPn2u73dbDw8O5/5y/NDPyCzGdTr96rs10i8Xim0vX58YuFouqqvr06VNVnQb4vbGHw6Gqqi4uLsYdyjAMNQzD+Fobd3FxcTKG8xDyC3EcQoujLVdbTD8yts3WwzCcLJWfhtvGtuX58cz89MTZw8PD+Hr7OW2b55b//HOE/EK0Y9TZbDbG0XXdeCz8o2On0+kYZ5uV2yx9rIX5vZ0FL5uQX4Djk0Uttt1uV4fD4aul8F8Z27Tv22z5dIfQ9/24E3gucn4eQn4Buq6rw+FQ0+l0DLfFOZlMvjoRdXy8/NzY5niWfW5Z3S5XLZdL14F/ckI+s8PhMAZ1fDmoxXt7e1s3Nzfj9jc3N+MZ4j8b2xzvAPq+PzmW7rqu9vv9eBmp+dYSez6fn5z8On60ND8vIZ9Zu2Pr+HLS/2psOzZus21bRrebQKqqLi8vv5qpj3cmT09utce2M2mPz5395p/jOvIZbbfbk1COzy63WzGbN2/eVNWXWzS/NXY+n9fhcBhv3FgsFtX3fXVdV+v1uj5+/FjDMIzBtrHL5bKm02ktFovqum58vurLjDubzarruuq6rl69ejUeAlian5eQz+h46XsczWaz+e5S9Xtj2+x7vBxucT83M1d9OY5eLpfj0rtp91qvVqvabrcny/rnjs/5Z1lah2rL6ouLi5MTXe35b5nP53V1dVWTyaQmk0ldXV2dLJ2P/0liPp/X9fX1uX/dX95vj4+Pf5z7QwB/jxkZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAggZAvwbIl0KrUXitZ0AAAAASUVORK5CYII="
+        }
+    }],
+    "context": {
+        "encounter": [{
+            "identifier": {
+                "system": "http://fhir.smart4health.eu/CodeSystem/data-provider-visit-id",
+                "value": "test-initial"
+            }
+        }]
+    }
+}
