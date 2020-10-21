@@ -848,11 +848,6 @@ describe('fhir validator', () => {
     for (const [exampleDomainName, resourceExamples] of Object.entries(exampleR4Collection)) {
       describe(exampleDomainName, () => {
         resourceExamples.forEach(resourceExample => {
-          if (exampleDomainName === 'DocumentReference') {
-            console.log(resourceExample);
-            // @ts-ignore
-            console.log(Object.values(resourceExample)[0].resourceType);
-          }
           it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
             fhirValidator
               .validate(Object.values(resourceExample)[0])
