@@ -23,35 +23,35 @@ const r4FhirResources = {
     ],
   },
   documentReference2: {
-    "resourceType": "DocumentReference",
-    "status": "current",
-    "type": {
-      "coding": [
+    resourceType: 'DocumentReference',
+    status: 'current',
+    type: {
+      coding: [
         {
-          "display": "LabBefund"
-        }
-      ]
+          display: 'LabBefund',
+        },
+      ],
     },
-    "author": [
+    author: [
       {
-        "reference": "#contained-author-id"
-      }
+        reference: '#contained-author-id',
+      },
     ],
-    "description": "sefsf",
-    "subject": {
-      "reference": "sefsf"
+    description: 'sefsf',
+    subject: {
+      reference: 'sefsf',
     },
-    "contained": [],
-    "content": [
+    contained: [],
+    content: [
       {
-        "attachment": {
-          "contentType": "image/png",
-          "creation": "2020-10-08T10:00:00.000Z",
-          "title": "Bildschirmfoto 2020-10-13 um 17.18.54.png"
-        }
-      }
+        attachment: {
+          contentType: 'image/png',
+          creation: '2020-10-08T10:00:00.000Z',
+          title: 'Bildschirmfoto 2020-10-13 um 17.18.54.png',
+        },
+      },
     ],
-    "date": "2020-10-08T10:00:00.000Z"
+    date: '2020-10-08T10:00:00.000Z',
   },
 };
 

@@ -84,7 +84,9 @@ describe('services/recordService', () => {
     // CREATECRYPTOSERVICE
     decryptDataStub = sinon
       .stub()
-      .returns(Promise.resolve(convertObjectToArrayBufferView(stu3FhirResources.documentReference)));
+      .returns(
+        Promise.resolve(convertObjectToArrayBufferView(stu3FhirResources.documentReference))
+      );
     encryptObjectStub = sinon.stub().returns(
       Promise.resolve([
         encryptionResources.encryptedObject,

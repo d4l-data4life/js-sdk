@@ -427,9 +427,7 @@ const fhirService = {
     try {
       validationResult = await fhirValidator.validate(cleanResource(cloneDeep(fhirResource)));
     } catch (e) {
-      return Promise.reject(
-        new ValidationError(e)
-      );
+      return Promise.reject(new ValidationError(e));
     }
 
     if (validationResult === false) {
