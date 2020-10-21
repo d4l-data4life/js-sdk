@@ -297,8 +297,8 @@ import ResearchSubjectExampleR4 from './resources/r4/researchsubject-example.jso
 import fhirService from '../../src/services/fhirService';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
 import sinon from 'sinon';
-
-// @ts-ignore-disable
+import stu3FhirResources from '../testUtils/stu3FhirResources';
+import r4FhirResources from '../testUtils/r4FhirResources';
 
 chai.use(sinonChai);
 
@@ -483,7 +483,13 @@ describe('fhir validator', () => {
         { diagnosticReportExampleSTU3PGX },
         { diagnosticReportExampleSTU3UltraSound },
       ],
-      DocumentReference: [{ documentReferenceExample: documentReferenceExampleSTU3 }],
+      DocumentReference: [
+        { documentReferenceExampleSTU3 },
+        {
+          // @ts-ignore
+          generatedReference: stu3FhirResources.documentReference,
+        },
+      ],
       Organization: [
         { organizationExampleSTU31 },
         { organizationExampleSTU3BurgersUniversity },
@@ -694,6 +700,8 @@ describe('fhir validator', () => {
         { documentReferenceExampleS4HTreatmentSeries },
         { documentReferenceExampleS4HAttachment },
         { documentReferenceExampleS4HTreatmentSeriesPreSession },
+        { generatedDocumentReference: r4FhirResources.documentReference },
+        { generatedDocumentReference2: r4FhirResources.documentReference2 },
       ],
       Encounter: [
         { encounterExampleR4 },
@@ -836,12 +844,15 @@ describe('fhir validator', () => {
       ResearchSubject: [{ ResearchSubjectExampleR4 }],
     };
 
-    // todo: refactor to share
-
     // eslint-disable-next-line no-restricted-syntax
     for (const [exampleDomainName, resourceExamples] of Object.entries(exampleR4Collection)) {
       describe(exampleDomainName, () => {
         resourceExamples.forEach(resourceExample => {
+          if (exampleDomainName === 'DocumentReference') {
+            console.log(resourceExample);
+            // @ts-ignore
+            console.log(Object.values(resourceExample)[0].resourceType);
+          }
           it(`validates the sample ${Object.keys(resourceExample)[0]}`, done => {
             fhirValidator
               .validate(Object.values(resourceExample)[0])

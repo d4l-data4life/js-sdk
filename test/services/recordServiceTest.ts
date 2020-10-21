@@ -19,7 +19,7 @@ import * as createCryptoService from '../../src/services/createCryptoService';
 import testVariables from '../testUtils/testVariables';
 import documentResources from '../testUtils/documentResources';
 import userResources from '../testUtils/userResources';
-import fhirResources from '../testUtils/fhirResources';
+import stu3FhirResources from '../testUtils/stu3FhirResources';
 import recordResources from '../testUtils/recordResources';
 import encryptionResources from '../testUtils/encryptionResources';
 import recordService from '../../src/services/recordService';
@@ -84,7 +84,7 @@ describe('services/recordService', () => {
     // CREATECRYPTOSERVICE
     decryptDataStub = sinon
       .stub()
-      .returns(Promise.resolve(convertObjectToArrayBufferView(fhirResources.documentReference)));
+      .returns(Promise.resolve(convertObjectToArrayBufferView(stu3FhirResources.documentReference)));
     encryptObjectStub = sinon.stub().returns(
       Promise.resolve([
         encryptionResources.encryptedObject,
@@ -138,12 +138,12 @@ describe('services/recordService', () => {
     it('should resolve when called with userId and correct fhirResource', done => {
       const tags = [
         taggingUtils.generateCreationTag(),
-        ...taggingUtils.generateTagsFromFhir(fhirResources.documentReference),
+        ...taggingUtils.generateTagsFromFhir(stu3FhirResources.documentReference),
       ];
 
       recordService
         .createRecord(testVariables.userId, {
-          fhirResource: fhirResources.documentReference,
+          fhirResource: stu3FhirResources.documentReference,
         })
         .then(() => {
           expect(createRecordStub).to.be.calledOnce;
@@ -152,11 +152,11 @@ describe('services/recordService', () => {
           );
           expect(createRecordStub).to.be.calledWith(testVariables.userId);
           expect(validateStub).to.be.calledOnce;
-          expect(validateStub).to.be.calledWith(fhirResources.documentReference);
+          expect(validateStub).to.be.calledWith(stu3FhirResources.documentReference);
           expect(getUserStub).to.be.calledOnce;
           expect(getUserStub).to.be.calledWith(testVariables.userId);
           expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
-            fhirResource: fhirResources.documentReference,
+            fhirResource: stu3FhirResources.documentReference,
             tags,
           });
           done();
@@ -170,7 +170,7 @@ describe('services/recordService', () => {
       recordService
         // @ts-ignore
         .uploadFhirRecord(testVariables.userId, {
-          fhirResource: fhirResources.documentReference,
+          fhirResource: stu3FhirResources.documentReference,
         })
         .then(() => done(Error("fhirValidation didn't fail as expected")))
         .catch(() => {
@@ -187,7 +187,7 @@ describe('services/recordService', () => {
       recordService
         .updateRecord(testVariables.userId, {
           id: testVariables.recordId,
-          fhirResource: fhirResources.documentReference,
+          fhirResource: stu3FhirResources.documentReference,
         })
         .then(res => {
           expect(res.id).to.deep.equal(testVariables.recordId);
@@ -215,7 +215,7 @@ describe('services/recordService', () => {
       recordService
         .updateRecord(testVariables.userId, {
           id: testVariables.recordId,
-          fhirResource: fhirResources.documentReference,
+          fhirResource: stu3FhirResources.documentReference,
           attachmentKey: {
             commonKeyId: customCkId,
             encryptedKey: encryptionResources.encryptedAttachmentKey,
@@ -247,13 +247,13 @@ describe('services/recordService', () => {
       const tags = [
         ...taggingUtils.generateCustomTags(documentResources.annotations),
         taggingUtils.generateUpdateTag(),
-        ...taggingUtils.generateTagsFromFhir(fhirResources.documentReference),
+        ...taggingUtils.generateTagsFromFhir(stu3FhirResources.documentReference),
       ];
 
       recordService
         .updateRecord(testVariables.userId, {
           id: testVariables.recordId,
-          fhirResource: fhirResources.documentReference,
+          fhirResource: stu3FhirResources.documentReference,
           tags: taggingUtils.generateCustomTags(documentResources.annotations),
         })
         .then(res => {
@@ -267,7 +267,7 @@ describe('services/recordService', () => {
           ]);
           expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
             id: testVariables.recordId,
-            fhirResource: fhirResources.documentReference,
+            fhirResource: stu3FhirResources.documentReference,
             tags,
           });
           done();
@@ -281,7 +281,7 @@ describe('services/recordService', () => {
       recordService
         .downloadRecord(testVariables.userId, testVariables.recordId)
         .then(res => {
-          expect(res.fhirResource).to.deep.equal(fhirResources.documentReference);
+          expect(res.fhirResource).to.deep.equal(stu3FhirResources.documentReference);
           expect(downloadRecordStub).to.be.calledOnce;
           expect(downloadRecordStub).to.be.calledWith(testVariables.userId);
           expect(getUserStub).to.be.calledOnce;

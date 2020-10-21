@@ -8,7 +8,7 @@ import DocumentReference from '../../../../src/lib/models/fhir/DocumentReference
 import Attachment from '../../../../src/lib/models/fhir/Attachment';
 import Practitioner from '../../../../src/lib/models/fhir/Practitioner';
 import { createCodeableConcept } from '../../../../src/lib/models/fhir/helper';
-import fhirResources from '../../../testUtils/fhirResources';
+import stu3FhirResources from '../../../testUtils/stu3FhirResources';
 
 chai.use(sinonChai);
 
@@ -118,7 +118,7 @@ describe('models/FHIR', () => {
     });
 
     it('should return valid Document instance with fromFHIRObject', () => {
-      const documentReference = DocumentReference.fromFHIRObject(fhirResources.documentReference);
+      const documentReference = DocumentReference.fromFHIRObject(stu3FhirResources.documentReference);
       expect(documentReference.getType().text).to.equal('Document');
     });
     it('should throw error when fromFHIRObject is called with no arguments', done => {

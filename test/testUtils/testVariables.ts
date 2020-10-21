@@ -24,7 +24,7 @@ const testVariables = {
   password: 'password',
   wrongPassword: 'wrong_password',
   dateString: '2017-12-15',
-  dateTimeString: '2017-12-15T10:35:52.492',
+  dateTimeString: '2017-12-15T10:35:52Z',
   tag: 'resourcetype=documentreference',
   // encrypted with encryptionResources.tagEncryptionKey
   encryptedTag: 'oEYB2yHZ26/+mdqTDOIjQnwU7cl49Ldf3HjATcNofnk=',
