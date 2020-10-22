@@ -1,6 +1,6 @@
 import testVariables from './testVariables';
 
-const fhirResources = {
+const stu3FhirResources = {
   documentReference: {
     id: 'record_id',
     resourceType: 'DocumentReference',
@@ -216,4 +216,4 @@ const fhirResources = {
     '8h1d2xeor7VkgG0W7cCLsRzXMMaiSafCA8WjS0DW9x3Xw11+ffZoUKQBq01tImdokPGoGmxiagtxYcOG3ugcBpN8gK3dkOr3ho8G2ToIeu+mzCgSA5UwafSJriiQqwwfDFnUGYdvP3ldNJXC4r9qrMMdbhYIsgUjPX5X/YbXso9EhRqmjtW3J46bGNrCoef3Y+j9mu+3oyx6LBukddH+TUFeFzPWxuCATAeVCIRlwnyc+eAbv+FECjPgjQyjrvwHPuUA9/mpWPg/TIaJ0VIzalLwpeLtyre1USRLEnYUzR4jAbQLV8v8jQg6YRVZuBgtEkD0Z/nyro8B1Plh4JWRza64gYYr4cUu/8gaw/pBOkaTnaZhUnV5O6j9awDFUSud+CJoysQsphNm840Cjztj9qZj2/gW1X2PWYAtjlC/1HiDGxs+N5omsxSzrSZnbaYghvhx9oXE9VIFNmlGarqQqw==',
 };
 
-export default fhirResources;
+export default stu3FhirResources;

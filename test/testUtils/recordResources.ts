@@ -1,5 +1,5 @@
 import testVariables from './testVariables';
-import fhirResources from './fhirResources';
+import stu3FhirResources from './stu3FhirResources';
 import encryptionResources from './encryptionResources';
 
 const recordResources = {
@@ -11,7 +11,7 @@ const recordResources = {
     version: 2,
     status: 'Active',
     createdAt: testVariables.dateTimeString,
-    body: fhirResources.documentReference,
+    body: stu3FhirResources.documentReference,
     tags: [testVariables.tag, testVariables.secondTag, testVariables.customTag],
   },
   documentReferenceEncrypted: {
@@ -22,7 +22,7 @@ const recordResources = {
     version: 2,
     status: 'Active',
     createdAt: testVariables.dateTimeString,
-    encrypted_body: fhirResources.encryptedFhir,
+    encrypted_body: stu3FhirResources.encryptedFhir,
     encrypted_tags: [testVariables.encryptedTag],
     encrypted_key: encryptionResources.encryptedDataKey,
   },

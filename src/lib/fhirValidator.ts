@@ -213,7 +213,24 @@ const fhirValidator = {
     const validationResult = validator(resourceToValidate);
 
     if (!validationResult) {
-      throw new ValidationError(`Validating "${resourceType}" failed.`);
+      let errorMessage = `Validating "${resourceType}" failed. `;
+      if (validator.errors?.length) {
+        errorMessage += `The following error(s) were encountered: `;
+        errorMessage += validator.errors
+          .map(errorObject => {
+            let messageBlock = `For ${errorObject.keyword}: ${errorObject.message}. There might be additional information below. \n`;
+            if (errorObject.dataPath?.length) {
+              messageBlock += `dataPath: ${errorObject.dataPath} `;
+            }
+            if (errorObject.schemaPath?.length) {
+              messageBlock += `schemaPath: ${errorObject.schemaPath}`;
+            }
+
+            return messageBlock;
+          })
+          .join(`\n`);
+      }
+      throw new ValidationError(errorMessage);
     }
 
     return true;

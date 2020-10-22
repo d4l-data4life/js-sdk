@@ -652,7 +652,9 @@ D4L.SDK.countResources('1cf5ee52-88dc-406a-bf7b-bc5e26a17b47', {
 
 ### Models
 
-The Data4Life platform supports multiple resource types. The resource types are reflected in the models.
+The Data4Life platform supports multiple resource types. It is up to integrators to build and supply these, the SDK merely validates supported resources.
+
+Exception: Within an STU3 context, the SDK provides the models below.
 
 #### DocumentReference
 To describe a document that's made available to a healthcare system, use the `DocumentReference` resource.

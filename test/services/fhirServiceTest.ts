@@ -13,7 +13,7 @@ import fhirService, {
 } from '../../src/services/fhirService';
 import testVariables from '../testUtils/testVariables';
 import fhirValidator from '../../src/lib/fhirValidator';
-import fhirResources from '../testUtils/fhirResources';
+import stu3FhirResources from '../testUtils/stu3FhirResources';
 import recordService from '../../src/services/recordService';
 import { D4LSDK } from '../../src/d4l';
 import documentRoutes from '../../src/routes/documentRoutes';
@@ -384,7 +384,7 @@ describe('attachBlobs', () => {
           // @ts-ignore
           newAttachments: [newAttachment],
           // @ts-ignore
-          resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
+          resource: new D4LSDK.models.DocumentReference(stu3FhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
@@ -422,7 +422,7 @@ describe('attachBlobs', () => {
           oldAttachments: [],
           newAttachments: [newAttachment],
           // @ts-ignore
-          resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
+          resource: new D4LSDK.models.DocumentReference(stu3FhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
@@ -462,7 +462,7 @@ describe('attachBlobs', () => {
           oldAttachments: [],
           newAttachments: [attachment],
           // @ts-ignore
-          resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
+          resource: new D4LSDK.models.DocumentReference(stu3FhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
@@ -501,7 +501,7 @@ describe('attachBlobs', () => {
           oldAttachments: [],
           newAttachments: [attachment],
           // @ts-ignore
-          resource: new D4LSDK.models.DocumentReference(fhirResources.documentReference),
+          resource: new D4LSDK.models.DocumentReference(stu3FhirResources.documentReference),
         });
       })
       .then(([resource, returnResource]) => {
@@ -537,7 +537,7 @@ describe('attachBlobs', () => {
         // technically not encrypted at this point
         const encryptedFiles = [mockPdfBlob];
         // @ts-ignore
-        const resource = new D4LSDK.models.DocumentReference(fhirResources.documentReference);
+        const resource = new D4LSDK.models.DocumentReference(stu3FhirResources.documentReference);
         resource.setAttachments([oldAttachment]);
 
         return attachBlobs({
@@ -592,7 +592,7 @@ describe('attachBlobs', () => {
         // technically not encrypted at this point
         const encryptedFiles = [mockPngBlob, mockPngBlob, mockPngBlob, mockPdfBlob];
         // @ts-ignore
-        const resource = new D4LSDK.models.DocumentReference(fhirResources.documentReference);
+        const resource = new D4LSDK.models.DocumentReference(stu3FhirResources.documentReference);
         resource.setAttachments([oldAttachment]);
 
         return attachBlobs({
@@ -640,7 +640,7 @@ describe('fhirService', () => {
     id: recordId,
     customCreationDate: new Date('2017-09-19'),
     user_id: userId,
-    fhirResource: fhirResources.carePlan,
+    fhirResource: stu3FhirResources.carePlan,
     tags: ['tag1', 'tag2', testVariables.secondTag],
     version: 1,
     status: 'Active',
@@ -650,7 +650,7 @@ describe('fhirService', () => {
   const record = {
     id: recordId,
     customCreationDate: new Date('2017-09-19'),
-    fhirResource: fhirResources.carePlan,
+    fhirResource: stu3FhirResources.carePlan,
     updatedDate: new Date('2017-09-19T09:29:48.278'),
     annotations: [],
     partner: '1',
@@ -768,7 +768,7 @@ describe('fhirService', () => {
         {
           id: testVariables.recordId,
         },
-        fhirResources.carePlan
+        stu3FhirResources.carePlan
       );
       const customCreationDate = new Date();
       fhirService
@@ -789,7 +789,7 @@ describe('fhirService', () => {
     });
 
     it('should reject a resource without an id', done => {
-      const d4lResource = Object.assign({}, fhirResources.carePlan);
+      const d4lResource = Object.assign({}, stu3FhirResources.carePlan);
       // @ts-ignore
       delete d4lResource.id;
       fhirService

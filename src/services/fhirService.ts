@@ -425,11 +425,9 @@ const fhirService = {
   ): Promise<IRecord> {
     let validationResult;
     try {
-      validationResult = await fhirValidator.validate(fhirResource);
+      validationResult = await fhirValidator.validate(cleanResource(cloneDeep(fhirResource)));
     } catch (e) {
-      return Promise.reject(
-        new ValidationError('Called createResource with an invalid fhirResource parameter.')
-      );
+      return Promise.reject(new ValidationError(e));
     }
 
     if (validationResult === false) {
