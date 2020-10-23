@@ -27,7 +27,6 @@ import { isAllowedFileType } from './lib/fileValidator';
 import d4lRequest from './lib/d4lRequest';
 import taggingUtils from './lib/taggingUtils';
 import userService from './services/userService';
-import D4LSpecialty from './lib/models/D4LSpecialty';
 import Practitioner from './lib/models/fhir/Practitioner';
 import DocumentReference from './lib/models/fhir/DocumentReference';
 import {
@@ -107,7 +106,6 @@ export const D4LSDK = {
   sealCAP: privateKey => importKey(JSON.parse(atob(privateKey))),
 
   models: {
-    D4LSpecialty,
     Practitioner,
     DocumentReference,
     Attachment,

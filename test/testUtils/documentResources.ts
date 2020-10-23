@@ -1,5 +1,3 @@
-import hcSpecialty from '../../src/lib/models/D4LSpecialty';
-
 const documentResources = {
   files: [new File(['test'], 'testName'), new File(['test'], 'testName')],
   creationDate: new Date('Thu, 23 Nov 2017 22:57:55 GMT'),
@@ -21,7 +19,7 @@ const documentResources = {
     postalCode: '10439',
     telephone: '061-221-9176',
     website: 'http://johndoe.me',
-    specialty: hcSpecialty.AdultMentalIllness,
+    specialty: '1234567890',
   },
   annotations: ['annotation1', 'annotation2'],
 };

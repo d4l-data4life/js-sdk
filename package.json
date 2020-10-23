@@ -1,6 +1,6 @@
 {
   "name": "@d4l/js-sdk",
-  "version": "3.0.1",
+  "version": "4.0.0",
   "D4L": {
     "data_model_version": 1
   },

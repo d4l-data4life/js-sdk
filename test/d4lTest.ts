@@ -50,7 +50,6 @@ describe('D4L', () => {
     expect(typeof D4LSDK.createCAP).to.equal('function');
     expect(typeof D4LSDK.setup).to.equal('function');
     expect(typeof D4LSDK.models).to.equal('object');
-    expect(typeof D4LSDK.models.D4LSpecialty).to.equal('object');
     expect(typeof D4LSDK.createCodeableConcept).to.equal('function');
     expect(typeof D4LSDK.models.Practitioner).to.equal('function');
     expect(typeof D4LSDK.models.DocumentReference).to.equal('function');
