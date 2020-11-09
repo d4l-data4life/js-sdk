@@ -506,11 +506,20 @@ const fhirService = {
     date,
     annotations?: string[]
   ): Promise<IRecord> {
-    if (!fhirValidator.validate(fhirResource)) {
+    let validationResult;
+    try {
+      validationResult = await fhirValidator.validate(cleanResource(cloneDeep(fhirResource)));
+    } catch (e) {
+      return Promise.reject(new ValidationError(e));
+    }
+
+    if (validationResult === false) {
+      // seems redundant, but eslint does not like return in finally
       return Promise.reject(
         new ValidationError('Called updateResource with an invalid fhirResource parameter.')
       );
     }
+
     if (!fhirResource.id) {
       return Promise.reject(new ValidationError('No parameter id found in resource to update'));
     }
