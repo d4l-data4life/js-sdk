@@ -1,6 +1,6 @@
 {
   "name": "@d4l/js-sdk",
-  "version": "4.0.1",
+  "version": "5.0.0-alpha.0",
   "D4L": {
     "data_model_version": 1
   },
@@ -24,6 +24,7 @@
     "lebab-fhir": "npm run lebab-fhir-safe && npm run lebab-fhir-unsafe"
   },
   "dependencies": {
+    "@d4l/js-fhir-validator": "^1.0.2",
     "@rollup/plugin-json": "^4.0.2",
     "@types/fhir": "^0.0.30",
     "@types/lodash": "^4.14.118",
