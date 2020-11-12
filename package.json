@@ -8,7 +8,7 @@
   "license": "See license in LICENSE",
   "main": "dest/d4l.js",
   "scripts": {
-    "build": "rollup -c --config-format=esm --config-mode=development",
+    "build": "rollup --max-old-space-size=16384 -c --config-format=esm --config-mode=development",
     "build:crypto": "rollup -c --config-format=esm --config-mode=development --config-sdk=crypto",
     "postinstall": "npm run build",
     "watch": "npm run build -- --watch",
