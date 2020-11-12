@@ -89,14 +89,14 @@ const fhirValidator = {
             break;
 
           case 'DiagnosticReport':
-            returnPromise = import('@d4l/js-fhir-validator/r4/js/Diagnosticreport').then(bundle => {
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/DiagnosticReport').then(bundle => {
               this.validator[version][resourceType] = bundle;
               return this.validator[version][resourceType];
             });
             break;
 
           case 'ResearchSubject':
-            returnPromise = import('@d4l/js-fhir-validator/r4/js/Researchsubject').then(bundle => {
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/ResearchSubject').then(bundle => {
               this.validator[version][resourceType] = bundle;
               return this.validator[version][resourceType];
             });
