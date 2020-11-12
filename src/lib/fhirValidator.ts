@@ -80,7 +80,7 @@ const fhirValidator = {
             break;
 
           case 'QuestionnaireResponse':
-            returnPromise = import('@d4l/js-fhir-validator/r4/js/Questionnaireresponse').then(
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/QuestionnaireResponse').then(
               bundle => {
                 this.validator[version][resourceType] = bundle;
                 return this.validator[version][resourceType];
@@ -153,7 +153,7 @@ const fhirValidator = {
             break;
 
           case 'QuestionnaireResponse':
-            returnPromise = import('@d4l/js-fhir-validator/stu3/js/Questionnaireresponse').then(
+            returnPromise = import('@d4l/js-fhir-validator/stu3/js/QuestionnaireResponse').then(
               bundle => {
                 this.validator[version][resourceType] = bundle;
                 return this.validator[version][resourceType];
