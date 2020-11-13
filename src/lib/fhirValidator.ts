@@ -63,7 +63,7 @@ const fhirValidator = {
           case 'Practitioner':
             returnPromise = import('@d4l/js-fhir-validator/r4/js/Practitioner').then(bundle => {
               this.validator[version][resourceType] = bundle.default;
-              return this.validator[resourceType];
+              return this.validator[version][resourceType];
             });
             break;
 
