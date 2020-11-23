@@ -26,6 +26,18 @@ const recordResources = {
     encrypted_tags: [testVariables.encryptedTag],
     encrypted_key: encryptionResources.encryptedDataKey,
   },
+  documentReferenceEncryptedTwoTags: {
+    record_id: testVariables.recordId,
+    date: testVariables.dateString,
+    user_id: testVariables.userId,
+    common_key_id: testVariables.commonKeyId,
+    version: 2,
+    status: 'Active',
+    createdAt: testVariables.dateTimeString,
+    encrypted_body: stu3FhirResources.encryptedFhir,
+    encrypted_tags: [testVariables.encryptedTag, testVariables.encryptedSecondTag],
+    encrypted_key: encryptionResources.encryptedDataKey,
+  },
 };
 
 export default recordResources;

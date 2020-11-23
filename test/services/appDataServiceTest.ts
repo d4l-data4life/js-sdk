@@ -101,7 +101,7 @@ describe('appDataService', () => {
   });
 
   describe('updateAppData', () => {
-    it('should update an AppData entity correctly', done => {
+    it('should update an AppData entity correctly when no annotations are submitted', done => {
       const appDataEntity = Object.assign({ sampleKey: 'SampleValue' });
       const customCreationDate = new Date();
       appDataService
@@ -111,7 +111,45 @@ describe('appDataService', () => {
           expect(updateRecordStub).to.be.calledWith(userId, {
             id: 'id',
             data: appDataEntity,
-            tags: [testVariables.appDataFlag],
+            tags: undefined,
+            customCreationDate,
+          });
+          expect(res).to.deep.equal(appData);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should update an AppData entity correctly when annotations are submitted', done => {
+      const appDataEntity = Object.assign({ sampleKey: 'SampleValue' });
+      const customCreationDate = new Date();
+      appDataService
+        .updateAppData(userId, appDataEntity, 'id', customCreationDate, ['addme'])
+        .then(res => {
+          expect(updateRecordStub).to.be.calledOnce;
+          expect(updateRecordStub).to.be.calledWith(userId, {
+            id: 'id',
+            data: appDataEntity,
+            tags: ['custom=addme', testVariables.appDataFlag],
+            customCreationDate,
+          });
+          expect(res).to.deep.equal(appData);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should update an AppData entity correctly when an empty annotations array is submitted', done => {
+      const appDataEntity = Object.assign({ sampleKey: 'SampleValue' });
+      const customCreationDate = new Date();
+      appDataService
+        .updateAppData(userId, appDataEntity, 'id', customCreationDate, [])
+        .then(res => {
+          expect(updateRecordStub).to.be.calledOnce;
+          expect(updateRecordStub).to.be.calledWith(userId, {
+            id: 'id',
+            data: appDataEntity,
+            tags: [],
             customCreationDate,
           });
           expect(res).to.deep.equal(appData);

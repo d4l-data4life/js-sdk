@@ -763,7 +763,7 @@ describe('fhirService', () => {
   });
 
   describe('updateResource', () => {
-    it('should update a resource correctly', done => {
+    it('should update a resource correctly when no annotations are added', done => {
       const d4lResource = Object.assign(
         {
           id: testVariables.recordId,
@@ -773,6 +773,56 @@ describe('fhirService', () => {
       const customCreationDate = new Date();
       fhirService
         .updateResource(userId, d4lResource, customCreationDate)
+        .then(res => {
+          expect(updateRecordStub).to.be.calledOnce;
+          expect(updateRecordStub).to.be.calledWith(userId, {
+            id: d4lResource.id,
+            fhirResource: d4lResource,
+            tags: undefined,
+            attachmentKey: undefined,
+            customCreationDate,
+          });
+          expect(res).to.deep.equal(record);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should update a resource correctly when annotations are added', done => {
+      const d4lResource = Object.assign(
+        {
+          id: testVariables.recordId,
+        },
+        stu3FhirResources.carePlan
+      );
+      const customCreationDate = new Date();
+      fhirService
+        .updateResource(userId, d4lResource, customCreationDate, ['addme'])
+        .then(res => {
+          expect(updateRecordStub).to.be.calledOnce;
+          expect(updateRecordStub).to.be.calledWith(userId, {
+            id: d4lResource.id,
+            fhirResource: d4lResource,
+            tags: ['custom=addme'],
+            attachmentKey: undefined,
+            customCreationDate,
+          });
+          expect(res).to.deep.equal(record);
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should update a resource correctly when an empty annotations array is added', done => {
+      const d4lResource = Object.assign(
+        {
+          id: testVariables.recordId,
+        },
+        stu3FhirResources.carePlan
+      );
+      const customCreationDate = new Date();
+      fhirService
+        .updateResource(userId, d4lResource, customCreationDate, [])
         .then(res => {
           expect(updateRecordStub).to.be.calledOnce;
           expect(updateRecordStub).to.be.calledWith(userId, {
