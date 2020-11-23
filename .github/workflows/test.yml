@@ -10,12 +10,10 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    env:
-      ACTIONS_ALLOW_UNSECURE_COMMANDS: true
     steps:
       - uses: actions/checkout@master
       - name: Add js-crypto ssh key
-        uses: webfactory/ssh-agent@v0.2.0
+        uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{ secrets.JS_CRYPTO_DEPLOY_KEY }}
 
