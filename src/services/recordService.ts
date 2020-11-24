@@ -57,6 +57,15 @@ const recordService = {
       documentRoutes.updateRecord(userId, record.id, params);
 
     return this.downloadRecord(ownerId, record.id).then(downloadedRecord => {
+      let tags;
+      if (record.tags && !record.tags.length) {
+        tags = [taggingUtils.generateUpdateTag()];
+      } else {
+        tags = record.tags
+          ? [...new Set([...record.tags, taggingUtils.generateUpdateTag()])]
+          : [...new Set([...downloadedRecord.tags, taggingUtils.generateUpdateTag()])];
+      }
+
       /*
        * AppData case
        * */
@@ -65,13 +74,7 @@ const recordService = {
           ownerId,
           {
             ...record,
-            tags: [
-              ...new Set([
-                ...record.tags,
-                taggingUtils.generateUpdateTag(),
-                ...downloadedRecord.tags,
-              ]),
-            ],
+            tags,
           },
           updateRequest
         );
@@ -88,13 +91,7 @@ const recordService = {
             downloadedRecord.fhirResource,
             (record as DecryptedRecord).fhirResource
           ),
-          // include new tags passed in record,
-          // previous tags, and tags specific to update method
-          tags: [
-            ...(record.tags || []),
-            taggingUtils.generateUpdateTag(),
-            ...downloadedRecord.tags,
-          ],
+          tags,
         },
         updateRequest
       );

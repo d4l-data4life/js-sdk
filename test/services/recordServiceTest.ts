@@ -244,7 +244,7 @@ describe('services/recordService', () => {
         .catch(done);
     });
 
-    it('should pass the right custom tags corresponding to the annotations passed', done => {
+    it('should pass the right custom tags corresponding to the annotations passed and overwrite existing tags on the document to be updated', done => {
       taggingUtils.setPartnerId(testVariables.partnerId);
       const tags = [
         ...taggingUtils.generateCustomTags(documentResources.annotations),
@@ -271,6 +271,67 @@ describe('services/recordService', () => {
             id: testVariables.recordId,
             fhirResource: stu3FhirResources.documentReference,
             tags,
+          });
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should leave existing annotations when no new ones are passed', done => {
+      taggingUtils.setPartnerId(testVariables.partnerId);
+      downloadRecordStub.returns(
+        Promise.resolve(Object.assign({}, recordResources.documentReferenceEncryptedTwoTags))
+      );
+
+      recordService
+        .updateRecord(testVariables.userId, {
+          id: testVariables.recordId,
+          fhirResource: stu3FhirResources.documentReference,
+        })
+        .then(res => {
+          expect(res.id).to.deep.equal(testVariables.recordId);
+          expect(updateRecordStub).to.be.calledOnce;
+          expect(recordServiceUploadRecordSpy.args[0][0]).to.equal(testVariables.userId);
+          expect(Object.keys(recordServiceUploadRecordSpy.args[0][1])).have.members([
+            'id',
+            'fhirResource',
+            'tags',
+          ]);
+          expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
+            id: testVariables.recordId,
+            fhirResource: stu3FhirResources.documentReference,
+            tags: ['resourcetype=documentreference', 'partner=1', taggingUtils.generateUpdateTag()],
+          });
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should delete existing annotations when an empty array of annotations as tags is passed', done => {
+      taggingUtils.setPartnerId(testVariables.partnerId);
+      downloadRecordStub.returns(
+        Promise.resolve(Object.assign({}, recordResources.documentReferenceEncryptedTwoTags))
+      );
+
+      recordService
+        .updateRecord(testVariables.userId, {
+          id: testVariables.recordId,
+          fhirResource: stu3FhirResources.documentReference,
+          tags: [],
+        })
+        .then(res => {
+          expect(res.id).to.deep.equal(testVariables.recordId);
+          expect(updateRecordStub).to.be.calledOnce;
+          expect(recordServiceUploadRecordSpy.args[0][0]).to.equal(testVariables.userId);
+          expect(Object.keys(recordServiceUploadRecordSpy.args[0][1])).have.members([
+            'id',
+            'fhirResource',
+            'tags',
+          ]);
+          expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
+            id: testVariables.recordId,
+            fhirResource: stu3FhirResources.documentReference,
+            tags: [taggingUtils.generateUpdateTag(), 'resourcetype=documentreference'],
           });
           done();
         })

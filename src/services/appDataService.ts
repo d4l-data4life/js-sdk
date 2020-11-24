@@ -72,18 +72,26 @@ const appDataService = {
     data: any,
     id: string,
     date,
-    annotations: string[] = []
+    annotations?: string[]
   ): Promise<any> {
+    let tags;
+    /* eslint-disable indent */
+    if (annotations) {
+      tags = annotations.length
+        ? [
+            ...new Set([
+              ...taggingUtils.generateCustomTags(annotations),
+              taggingUtils.generateAppDataFlagTag(),
+            ]),
+          ]
+        : [];
+      /* eslint-enable indent */
+    }
     return recordService
       .updateRecord(ownerId, {
         data,
         id,
-        tags: [
-          ...new Set([
-            ...taggingUtils.generateCustomTags(annotations),
-            taggingUtils.generateAppDataFlagTag(),
-          ]),
-        ],
+        tags,
         customCreationDate: date,
       })
       .then(convertToExposedAppData);

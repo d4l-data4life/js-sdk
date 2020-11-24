@@ -536,12 +536,17 @@ const fhirService = {
       );
     }
 
+    let tags;
+    if (annotations) {
+      tags = annotations.length ? taggingUtils.generateCustomTags(annotations) : [];
+    }
+
     return recordService
       .updateRecord(ownerId, {
         attachmentKey,
         fhirResource: cleanResource(resource || fhirResource),
         id: fhirResource.id,
-        tags: taggingUtils.generateCustomTags(annotations),
+        tags,
         customCreationDate: date,
       })
       .then(convertToExposedRecord)
