@@ -10,6 +10,7 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
     "strict": false,
+    "declaration": true
   },
   "exclude": [
     "node_modules",
