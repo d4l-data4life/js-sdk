@@ -10,12 +10,13 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
     "strict": false,
-    "declaration": true,
+    "declaration": true
   },
   "exclude": [
     "node_modules",
     "tsDist",
     "dist",
-    "test"
+    "test",
+    "dest"
   ],
 }
