@@ -113,23 +113,30 @@ export const D4LSDK = {
 
   /**
    * sets up the D4L SDK
-   * @param {String} clientId - the clientId provided by data4life
-   * @param {String} environment - the environment in which the SDK is run
-   * @param {Object} privateKey - the privateKey returned from the sealCAP method
-   * @param {Function} requestAccessToken - () => Promise<String>: returns a new valid accessToken
+   * @param clientId the clientId provided by data4life
+   * @param environment the environment in which the SDK is run
+   * @param privateKey the privateKey returned from the sealCAP method
+   * @param requestAccessToken returns a new valid accessToken
    *      of the logged in user
-   * @param {Object} extendedEnvConfig - environment config to extend the base config
-   * @param {String} fhirVersion - the FHIR Version in use
-   * @returns {Promise<String>} the id of the logged in user
+   * @param extendedEnvConfig environment config to extend the base config
+   * @param fhirVersion the FHIR Version in use
+   * @returns the id of the logged in user
    */
-  setup({
+  async setup({
     clientId,
     environment,
     privateKey,
     requestAccessToken,
     extendedEnvConfig = {},
     fhirVersion = FHIR_VERSION_STU3,
-  }) {
+  }: {
+    clientId: string;
+    environment: string;
+    privateKey: any;
+    requestAccessToken: () => Promise<string>;
+    extendedEnvConfig?: any;
+    fhirVersion?: string;
+  }): Promise<string> {
     if (arguments.length > 1) {
       return Promise.reject(
         new SetupError(
@@ -154,19 +161,15 @@ export const D4LSDK = {
     d4lRequest.requestAccessToken = requestAccessToken;
     fhirService.setFhirVersion(fhirVersion);
     userService.setPrivateKey(privateKey);
-    return requestAccessToken()
-      .then(accessToken => {
-        d4lRequest.setMasterAccessToken(accessToken);
-        // as an interim measure, we check the user info endpoint regularly
-        // this is for common key rotation v1 in order to pick up on the new common key
-        // it can be removed once the backend can reject out-of-date common keys
-        userService.beginUserInfoPoll(config.userInfoPollInterval);
-        return userService.pullUser();
-      })
-      .then(({ id }) => {
-        d4lRequest.currentUserId = id;
-        return id;
-      });
+    const accessToken = await requestAccessToken();
+    d4lRequest.setMasterAccessToken(accessToken);
+    // as an interim measure, we check the user info endpoint regularly
+    // this is for common key rotation v1 in order to pick up on the new common key
+    // it can be removed once the backend can reject out-of-date common keys
+    userService.beginUserInfoPoll(config.userInfoPollInterval);
+    const { id } = await userService.pullUser();
+    d4lRequest.currentUserId = id;
+    return id;
   },
 
   /**

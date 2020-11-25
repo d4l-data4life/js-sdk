@@ -290,7 +290,7 @@ describe('D4L', () => {
 
     it('fails when a non-string clientId is used as parameter', done => {
       D4LSDK.setup({
-        clientId: 234,
+        clientId: 234 as any,
         environment: 'development',
         privateKey: btoa(JSON.stringify(encryptionResources.CUPPrivateKey)),
         requestAccessToken: requestAccessTokenStub,

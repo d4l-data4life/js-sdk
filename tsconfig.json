@@ -10,7 +10,8 @@
     "allowSyntheticDefaultImports": true,
     "baseUrl": "./src",
     "strict": false,
-    "declaration": true
+    "declaration": true,
+    "strictBindCallApply": true
   },
   "exclude": [
     "node_modules",

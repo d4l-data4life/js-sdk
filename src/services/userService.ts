@@ -61,12 +61,15 @@ const userService = {
    *
    * CryptoKey: https://developer.mozilla.org/en-US/docs/Web/API/CryptoKey
    *
-   * @param {Object} privateKey - an unexportable CryptoKey.
+   * @param privateKey  an unexportable CryptoKey.
    */
-  setPrivateKey(privateKey): void {
+  setPrivateKey(privateKey: any): void {
     this.privateKey = privateKey;
   },
 
+  /**
+   * Get the id of the current user
+   */
   getCurrentUserId(): string {
     if (!this.currentUserId) {
       throw new SetUpError(NOT_SETUP);
@@ -74,34 +77,45 @@ const userService = {
     return this.currentUserId;
   },
 
+  /**
+   * Get the id of the current app
+   */
   getCurrentAppId(): string {
     return this.currentAppId;
   },
 
+  /**
+   * Set a language for the current user
+   * @param languageCode The code of the language that should be set
+   */
   setCurrentUserLanguage(languageCode: string): void {
     d4lRequest.currentUserLanguage = languageCode ? String(languageCode).slice(0, 2) : null;
   },
 
+  /**
+   * Check if a the id is the one of the current user
+   * @param userId The id to check
+   */
   isCurrentUser(userId: string): boolean {
     return userId === this.currentUserId;
   },
 
   /**
-   *
-   *  @param {String} userId - userId of the user whos data is requested.
-   *      Loggedin user by default(even if this.currentUserId is not set yet).
-   *  @returns {Promise} Resolves to a userObject that contains userId,
-   *      commonKey and tagEncryptionKey
+   * Get the user for an id.
+   * Defaults to `this.currentUserId`.
+   *  @param userId Id of the user whos data is requested.
+   *                Loggedin user by default(even if `this.currentUserId` is not set yet).
+   *  @returns Resolves to a userObject that contains `userId`, `commonKey` and `tagEncryptionKey`.
    */
   getUser(userId: string = this.currentUserId): Promise<User> {
     return this.users[userId] ? Promise.resolve(this.users[userId]) : this.pullUser(userId);
   },
 
   /**
-   *  @param {String} userId - userId of the user whose data is requested.
-   *      Loggedin user by default.
-   *  @returns {Promise} Resolves to a userObject that contains userId,
-   *      commonKey and tagEncryptionKey
+   * Get the user for an id.
+   *  @param userId Id of the user whos data is requested.
+   *                Loggedin user by default(even if `this.currentUserId` is not set yet).
+   * @returns Resolves to a userObject that contains `userId`, `commonKey` and `tagEncryptionKey`.
    */
   pullUser(userId?: string): Promise<User> {
     // Does not work, if this.privateKey is not set.
@@ -155,9 +169,10 @@ const userService = {
   },
 
   /**
-   *  @param {String} userId - user whose key to retrieve
-   *  @param {String} keyId - ID of key to retrieve
-   *  @returns {Promise} Resolves to the (decrypted) common key
+   * Get the `commonKey` for a user
+   * @param userId  Id of the user whose key to retrieve
+   * @param keyId  Id of key to retrieve
+   * @returns Resolves to the (decrypted) common key
    */
   async getCommonKey(userId: string, keyId: string): Promise<Record<string, any>> {
     if (!this.commonKeys[userId]) {
@@ -179,16 +194,18 @@ const userService = {
   },
 
   /**
-   *  @returns {Promise} Resolves to an array of received permissions.
+   * Get a list of received permissions
+   *
+   * @returns Resolves to an array of received permissions.
    *      A permission contains:
-   *          - permissionId: the id of the permission
-   *          - appId: the id of the user-client combination that is allowed to access data
-   *          - owner: the id of the user that owns the data
-   *          - grantee: the id of the user that received the permission
-   *          - granteePublicKey: the publicKey of the grantee (base64 encoded)
-   *          - commonKey: the common key of the owner, encrypted with the grantee's
+   *          - `permissionId`: the id of the permission
+   *          - `appId`: the id of the user-client combination that is allowed to access data
+   *          - `owner`: the id of the user that owns the data
+   *          - `grantee`: the id of the user that received the permission
+   *          - `granteePublicKey`: the publicKey of the grantee (base64 encoded)
+   *          - `commonKey`: the common key of the owner, encrypted with the grantee's
    *              public key (base64 encoded)
-   *          - scope: the scope of the permission (array of strings)
+   *          - `scope`: the scope of the permission (array of strings)
    *
    * TODO: decide on which data should be exposed
    */
@@ -219,9 +236,9 @@ const userService = {
   },
 
   /**
-   * @param {String} appId - the id of the user-client tuple the permission shall be granted to
-   * @param {Array} annotations - the annotations that shall be shared.
-   * @returns {Promise}
+   * Grant permissions to a certain app
+   * @param appId The id of the user-client tuple the permission shall be granted to
+   * @param annotations The annotations that shall be shared.
    */
   grantPermission(appId: string, annotations: string[] = []): Promise<void> {
     const scope = ['rec:r', 'rec:w', 'attachment:r', 'attachment:w', 'user:r', 'user:w', 'user:q'];
@@ -256,7 +273,7 @@ const userService = {
 
   /**
    * Starts a regular, recurring call to /userinfo to get common key updates
-   * @param {number} interval - interval between calls in seconds
+   * @param interval interval between calls in seconds
    */
   beginUserInfoPoll(interval: number): void {
     if (this.userPollAction) {
