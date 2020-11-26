@@ -1,6 +1,6 @@
 import cleaner from 'rollup-plugin-cleaner';
 import replace from '@rollup/plugin-replace';
-import typescript from '@rollup/plugin-typescript';
+import typescript from 'rollup-plugin-typescript2';
 import resolve from '@rollup/plugin-node-resolve';
 import json from '@rollup/plugin-json';
 import commonjs from '@rollup/plugin-commonjs';
@@ -78,7 +78,11 @@ export default {
     }),
     nodePolyfills(),
     json(),
-    typescript(),
+    typescript(
+      config.mode === 'test'
+        ? { tsconfig: `${__dirname}/tsconfig.test.json` }
+        : { tsconfig: `${__dirname}/tsconfig.json` }
+    ),
     terser(),
     {
       name: 'generatePackageJson',
@@ -87,8 +91,13 @@ export default {
         delete contents.scripts;
         delete contents.dependencies;
         delete contents.devDependencies;
+        delete contents.directories;
         contents.module = './d4l.js';
         contents.main = './d4l.js';
+        if (config.mode !== 'test') {
+          contents.types = './d4l';
+          contents.typings = './d4l';
+        }
         writeFileSync(`${__dirname}/dest/package.json`, JSON.stringify(contents, null, 2));
         writeFileSync(
           `${__dirname}/dest/README.md`,

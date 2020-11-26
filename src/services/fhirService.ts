@@ -1,4 +1,4 @@
-/* eslint-disable no-await-in-loop,@typescript-eslint/interface-name-prefix,no-param-reassign */
+/* eslint-disable no-param-reassign, no-await-in-loop */
 import {
   convertBlobToArrayBufferView,
   // @ts-ignore
@@ -48,7 +48,7 @@ import recordService, { DecryptedRecord } from './recordService';
 import InvalidAttachmentPayloadError from '../lib/errors/InvalidAttachmentPayloadError';
 
 // The exposed search params
-interface IParams {
+export interface IParams {
   limit?: number;
   offset?: number;
   start_date?: string;
@@ -67,7 +67,7 @@ interface IParams {
  * Annotations are treated internally as custom tags by the SDK which can be used for filtering
  * by the users of SDK
  */
-interface IRecord {
+export interface Record {
   id?: string;
   fhirResource: fhir.DomainResource;
   annotations?: string[];
@@ -84,9 +84,10 @@ interface AppData {
   updatedDate?: Date;
   partner?: string;
 }
-interface IFetchResponse {
+
+export interface FetchResponse {
   totalCount: number;
-  records: IRecord[] | AppData[];
+  records: Record[] | AppData[];
 }
 
 type IAttachment = {
@@ -422,7 +423,7 @@ const fhirService = {
     fhirResource: fhir.DomainResource,
     date: Date = new Date(),
     annotations: string[] = []
-  ): Promise<IRecord> {
+  ): Promise<Record> {
     let validationResult;
     try {
       validationResult = await fhirValidator.validate(cleanResource(cloneDeep(fhirResource)));
@@ -505,7 +506,7 @@ const fhirService = {
     fhirResource: fhir.DomainResource,
     date,
     annotations?: string[]
-  ): Promise<IRecord> {
+  ): Promise<Record> {
     let validationResult;
     try {
       validationResult = await fhirValidator.validate(cleanResource(cloneDeep(fhirResource)));
@@ -627,7 +628,7 @@ const fhirService = {
       });
   },
 
-  fetchResource(ownerId: string, resourceId: string): Promise<IRecord> {
+  fetchResource(ownerId: string, resourceId: string): Promise<Record> {
     return recordService.downloadRecord(ownerId, resourceId).then(convertToExposedRecord);
   },
 
@@ -643,7 +644,7 @@ const fhirService = {
     return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
   },
 
-  fetchResources(ownerId: string, params: IParams = {}): Promise<IFetchResponse> {
+  fetchResources(ownerId: string, params: IParams = {}): Promise<FetchResponse> {
     const parameters = prepareSearchParameters({
       ...params,
       exclude_flags: [taggingUtils.generateAppDataFlagTag()],
@@ -658,7 +659,7 @@ const fhirService = {
     ownerId: string,
     resourceId: string,
     options = { imageSize: FULL }
-  ): Promise<IRecord> {
+  ): Promise<Record> {
     let record;
     let resource;
     let encryptedAttachmentKey;
