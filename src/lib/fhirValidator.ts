@@ -4,6 +4,7 @@ import cloneDeep from 'lodash/cloneDeep';
 import isObjectLike from 'lodash/isObjectLike';
 import isArray from 'lodash/isArray';
 import isUndefined from 'lodash/isUndefined';
+import get from 'lodash/get';
 import omit from 'lodash/omit';
 
 import ValidationError from './errors/ValidationError';
@@ -212,8 +213,14 @@ const fhirValidator = {
       );
     }
 
-    const validator = await this.getValidator(resourceType);
+    if (get(resource, 'contained[0].contained[0]') !== undefined) {
+      throw new ValidationError(
+        'Resource cannot contain resources that themselves contain another set of resources.'
+      );
+    }
+
     const containedResources = cloneDeep(resource.contained);
+    const validator = await this.getValidator(resourceType);
     let resourceToValidate = resource;
     if (containedResources && containedResources.length) {
       resourceToValidate = omit(resource, ['contained']);
