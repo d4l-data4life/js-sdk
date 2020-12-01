@@ -393,68 +393,60 @@ describe('fhir validator', () => {
       expect(valid).to.equal(false);
     });
 
-    it('fails to validate with an explicit message if no parameter is provided', done => {
+    it('fails to validate with an explicit message if no parameter is provided', async () => {
       try {
         // @ts-ignore
-        fhirValidator.validate();
-        done();
+        await fhirValidator.validate();
       } catch (err) {
         expect(err).to.not.be.null;
         expect(err instanceof Error).to.be.true;
         expect(Array.isArray(err.errors)).to.be.true;
         expect(err.toString()).to.contain('No resource provided');
-        done();
       }
     });
 
-    it('fails to validate with an explicit message if a non-string, non-object parameter is provided', done => {
+    it('fails to validate with an explicit message if a non-string, non-object parameter is provided', async () => {
       try {
         // @ts-ignore
-        fhirValidator.validate([]);
-        done();
+        await fhirValidator.validate([]);
       } catch (err) {
         expect(err).to.not.be.null;
         expect(err instanceof Error).to.be.true;
         expect(Array.isArray(err.errors)).to.be.true;
         expect(err.toString()).to.contain('Resource needs to be an object.');
-        done();
       }
     });
 
-    it('fails to validate with an explicit message if a parameter without a resourceType property is provided', done => {
+    it('fails to validate with an explicit message if a parameter without a resourceType property is provided', async () => {
       try {
-        fhirValidator.validate({
+        await fhirValidator.validate({
           // @ts-ignore
           uselessProperty: 'not a resource type',
         });
-        done();
       } catch (err) {
         expect(err).to.not.be.null;
         expect(err instanceof Error).to.be.true;
         expect(Array.isArray(err.errors)).to.be.true;
         expect(err.toString()).to.contain('Resource object does not have a resource type.');
         expect(err.toString()).to.not.contain('Did you mean to submit the .fhirResource property?');
-        done();
       }
     });
 
-    it('fails to validate with an explicit message if a parameter without a resourceType property is provided but a fhirResource property exists on the object', done => {
+    it('fails to validate with an explicit message if a parameter without a resourceType property is provided but a fhirResource property exists on the object', async () => {
       try {
-        fhirValidator.validate({
+        await fhirValidator.validate({
           // @ts-ignore
           uselessProperty: 'not a resource type',
           fhirResource: {
             why: 'You might want to submit me though',
           },
         });
-        done();
       } catch (err) {
         expect(err).to.not.be.null;
         expect(err instanceof Error).to.be.true;
         expect(Array.isArray(err.errors)).to.be.true;
         expect(err.toString()).to.contain('Resource object does not have a resource type.');
         expect(err.toString()).to.contain('Did you mean to submit the .fhirResource property?');
-        done();
       }
     });
 
