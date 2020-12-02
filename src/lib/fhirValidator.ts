@@ -33,7 +33,6 @@ const fhirValidator = {
     let returnPromise = Promise.resolve(false);
 
     /*
-    /*
      * This is, for now, a deliberately simplified version that just deals with our own
      * "Organization" as attached to Documents by the native apps.
      * If we ever support Organization resources properly,
