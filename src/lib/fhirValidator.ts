@@ -5,6 +5,7 @@ import isObjectLike from 'lodash/isObjectLike';
 import isArray from 'lodash/isArray';
 import isUndefined from 'lodash/isUndefined';
 import omit from 'lodash/omit';
+import some from 'lodash/some';
 
 import ValidationError from './errors/ValidationError';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4, SUPPORTED_RESOURCES } from './models/fhir/helper';
@@ -212,8 +213,14 @@ const fhirValidator = {
       );
     }
 
-    const validator = await this.getValidator(resourceType);
+    if (some(resource.contained, 'contained')) {
+      throw new ValidationError(
+        'Resource cannot contain resources that themselves contain another set of resources.'
+      );
+    }
     const containedResources = cloneDeep(resource.contained);
+
+    const validator = await this.getValidator(resourceType);
     let resourceToValidate = resource;
     if (containedResources && containedResources.length) {
       resourceToValidate = omit(resource, ['contained']);
