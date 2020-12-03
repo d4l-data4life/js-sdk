@@ -1,0 +1,72 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "26",
+  "meta": {
+    "lastUpdated": "2012-04-14T10:35:23Z"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: 26</p><p><b>meta</b>: </p><p><b>contained</b>: </p><p><b>identifier</b>: 5234342</p><p><b>status</b>: final</p><p><b>code</b>: RPR <span>(Details : {http://acme.com/labs/reports code '142080' = '142080', given as 'Rapid Plasma Reagin'})</span></p><p><b>subject</b>: <a>Patient/6</a></p><p><b>effective</b>: 07/03/2005 2:02:17 PM</p><p><b>issued</b>: 07/03/2005 2:02:01 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Acme Laboratory, Inc</a></td></tr></table><p><b>result</b>: id: o1; status: final; Reagin Ab [Presence] in Serum by RPR <span>(Details : {LOINC code '20507-0' = 'Reagin Ab [Presence] in Serum by RPR', given as 'Reagin Ab [Presence] in Serum by RPR'})</span>; ????; Acme Laboratory, Inc; value: Non-reactive</p></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Observation",
+      "id": "o1",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "20507-0",
+            "display": "Reagin Ab [Presence] in Serum by RPR"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/6"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueString": "Non-reactive"
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://acme.com/lab/reports",
+      "value": "5234342"
+    }
+  ],
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://acme.com/labs/reports",
+        "code": "142080",
+        "display": "Rapid Plasma Reagin"
+      }
+    ],
+    "text": "RPR"
+  },
+  "subject": {
+    "reference": "Patient/6"
+  },
+  "effectiveDateTime": "2005-03-07T14:02:17Z",
+  "issued": "2005-03-07T14:02:01Z",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+        "display": "Acme Laboratory, Inc"
+      }
+    }
+  ],
+  "result": [
+    {
+      "reference": "#o1"
+    }
+  ]
+}

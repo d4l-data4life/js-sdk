@@ -13,7 +13,7 @@ function splitBundleToResources(inputFile, outputDir) {
   resources.forEach(resource =>
     writeFileSync(
       `${outputDir}/${resource.resourceType}-${resource.id}.json`,
-      JSON.stringify(resource)
+      JSON.stringify(resource, null, 2)
     )
   );
 }

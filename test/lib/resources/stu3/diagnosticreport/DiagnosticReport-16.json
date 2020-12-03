@@ -1,0 +1,1244 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "16",
+  "meta": {
+    "lastUpdated": "2012-04-14T10:35:23Z"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: 16</p><p><b>meta</b>: </p><p><b>contained</b>: , , , , , , , , , , , , , , , , , , , , , , , , </p><p><b>identifier</b>: 5234342</p><p><b>status</b>: final</p><p><b>code</b>: SERUM CHEMISTRY <span>(Details )</span></p><p><b>subject</b>: <a>Patient/9</a></p><p><b>effective</b>: 08/12/2004 7:45:17 AM</p><p><b>issued</b>: 23/02/2005 10:04:01 AM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Acme Laboratory, Inc</a></td></tr></table><p><b>result</b>: </p><ul><li>id: o1; status: final; Sodium [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '2951-2' = 'Sodium [Moles/volume] in Serum or Plasma', given as 'Sodium [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '104934005' = 'Sodium measurement, serum)</span>; ????; Acme Laboratory, Inc; 138 mmol/L</li><li>id: o2; status: final; Potassium [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '2823-3' = 'Potassium [Moles/volume] in Serum or Plasma', given as 'Potassium [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '59573005' = 'Potassium measurement)</span>; ????; Acme Laboratory, Inc; 4.1 mmol/L</li><li>id: o3; status: final; Chloride [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '2075-0' = 'Chloride [Moles/volume] in Serum or Plasma', given as 'Chloride [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '46511006' = 'Chloride measurement)</span>; ????; Acme Laboratory, Inc; 103 mmol/L</li><li>id: o4; status: final; Bicarbonate [Moles/volume] in Serum <span>(Details : {LOINC code '1963-8' = 'Bicarbonate [Moles/volume] in Serum', given as 'Bicarbonate [Moles/volume] in Serum'}; {SNOMED CT code '88645003' = 'Bicarbonate measurement)</span>; ????; Acme Laboratory, Inc; 27 mmol/L</li><li>id: o5; status: final; Anion gap 4 in Serum or Plasma <span>(Details : {LOINC code '1863-0' = 'Anion gap 4 in Serum or Plasma', given as 'Anion gap 4 in Serum or Plasma'}; {SNOMED CT code '271057005' = 'Serum anion gap measurement)</span>; ????; Acme Laboratory, Inc; 12 mmol/L</li><li>id: o6; status: final; Glucose [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14749-6' = 'Glucose [Moles/volume] in Serum or Plasma', given as 'Glucose [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '36048009' = 'Glucose measurement)</span>; ????; Acme Laboratory, Inc; 6.8 mmol/L</li><li>id: o7; status: final; Urea nitrogen [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14937-7' = 'Urea nitrogen [Moles/volume] in Serum or Plasma', given as 'Urea nitrogen [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '273967009' = 'Serum urea level)</span>; ????; Acme Laboratory, Inc; 8.2 mmol/L; High <span>(Details : {http://hl7.org/fhir/v2/0078 code 'H' = 'High)</span></li><li>id: o8; status: final; Creatinine [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14682-9' = 'Creatinine [Moles/volume] in Serum or Plasma', given as 'Creatinine [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '70901006' = 'Creatinine measurement)</span>; ????; Acme Laboratory, Inc; 0.07 mmol/L</li><li>id: o9; status: final; Urate [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14933-6' = 'Urate [Moles/volume] in Serum or Plasma', given as 'Urate [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '86228006' = 'Uric acid measurement)</span>; ????; Acme Laboratory, Inc; 0.42 mmol/L; Critically high <span>(Details : {http://hl7.org/fhir/v2/0078 code 'HH' = 'Critically high)</span></li><li>id: o10; status: final; Bilirubin.total [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14631-6' = 'Bilirubin.total [Moles/volume] in Serum or Plasma', given as 'Bilirubin.total [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '27171005' = 'Urinalysis)</span>; ????; Acme Laboratory, Inc; 16 umol/L</li><li>id: o11; status: final; Bilirubin.direct [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14629-0' = 'Bilirubin.direct [Moles/volume] in Serum or Plasma', given as 'Bilirubin.direct [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '39748002' = 'Bilirubin, direct measurement)</span>; ????; Acme Laboratory, Inc; 8 umol/L</li><li>id: o12; status: final; Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code '6768-6' = 'Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma', given as 'Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma'}; {SNOMED CT code '88810008' = 'Alkaline phosphatase measurement)</span>; ????; Acme Laboratory, Inc; 369 U/L; Critically high <span>(Details : {http://hl7.org/fhir/v2/0078 code 'HH' = 'Critically high)</span></li><li>id: o13; status: final; Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code '2324-2' = 'Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma', given as 'Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma'}; {SNOMED CT code '69480007' = 'Gamma glutamyl transferase measurement)</span>; ????; Acme Laboratory, Inc; 438 U/L; Critically high <span>(Details : {http://hl7.org/fhir/v2/0078 code 'HH' = 'Critically high)</span></li><li>id: o14; status: final; Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code '1742-6' = 'Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma', given as 'Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma'}; {SNOMED CT code '34608000' = 'Alanine aminotransferase measurement)</span>; ????; Acme Laboratory, Inc; 263 U/L; Critically high <span>(Details : {http://hl7.org/fhir/v2/0078 code 'HH' = 'Critically high)</span></li><li>id: o15; status: final; Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code '1920-8' = 'Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma', given as 'Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma'}; {SNOMED CT code '45896001' = 'Aspartate aminotransferase measurement)</span>; ????; Acme Laboratory, Inc; 87 U/L; Critically high <span>(Details : {http://hl7.org/fhir/v2/0078 code 'HH' = 'Critically high)</span></li><li>id: o16; status: final; Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma <span>(Details : {LOINC code '2532-0' = 'Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma', given as 'Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma'}; {SNOMED CT code '11274001' = 'Lactate dehydrogenase measurement)</span>; ????; Acme Laboratory, Inc; 179 U/L</li><li>id: o17; status: final; Calcium [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '2000-8' = 'Calcium [Moles/volume] in Serum or Plasma', given as 'Calcium [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '71878006' = 'Calcium measurement)</span>; ????; Acme Laboratory, Inc; 2.32 mmol/L</li><li>id: o18; status: final; Calcium.ionized [Moles/volume] in Serum or Plasma by calculation <span>(Details : {LOINC code '13959-2' = 'Calcium.ionized [Moles/volume] in Serum or Plasma by calculation', given as 'Calcium.ionized [Moles/volume] in Serum or Plasma by calculation'}; {SNOMED CT code '166708003' = 'Corrected serum calcium measurement)</span>; ????; Acme Laboratory, Inc; 2.42 mmol/L</li><li>id: o19; status: final; Phosphate [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14879-1' = 'Phosphate [Moles/volume] in Serum or Plasma', given as 'Phosphate [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '104866001' = 'Phosphate measurement)</span>; ????; Acme Laboratory, Inc; 1.3 mmol/L</li><li>id: o20; status: final; Protein [Mass/volume] in Serum or Plasma <span>(Details : {LOINC code '2885-2' = 'Protein [Mass/volume] in Serum or Plasma', given as 'Protein [Mass/volume] in Serum or Plasma'}; {SNOMED CT code '74040009' = 'Protein measurement)</span>; ????; Acme Laboratory, Inc; 67 g/L</li><li>id: o21; status: final; Albumin [Mass/volume] in Serum or Plasma <span>(Details : {LOINC code '1751-7' = 'Albumin [Mass/volume] in Serum or Plasma', given as 'Albumin [Mass/volume] in Serum or Plasma'}; {SNOMED CT code '104485008' = 'Albumin measurement, serum)</span>; ????; Acme Laboratory, Inc; 39 g/L</li><li>id: o22; status: final; Globulin [Mass/volume] in Serum by calculation <span>(Details : {LOINC code '10834-0' = 'Globulin [Mass/volume] in Serum by calculation', given as 'Globulin [Mass/volume] in Serum by calculation'}; {SNOMED CT code '104979009' = 'Total globulins measurement)</span>; ????; Acme Laboratory, Inc; 28 g/L</li><li>id: o23; status: final; Iron [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14798-3' = 'Iron [Moles/volume] in Serum or Plasma', given as 'Iron [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '42950004' = 'Iron measurement)</span>; ????; Acme Laboratory, Inc; 8 umol/L; Low <span>(Details : {http://hl7.org/fhir/v2/0078 code 'L' = 'Low)</span></li><li>id: o24; status: final; Cholesterol [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14647-2' = 'Cholesterol [Moles/volume] in Serum or Plasma', given as 'Cholesterol [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '77068002' = 'Cholesterol measurement)</span>; ????; Acme Laboratory, Inc; 4.8 mmol/L</li><li>id: o25; status: final; Triglyceride [Moles/volume] in Serum or Plasma <span>(Details : {LOINC code '14927-8' = 'Triglyceride [Moles/volume] in Serum or Plasma', given as 'Triglyceride [Moles/volume] in Serum or Plasma'}; {SNOMED CT code '104784006' = 'Lipids, triglycerides measurement)</span>; ????; Acme Laboratory, Inc; 2.2 mmol/L</li></ul></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Observation",
+      "id": "o1",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2951-2",
+            "display": "Sodium [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "104934005"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 138,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 137,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 147,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o2",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2823-3",
+            "display": "Potassium [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "59573005"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 4.1,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 3.5,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 5,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o3",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2075-0",
+            "display": "Chloride [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "46511006"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 103,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 96,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 109,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o4",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "1963-8",
+            "display": "Bicarbonate [Moles/volume] in Serum"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "88645003"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 27,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 25,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 33,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o5",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "1863-0",
+            "display": "Anion gap 4 in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "271057005"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 12,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 4,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 17,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o6",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14749-6",
+            "display": "Glucose [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "36048009"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 6.8,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 3,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 7.7,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o7",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14937-7",
+            "display": "Urea nitrogen [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "273967009"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 8.2,
+        "unit": "mmol/L"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "H"
+          }
+        ]
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 2,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 7,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o8",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14682-9",
+            "display": "Creatinine [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "70901006"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 0.07,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0.04,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 0.11,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o9",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14933-6",
+            "display": "Urate [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "86228006"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 0.42,
+        "unit": "mmol/L"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "HH"
+          }
+        ]
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0.14,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 0.35,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o10",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14631-6",
+            "display": "Bilirubin.total [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "27171005"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 16,
+        "unit": "umol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 2,
+            "unit": "umol/L"
+          },
+          "high": {
+            "value": 20,
+            "unit": "umol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o11",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14629-0",
+            "display": "Bilirubin.direct [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "39748002"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 8,
+        "unit": "umol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0,
+            "unit": "umol/L"
+          },
+          "high": {
+            "value": 8,
+            "unit": "umol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o12",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "6768-6",
+            "display": "Alkaline phosphatase [Enzymatic activity/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "88810008"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 369,
+        "unit": "U/L"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "HH"
+          }
+        ]
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 30,
+            "unit": "U/L"
+          },
+          "high": {
+            "value": 115,
+            "unit": "U/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o13",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2324-2",
+            "display": "Gamma glutamyl transferase [Enzymatic activity/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "69480007"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 438,
+        "unit": "U/L"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "HH"
+          }
+        ]
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0,
+            "unit": "U/L"
+          },
+          "high": {
+            "value": 45,
+            "unit": "U/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o14",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "1742-6",
+            "display": "Alanine aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "34608000"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 263,
+        "unit": "U/L"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "HH"
+          }
+        ]
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0,
+            "unit": "U/L"
+          },
+          "high": {
+            "value": 45,
+            "unit": "U/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o15",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "1920-8",
+            "display": "Aspartate aminotransferase [Enzymatic activity/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "45896001"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 87,
+        "unit": "U/L"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "HH"
+          }
+        ]
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0,
+            "unit": "U/L"
+          },
+          "high": {
+            "value": 41,
+            "unit": "U/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o16",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2532-0",
+            "display": "Lactate dehydrogenase [Enzymatic activity/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "11274001"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 179,
+        "unit": "U/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 80,
+            "unit": "U/L"
+          },
+          "high": {
+            "value": 250,
+            "unit": "U/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o17",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2000-8",
+            "display": "Calcium [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "71878006"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 2.32,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 2.25,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 2.65,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o18",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "13959-2",
+            "display": "Calcium.ionized [Moles/volume] in Serum or Plasma by calculation"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "166708003"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 2.42,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 2.25,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 2.65,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o19",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14879-1",
+            "display": "Phosphate [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "104866001"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1.3,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0.8,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 1.5,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o20",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "2885-2",
+            "display": "Protein [Mass/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "74040009"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 67,
+        "unit": "g/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 60,
+            "unit": "g/L"
+          },
+          "high": {
+            "value": 82,
+            "unit": "g/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o21",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "1751-7",
+            "display": "Albumin [Mass/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "104485008"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 39,
+        "unit": "g/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 35,
+            "unit": "g/L"
+          },
+          "high": {
+            "value": 50,
+            "unit": "g/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o22",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "10834-0",
+            "display": "Globulin [Mass/volume] in Serum by calculation"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "104979009"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 28,
+        "unit": "g/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 20,
+            "unit": "g/L"
+          },
+          "high": {
+            "value": 40,
+            "unit": "g/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o23",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14798-3",
+            "display": "Iron [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "42950004"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 8,
+        "unit": "umol/L"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "L"
+          }
+        ]
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 10,
+            "unit": "umol/L"
+          },
+          "high": {
+            "value": 33,
+            "unit": "umol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o24",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14647-2",
+            "display": "Cholesterol [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "77068002"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 4.8,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 3.6,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 6.7,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o25",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "14927-8",
+            "display": "Triglyceride [Moles/volume] in Serum or Plasma"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "104784006"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/9"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 2.2,
+        "unit": "mmol/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 0.3,
+            "unit": "mmol/L"
+          },
+          "high": {
+            "value": 4,
+            "unit": "mmol/L"
+          }
+        }
+      ]
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://acme.com/lab/reports",
+      "value": "5234342"
+    }
+  ],
+  "status": "final",
+  "code": {
+    "text": "SERUM CHEMISTRY"
+  },
+  "subject": {
+    "reference": "Patient/9"
+  },
+  "effectiveDateTime": "2004-12-08T07:45:17Z",
+  "issued": "2005-02-23T10:04:01Z",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+        "display": "Acme Laboratory, Inc"
+      }
+    }
+  ],
+  "result": [
+    {
+      "reference": "#o1"
+    },
+    {
+      "reference": "#o2"
+    },
+    {
+      "reference": "#o3"
+    },
+    {
+      "reference": "#o4"
+    },
+    {
+      "reference": "#o5"
+    },
+    {
+      "reference": "#o6"
+    },
+    {
+      "reference": "#o7"
+    },
+    {
+      "reference": "#o8"
+    },
+    {
+      "reference": "#o9"
+    },
+    {
+      "reference": "#o10"
+    },
+    {
+      "reference": "#o11"
+    },
+    {
+      "reference": "#o12"
+    },
+    {
+      "reference": "#o13"
+    },
+    {
+      "reference": "#o14"
+    },
+    {
+      "reference": "#o15"
+    },
+    {
+      "reference": "#o16"
+    },
+    {
+      "reference": "#o17"
+    },
+    {
+      "reference": "#o18"
+    },
+    {
+      "reference": "#o19"
+    },
+    {
+      "reference": "#o20"
+    },
+    {
+      "reference": "#o21"
+    },
+    {
+      "reference": "#o22"
+    },
+    {
+      "reference": "#o23"
+    },
+    {
+      "reference": "#o24"
+    },
+    {
+      "reference": "#o25"
+    }
+  ]
+}
