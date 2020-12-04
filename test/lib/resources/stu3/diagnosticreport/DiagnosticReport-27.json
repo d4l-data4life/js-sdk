@@ -1,0 +1,91 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "27",
+  "meta": {
+    "lastUpdated": "2012-05-23T14:27:01Z"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\">\n            <table>\n              <tr>\n                <td>hsCRP</td>\n                <td>2.8</td>\n                <td>mg/L</td>\n                <td>1.0-3.0</td>\n              </tr>\n            </table>\n          </div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Observation",
+      "id": "o1",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "30522-7",
+            "display": "C reactive protein [Mass/volume] in Serum or Plasma by High sensitivity method"
+          },
+          {
+            "system": "http://snomed.info/sct",
+            "code": "55235003"
+          }
+        ],
+        "text": "hsCRP"
+      },
+      "subject": {
+        "reference": "Patient/1"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 2.8,
+        "unit": "mg/L"
+      },
+      "referenceRange": [
+        {
+          "low": {
+            "value": 1,
+            "unit": "mg/L"
+          },
+          "high": {
+            "value": 3,
+            "unit": "mg/L"
+          }
+        }
+      ]
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://acme.com/lab/reports",
+      "value": "23412355"
+    }
+  ],
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://acme.com/labs/reports",
+        "code": "bchem2",
+        "display": "Specialist Biochemistry"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/1"
+  },
+  "effectiveDateTime": "2012-05-21T10:45:00Z",
+  "issued": "2012-05-23T14:27:01Z",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+        "display": "Acme Laboratory, Inc"
+      }
+    }
+  ],
+  "result": [
+    {
+      "reference": "#o1"
+    }
+  ]
+}

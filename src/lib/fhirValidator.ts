@@ -68,6 +68,13 @@ const fhirValidator = {
             });
             break;
 
+          case 'PractitionerRole':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/PractitionerRole').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+
           case 'Patient':
             returnPromise = import('@d4l/js-fhir-validator/r4/js/Patient').then(bundle => {
               this.validator[version][resourceType] = bundle.default;
@@ -134,6 +141,15 @@ const fhirValidator = {
               this.validator[version][resourceType] = bundle.default;
               return this.validator[version][resourceType];
             });
+            break;
+
+          case 'PractitionerRole':
+            returnPromise = import('@d4l/js-fhir-validator/stu3/js/PractitionerRole').then(
+              bundle => {
+                this.validator[version][resourceType] = bundle.default;
+                return this.validator[version][resourceType];
+              }
+            );
             break;
 
           case 'Observation':

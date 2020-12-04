@@ -1,0 +1,729 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "25",
+  "meta": {
+    "lastUpdated": "2012-04-14T10:35:23Z"
+  },
+  "text": {
+    "status": "generated",
+    "div": "<div xmlns=\"http://www.w3.org/1999/xhtml\"><p><b>Generated Narrative with Details</b></p><p><b>id</b>: 25</p><p><b>meta</b>: </p><p><b>contained</b>: , , , , , , , , , , , , , , , , , </p><p><b>identifier</b>: 5234342</p><p><b>status</b>: final</p><p><b>code</b>: Microbial susceptibility tests Set <span>(Details : {LOINC code '18769-0' = 'Microbial susceptibility tests Set', given as 'Microbial susceptibility tests Set'})</span></p><p><b>subject</b>: <a>Patient/5</a></p><p><b>effective</b>: 07/11/2005 9:44:17 PM</p><p><b>issued</b>: 07/11/2005 11:38:01 PM</p><h3>Performers</h3><table><tr><td>-</td><td><b>Actor</b></td></tr><tr><td>*</td><td><a>Acme Laboratory, Inc</a></td></tr></table><p><b>specimen</b>: URINE, CLEAN CATCH/MIDSTREAM</p><p><b>result</b>: </p><ul><li>id: o1; status: final; Microorganism identified in Unspecified specimen by Culture <span>(Details : {LOINC code '11475-1' = 'Microorganism identified in Unspecified specimen by Culture', given as 'Microorganism identified in Unspecified specimen by Culture'})</span>; ????; Acme Laboratory, Inc; KLEBSIELLA PNEUMONIAE <span>(Details )</span></li><li>id: o2; status: final; Microorganism [#/volume] in Unspecified specimen by Viability count <span>(Details : {LOINC code '43161-9' = 'Microorganism [#/volume] in Unspecified specimen by Viability count', given as 'Microorganism [#/volume] in Unspecified specimen by Viability count'})</span>; ????; Acme Laboratory, Inc; 20000 CFU/ML</li><li>id: o3; status: final; AMPICILLIN/SULBACTAM <span>(Details : {http://example.org/local code 'AMS' = 'AMS', given as 'AMPICILLIN/SULBACTAM'})</span>; ????; Acme Laboratory, Inc; 4 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o4; status: final; AMPICILLIN <span>(Details : {http://example.org/local code 'AM' = 'AM', given as 'AMPICILLIN'})</span>; ????; Acme Laboratory, Inc; 16 U; Resistant <span>(Details : {http://hl7.org/fhir/v2/0078 code 'R' = 'Resistant)</span></li><li>id: o5; status: final; AZTREONAM <span>(Details : {http://example.org/local code 'ATM' = 'ATM', given as 'AZTREONAM'})</span>; ????; Acme Laboratory, Inc; &lt;=1 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o6; status: final; CEFAZOLIN <span>(Details : {http://example.org/local code 'CFZ' = 'CFZ', given as 'CEFAZOLIN'})</span>; ????; Acme Laboratory, Inc; &lt;=4 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o7; status: final; CEFEPIME <span>(Details : {http://example.org/local code 'FEP' = 'FEP', given as 'CEFEPIME'})</span>; ????; Acme Laboratory, Inc; &lt;=1 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o8; status: final; CEFOTETAN <span>(Details : {http://example.org/local code 'CTN' = 'CTN', given as 'CEFOTETAN'})</span>; ????; Acme Laboratory, Inc; &lt;=4 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o9; status: final; CEFTAZIDIME <span>(Details : {http://example.org/local code 'TAZ' = 'TAZ', given as 'CEFTAZIDIME'})</span>; ????; Acme Laboratory, Inc; &lt;=1 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o10; status: final; CEFTRIAXONE <span>(Details : {http://example.org/local code 'CRO' = 'CRO', given as 'CEFTRIAXONE'})</span>; ????; Acme Laboratory, Inc; &lt;=1 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o11; status: final; CIPROFLOXACIN <span>(Details : {http://example.org/local code 'CIPRO' = 'CIPRO', given as 'CIPROFLOXACIN'})</span>; ????; Acme Laboratory, Inc; &lt;=0.25 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o12; status: final; GENTAMICIN <span>(Details : {http://example.org/local code 'GM' = 'GM', given as 'GENTAMICIN'})</span>; ????; Acme Laboratory, Inc; &lt;=1 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o13; status: final; IMIPENEM <span>(Details : {http://example.org/local code 'IPM' = 'IPM', given as 'IMIPENEM'})</span>; ????; Acme Laboratory, Inc; &lt;=1 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o14; status: final; LEVOFLOXACIN <span>(Details : {http://example.org/local code 'LVX' = 'LVX', given as 'LEVOFLOXACIN'})</span>; ????; Acme Laboratory, Inc; &lt;=0.25 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o15; status: final; NITROFURANTOIN <span>(Details : {http://example.org/local code 'NIT' = 'NIT', given as 'NITROFURANTOIN'})</span>; ????; Acme Laboratory, Inc; 32 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o16; status: final; PIPERACILLIN/TAZOBAC <span>(Details : {http://example.org/local code 'PTZ' = 'PTZ', given as 'PIPERACILLIN/TAZOBAC'})</span>; ????; Acme Laboratory, Inc; &lt;=4 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o17; status: final; TRIMETH/SULFA <span>(Details : {http://example.org/local code 'TRSUV' = 'TRSUV', given as 'TRIMETH/SULFA'})</span>; ????; Acme Laboratory, Inc; &lt;=20 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li><li>id: o18; status: final; TOBRAMYCIN <span>(Details : {http://example.org/local code 'TOB' = 'TOB', given as 'TOBRAMYCIN'})</span>; ????; Acme Laboratory, Inc; &lt;=1 U; Susceptible <span>(Details : {http://hl7.org/fhir/v2/0078 code 'S' = 'Susceptible)</span></li></ul></div>"
+  },
+  "contained": [
+    {
+      "resourceType": "Observation",
+      "id": "o1",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "11475-1",
+            "display": "Microorganism identified in Unspecified specimen by Culture"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueCodeableConcept": {
+        "text": "KLEBSIELLA PNEUMONIAE"
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o2",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://loinc.org",
+            "code": "43161-9",
+            "display": "Microorganism [#/volume] in Unspecified specimen by Viability count"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 20000,
+        "unit": "CFU/ML"
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o3",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "AMS",
+            "display": "AMPICILLIN/SULBACTAM"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 4,
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o4",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "AM",
+            "display": "AMPICILLIN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 16,
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "R"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o5",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "ATM",
+            "display": "AZTREONAM"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o6",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "CFZ",
+            "display": "CEFAZOLIN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 4,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o7",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "FEP",
+            "display": "CEFEPIME"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o8",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "CTN",
+            "display": "CEFOTETAN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 4,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o9",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "TAZ",
+            "display": "CEFTAZIDIME"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o10",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "CRO",
+            "display": "CEFTRIAXONE"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o11",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "CIPRO",
+            "display": "CIPROFLOXACIN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 0.25,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o12",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "GM",
+            "display": "GENTAMICIN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o13",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "IPM",
+            "display": "IMIPENEM"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o14",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "LVX",
+            "display": "LEVOFLOXACIN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 0.25,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o15",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "NIT",
+            "display": "NITROFURANTOIN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 32,
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o16",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "PTZ",
+            "display": "PIPERACILLIN/TAZOBAC"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 4,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o17",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "TRSUV",
+            "display": "TRIMETH/SULFA"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 20,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    },
+    {
+      "resourceType": "Observation",
+      "id": "o18",
+      "status": "final",
+      "code": {
+        "coding": [
+          {
+            "system": "http://example.org/local",
+            "code": "TOB",
+            "display": "TOBRAMYCIN"
+          }
+        ]
+      },
+      "subject": {
+        "reference": "Patient/5"
+      },
+      "performer": [
+        {
+          "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+          "display": "Acme Laboratory, Inc"
+        }
+      ],
+      "valueQuantity": {
+        "value": 1,
+        "comparator": "<=",
+        "unit": "U"
+      },
+      "interpretation": {
+        "coding": [
+          {
+            "system": "http://hl7.org/fhir/v2/0078",
+            "code": "S"
+          }
+        ]
+      }
+    }
+  ],
+  "identifier": [
+    {
+      "system": "http://acme.com/lab/reports",
+      "value": "5234342"
+    }
+  ],
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://loinc.org",
+        "code": "18769-0",
+        "display": "Microbial susceptibility tests Set"
+      }
+    ]
+  },
+  "subject": {
+    "reference": "Patient/5"
+  },
+  "effectiveDateTime": "2005-11-07T21:44:17Z",
+  "issued": "2005-11-07T23:38:01Z",
+  "performer": [
+    {
+      "actor": {
+        "reference": "Organization/1832473e-2fe0-452d-abe9-3cdb9879522f",
+        "display": "Acme Laboratory, Inc"
+      }
+    }
+  ],
+  "specimen": [
+    {
+      "display": "URINE, CLEAN CATCH/MIDSTREAM"
+    }
+  ],
+  "result": [
+    {
+      "reference": "#o1"
+    },
+    {
+      "reference": "#o2"
+    },
+    {
+      "reference": "#o3"
+    },
+    {
+      "reference": "#o4"
+    },
+    {
+      "reference": "#o5"
+    },
+    {
+      "reference": "#o6"
+    },
+    {
+      "reference": "#o7"
+    },
+    {
+      "reference": "#o8"
+    },
+    {
+      "reference": "#o9"
+    },
+    {
+      "reference": "#o10"
+    },
+    {
+      "reference": "#o11"
+    },
+    {
+      "reference": "#o12"
+    },
+    {
+      "reference": "#o13"
+    },
+    {
+      "reference": "#o14"
+    },
+    {
+      "reference": "#o15"
+    },
+    {
+      "reference": "#o16"
+    },
+    {
+      "reference": "#o17"
+    },
+    {
+      "reference": "#o18"
+    }
+  ]
+}
