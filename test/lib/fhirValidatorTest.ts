@@ -12,6 +12,7 @@ import stu3DocumentReferenceExamples from './resources/stu3/documentreference-ex
 import stu3OrganizationExamples from './resources/stu3/organization-examples';
 import stu3PatientExamples from './resources/stu3/patient-examples';
 import stu3PractitionerExamples from './resources/stu3/practitioner-examples';
+import stu3PractitionerRoleExamples from './resources/stu3/practitionerrole-examples';
 import stu3QuestionnaireExamples from './resources/stu3/questionnaire-examples';
 import stu3QuestionnaireResponseExamples from './resources/stu3/questionnaireresponse-examples';
 import stu3ObservationExamples from './resources/stu3/observation-examples';
@@ -22,7 +23,8 @@ import r4DocumentReferenceExamples from './resources/r4/documentreference-exampl
 import r4EncounterExamples from './resources/r4/encounter-examples';
 import r4ObservationExamples from './resources/r4/observation-examples';
 import r4PatientExamples from './resources/r4/patient-examples';
-import r4PractitionnerExamples from './resources/r4/practitioner-examples';
+import r4PractitionerExamples from './resources/r4/practitioner-examples';
+import r4PractitionerRoleExamples from './resources/r4/practitionerrole-examples';
 import r4QuestionnaireExamples from './resources/r4/questionnaire-examples';
 import r4QuestionnaireResponseExamples from './resources/r4/questionnaireresponse-examples';
 import r4DiagnosticReportExamples from './resources/r4/diagnosticreport-examples';
@@ -109,6 +111,13 @@ describe('fhir validator', () => {
 
     it('successfully calls getValidator for an Practitioner', done => {
       fhirValidator.getValidator('Practitioner').then(res => {
+        expect(typeof res).to.equal('function');
+        done();
+      });
+    });
+
+    it('successfully calls getValidator for an PractitionerRole', done => {
+      fhirValidator.getValidator('PractitionerRole').then(res => {
         expect(typeof res).to.equal('function');
         done();
       });
@@ -240,6 +249,7 @@ describe('fhir validator', () => {
       Organization: stu3OrganizationExamples,
       Patient: stu3PatientExamples,
       Practitioner: stu3PractitionerExamples,
+      PractitionerRole: stu3PractitionerRoleExamples,
       Questionnaire: stu3QuestionnaireExamples,
       QuestionnaireResponse: stu3QuestionnaireResponseExamples,
       Observation: stu3ObservationExamples,
@@ -486,7 +496,8 @@ describe('fhir validator', () => {
       DocumentReference: r4DocumentReferenceExamples,
       Encounter: r4EncounterExamples,
       Observation: r4ObservationExamples,
-      Practitioner: r4PractitionnerExamples,
+      Practitioner: r4PractitionerExamples,
+      PractitionerRole: r4PractitionerRoleExamples,
       DiagnosticReport: r4DiagnosticReportExamples,
       Questionnaire: r4QuestionnaireExamples,
       QuestionnaireResponse: r4QuestionnaireResponseExamples,
