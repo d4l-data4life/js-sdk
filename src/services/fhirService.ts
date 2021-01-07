@@ -1,10 +1,7 @@
 /* eslint-disable no-param-reassign, no-await-in-loop */
-import {
-  convertBlobToArrayBufferView,
-  // @ts-ignore
-} from 'js-crypto';
-
+import { convertBlobToArrayBufferView } from 'js-crypto';
 import cloneDeep from 'lodash/cloneDeep';
+import find from 'lodash/find';
 import flatMap from 'lodash/flatMap';
 import includes from 'lodash/includes';
 import isEmpty from 'lodash/isEmpty';
@@ -15,80 +12,35 @@ import mergeWith from 'lodash/mergeWith';
 import omit from 'lodash/omit';
 import reject from 'lodash/reject';
 import some from 'lodash/some';
-import find from 'lodash/find';
-
-import Attachment from '../lib/models/fhir/Attachment';
+import {
+  FULL,
+  getAttachmentIdToDownload,
+  getContentHash,
+  getEncryptedFilesByAttachmentIndex,
+  getFileContentsAsBuffer,
+  getIdentifierValue,
+  hasAttachments,
+  separateOldAndNewAttachments,
+  shrinkImageHeightIfNeeded,
+  verifyAttachmentPayload,
+} from '../lib/attachmentUtils';
+import BlobFile from '../lib/BlobFile';
+import InvalidAttachmentPayloadError from '../lib/errors/InvalidAttachmentPayloadError';
 import ValidationError from '../lib/errors/ValidationError';
 import fhirValidator from '../lib/fhirValidator';
-import DocumentReference, { DOCUMENT_REFERENCE } from '../lib/models/fhir/DocumentReference';
-import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import {
   isAllowedByteSequence,
   isAllowedFileType,
   isResizableImageByteSequence,
   isWithinSizeLimit,
 } from '../lib/fileValidator';
-
-import BlobFile from '../lib/BlobFile';
-import {
-  shrinkImageHeightIfNeeded,
-  getContentHash,
-  getEncryptedFilesByAttachmentIndex,
-  getFileContentsAsBuffer,
-  separateOldAndNewAttachments,
-  FULL,
-  getIdentifierValue,
-  verifyAttachmentPayload,
-  hasAttachments,
-  getAttachmentIdToDownload,
-} from '../lib/attachmentUtils';
+import Attachment from '../lib/models/fhir/Attachment';
+import { DOCUMENT_REFERENCE } from '../lib/models/fhir/DocumentReference';
+import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
-import recordService, { DecryptedRecord } from './recordService';
-import InvalidAttachmentPayloadError from '../lib/errors/InvalidAttachmentPayloadError';
-
-// The exposed search params
-export interface IParams {
-  limit?: number;
-  offset?: number;
-  start_date?: string;
-  end_date?: string;
-  tags?: string[];
-  exclude_tags?: string[];
-  exclude_flags?: string[];
-  annotations?: string[];
-  resourceType?: string;
-  partner?: string;
-}
-
-/** The record we expose to users should not expose any sensitive information.
- * It implies dataKey, attachmentKey, internal tags used to distinguish fhir resource types,
- * client ids. It should only expose annotations created by the users of SDK.
- * Annotations are treated internally as custom tags by the SDK which can be used for filtering
- * by the users of SDK
- */
-export interface Record {
-  id?: string;
-  fhirResource: fhir.DomainResource;
-  annotations?: string[];
-  customCreationDate?: Date;
-  updatedDate?: Date;
-  partner?: string;
-}
-
-interface AppData {
-  id?: string;
-  data: any;
-  annotations?: string[];
-  customCreationDate?: Date;
-  updatedDate?: Date;
-  partner?: string;
-}
-
-export interface FetchResponse {
-  totalCount: number;
-  records: Record[] | AppData[];
-}
+import recordService from './recordService';
+import { DecryptedFhirRecord, FetchResponse, Params, Record } from './types';
 
 type IAttachment = {
   isImage?: boolean;
@@ -164,28 +116,30 @@ export const getCleanAttachmentsFromResource = (resource: any): any[] => {
 };
 
 export const setAttachmentsToResource = (
-  // @ts-ignore
-  resourceWithoutAttachments: Fhir.DomainResource,
+  resourceWithoutAttachments: fhir.DomainResource,
   attachments: Attachment[]
 ): fhir.DomainResource => {
   const resource = cloneDeep(resourceWithoutAttachments);
   const { resourceType } = resource;
 
   if (resourceType === 'DocumentReference') {
-    resource.content = attachments.map(attachment => ({ attachment }));
+    (resource as fhir.DocumentReference).content = attachments.map(attachment => ({ attachment }));
   }
-  if (resourceType === 'Patient' || resourceType === 'Practitioner') {
-    resource.photo = [...attachments];
+  if (resourceType === 'Patient') {
+    (resource as fhir.Patient).photo = [...attachments];
+  }
+  if (resourceType === 'Practitioner') {
+    (resource as fhir.Practitioner).photo = [...attachments];
   }
   if (resourceType === 'Medication') {
-    resource.image = [...attachments];
+    (resource as fhir.Medication).image = [...attachments];
   }
   if (resourceType === 'DiagnosticReport') {
-    resource.presentedForm = [...attachments];
+    (resource as fhir.DiagnosticReport).presentedForm = [...attachments];
   }
 
   if (resourceType === 'Observation') {
-    const components = resource.component;
+    const components = (resource as fhir.Observation).component;
     if (components && components.length) {
       components.forEach(component => {
         if (!isEmpty(component.valueAttachment)) {
@@ -200,7 +154,7 @@ export const setAttachmentsToResource = (
     }
   }
   if (resourceType === 'Questionnaire') {
-    const items = resource.item;
+    const items = (resource as fhir.Questionnaire).item;
     if (items && items.length) {
       items.forEach(item => {
         if (!isEmpty(item.initialAttachment)) {
@@ -223,7 +177,7 @@ export const setAttachmentsToResource = (
    *
    * */
   if (resourceType === 'QuestionnaireResponse') {
-    const items = resource.item;
+    const items = (resource as fhir.QuestionnaireResponse).item;
     if (items && items.length) {
       items.forEach(item => {
         const answers = item.answer;
@@ -331,7 +285,6 @@ export const attachBlobs = ({
   return Promise.all(uploadPromises).then(uploadInformation => {
     // @ts-ignore
     const identifier = resource.identifier || [];
-    // eslint-disable-next-line max-nested-callbacks
     newAttachments.forEach((attachment, attachmentIndex) => {
       // @ts-ignore
       attachment.id = uploadInformation[attachmentIndex][0].document_id;
@@ -360,7 +313,7 @@ export const attachBlobs = ({
   });
 };
 
-export const prepareSearchParameters = (params: IParams) => {
+export const prepareSearchParameters = (params: Params) => {
   const parameters = { ...params };
   if (!Object.keys(parameters).every(key => includes(SUPPORTED_PARAMS, key))) {
     throw new Error(
@@ -398,7 +351,7 @@ export const prepareSearchParameters = (params: IParams) => {
   return parameters;
 };
 
-const convertToExposedRecord = (decryptedRecord: DecryptedRecord) => {
+const convertToExposedRecord = (decryptedRecord: DecryptedFhirRecord) => {
   const exposedRecord = {
     annotations: taggingUtils.getAnnotations(decryptedRecord.tags),
     customCreationDate: decryptedRecord.customCreationDate,
@@ -504,7 +457,7 @@ const fhirService = {
   async updateResource(
     ownerId: string,
     fhirResource: fhir.DomainResource,
-    date,
+    date: Date,
     annotations?: string[]
   ): Promise<Record> {
     let validationResult;
@@ -560,7 +513,7 @@ const fhirService = {
   updateAttachments(ownerId: string, resource: fhir.DomainResource, annotations: string[]) {
     return recordService
       .downloadRecord(ownerId, resource.id)
-      .then((previousRecord: DecryptedRecord) => {
+      .then((previousRecord: DecryptedFhirRecord) => {
         const previousResource = previousRecord.fhirResource;
         const previousAttachments = getCleanAttachmentsFromResource(previousResource);
 
@@ -636,7 +589,7 @@ const fhirService = {
     return recordService.deleteRecord(ownerId, resourceId);
   },
 
-  countResources(ownerId: string, params: IParams = {}): Promise<number> {
+  countResources(ownerId: string, params: Params = {}): Promise<number> {
     const parameters = prepareSearchParameters({
       ...params,
       exclude_flags: [taggingUtils.generateAppDataFlagTag()],
@@ -644,7 +597,7 @@ const fhirService = {
     return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
   },
 
-  fetchResources(ownerId: string, params: IParams = {}): Promise<FetchResponse> {
+  fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
     const parameters = prepareSearchParameters({
       ...params,
       exclude_flags: [taggingUtils.generateAppDataFlagTag()],
@@ -666,7 +619,7 @@ const fhirService = {
 
     return recordService
       .downloadRecord(ownerId, resourceId)
-      .then((rec: DecryptedRecord) => {
+      .then((rec: DecryptedFhirRecord) => {
         record = { ...rec };
 
         resource = record.fhirResource;

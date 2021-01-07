@@ -27,7 +27,7 @@
   "dependencies": {
     "@d4l/js-fhir-validator": "^1.0.2",
     "@rollup/plugin-json": "^4.0.2",
-    "@types/fhir": "^0.0.30",
+    "@types/fhir": "3.0.2",
     "@types/lodash": "^4.14.118",
     "@types/node": "^12.7.4",
     "babel-polyfill": "^6.26.0",

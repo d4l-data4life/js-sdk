@@ -64,7 +64,7 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'warn',
     '@typescript-eslint/ban-ts-ignore': 'off', // it's not like we WANT ts-ignore
     '@typescript-eslint/explicit-function-return-type': 'off',
-    '@typescript-eslint/no-unused-vars': 'off', // so types do not trigger
+    '@typescript-eslint/no-unused-vars': 'warn', // so types do not trigger
     '@typescript-eslint/camelcase': 'off', // many API responses are snake_case
     'prettier/prettier': 'error',
   },

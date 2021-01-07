@@ -8,8 +8,8 @@ import {
   symDecrypt,
   // @ts-ignore
 } from 'js-crypto';
+import { EncryptedDataKey, Key } from './types';
 import userService from './userService';
-import { EncryptedDataKey, Key } from './recordService';
 
 type EncryptedKeyOrEncryptedKeyPromise = EncryptedDataKey | Promise<EncryptedDataKey>;
 
