@@ -5,6 +5,7 @@ import isObjectLike from 'lodash/isObjectLike';
 import isArray from 'lodash/isArray';
 import isUndefined from 'lodash/isUndefined';
 import omit from 'lodash/omit';
+import some from 'lodash/some';
 
 import ValidationError from './errors/ValidationError';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4, SUPPORTED_RESOURCES } from './models/fhir/helper';
@@ -62,6 +63,13 @@ const fhirValidator = {
 
           case 'Practitioner':
             returnPromise = import('@d4l/js-fhir-validator/r4/js/Practitioner').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+
+          case 'PractitionerRole':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/PractitionerRole').then(bundle => {
               this.validator[version][resourceType] = bundle.default;
               return this.validator[version][resourceType];
             });
@@ -133,6 +141,15 @@ const fhirValidator = {
               this.validator[version][resourceType] = bundle.default;
               return this.validator[version][resourceType];
             });
+            break;
+
+          case 'PractitionerRole':
+            returnPromise = import('@d4l/js-fhir-validator/stu3/js/PractitionerRole').then(
+              bundle => {
+                this.validator[version][resourceType] = bundle.default;
+                return this.validator[version][resourceType];
+              }
+            );
             break;
 
           case 'Observation':
@@ -212,8 +229,14 @@ const fhirValidator = {
       );
     }
 
-    const validator = await this.getValidator(resourceType);
+    if (some(resource.contained, 'contained')) {
+      throw new ValidationError(
+        'Resource cannot contain resources that themselves contain another set of resources.'
+      );
+    }
     const containedResources = cloneDeep(resource.contained);
+
+    const validator = await this.getValidator(resourceType);
     let resourceToValidate = resource;
     if (containedResources && containedResources.length) {
       resourceToValidate = omit(resource, ['contained']);
