@@ -123,8 +123,8 @@ const userService = {
       return Promise.reject(new SetUpError(NOT_SETUP));
     }
 
-    let commonKey;
-    let commonKeyId;
+    let commonKey: any;
+    let commonKeyId: string;
 
     // Fetch user info. userId == null is a valid value. It seems to fetch
     // the users data.
@@ -242,8 +242,8 @@ const userService = {
    */
   grantPermission(appId: string, annotations: string[] = []): Promise<void> {
     const scope = ['rec:r', 'rec:w', 'attachment:r', 'attachment:w', 'user:r', 'user:w', 'user:q'];
-    let ownerId;
-    let granteeId;
+    let ownerId: string;
+    let granteeId: string;
 
     return Promise.all([userRoutes.getCAPs(appId), this.getUser()])
       .then(([CAPs, user]) => {

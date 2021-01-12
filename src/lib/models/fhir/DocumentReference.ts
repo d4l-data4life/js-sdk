@@ -53,7 +53,7 @@ export default class DocumentReference implements fhir.DocumentReference {
 
   public indexed: fhir.instant;
 
-  public status: fhir.code;
+  public status: fhir.DocumentReferenceStatus;
 
   public type: fhir.CodeableConcept;
 

@@ -4,7 +4,7 @@ const stu3FhirResources = {
   documentReference: {
     id: 'record_id',
     resourceType: 'DocumentReference',
-    status: 'current',
+    status: 'current' as fhir.DocumentReferenceStatus,
     type: {
       text: 'Document',
     },

@@ -1,30 +1,8 @@
 import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
-import recordService from './recordService';
 import { prepareSearchParameters } from './fhirService';
-
-export interface DecryptedAppData {
-  id?: string;
-  data: any;
-  tags?: string[];
-  customCreationDate?: Date;
-  updatedDate?: Date;
-  commonKeyId?: string;
-}
-
-export interface Record {
-  id?: string;
-  fhirResource: fhir.DomainResource;
-  annotations?: string[];
-  customCreationDate?: Date;
-  updatedDate?: Date;
-  partner?: string;
-}
-
-export interface FetchResponse {
-  totalCount: number;
-  records: Record[];
-}
+import recordService from './recordService';
+import { AppData, DecryptedAppData, FetchResponse, Params } from './types';
 
 const convertToExposedAppData = (decryptedAppData: DecryptedAppData) => ({
   annotations: taggingUtils.getAnnotations(decryptedAppData.tags),
@@ -106,8 +84,9 @@ const appDataService = {
     return recordService.deleteRecord(ownerId, resourceId);
   },
 
-  fetchAllAppData(ownerId: string): Promise<FetchResponse> {
+  fetchAllAppData(ownerId: string, params: Params = {}): Promise<FetchResponse<AppData>> {
     const parameters = prepareSearchParameters({
+      ...params,
       tags: [taggingUtils.generateAppDataFlagTag()],
     });
 

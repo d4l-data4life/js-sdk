@@ -4,55 +4,22 @@ import {
   symDecryptString,
   symEncryptString,
 } from 'js-crypto';
-
 import isError from 'lodash/isError';
 import reject from 'lodash/reject';
-
+import { populateCommonKeyId } from '../lib/cryptoUtils';
 import dateUtils from '../lib/dateUtils';
 import fhirValidator from '../lib/fhirValidator';
 import taggingUtils from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
+import { DecryptedAppData, DecryptedFhirRecord, Key, QueryParams } from './types';
 import userService from './userService';
-import { populateCommonKeyId } from '../lib/cryptoUtils';
-import { DecryptedAppData } from './appDataService';
-
-export interface EncryptedDataKey {
-  commonKeyId: string;
-  encryptedKey: string;
-}
-
-export interface Key {
-  t: string;
-  v: number;
-  sym: string;
-}
-
-// todo: rename this to DecryptedFhirRecord?
-export interface DecryptedRecord {
-  id?: string;
-  fhirResource?: fhir.DomainResource;
-  tags?: string[];
-  attachmentKey?: EncryptedDataKey;
-  customCreationDate?: Date;
-  updatedDate?: Date;
-  commonKeyId?: string;
-}
-
-export interface QueryParams {
-  limit?: number;
-  offset?: number;
-  start_date?: string;
-  end_date?: string;
-  tags?: string[];
-  exclude_tags?: string[];
-}
 
 const recordService = {
   updateRecord(
     ownerId: string,
-    record: DecryptedRecord | DecryptedAppData
-  ): Promise<DecryptedRecord | DecryptedAppData> {
+    record: DecryptedFhirRecord | DecryptedAppData
+  ): Promise<DecryptedFhirRecord | DecryptedAppData> {
     const updateRequest = (userId, params) =>
       documentRoutes.updateRecord(userId, record.id, params);
 
@@ -89,7 +56,7 @@ const recordService = {
           ...record,
           fhirResource: Object.assign(
             downloadedRecord.fhirResource,
-            (record as DecryptedRecord).fhirResource
+            (record as DecryptedFhirRecord).fhirResource
           ),
           tags,
         },
@@ -98,7 +65,7 @@ const recordService = {
     });
   },
 
-  createRecord(ownerId: string, record: DecryptedRecord): Promise<DecryptedRecord> {
+  createRecord(ownerId: string, record: DecryptedFhirRecord): Promise<DecryptedFhirRecord> {
     return this.uploadFhirRecord(
       ownerId,
       {
@@ -112,9 +79,9 @@ const recordService = {
 
   uploadFhirRecord(
     ownerId: string,
-    record: DecryptedRecord,
-    uploadRequest: Promise<DecryptedRecord>
-  ): Promise<DecryptedRecord> {
+    record: DecryptedFhirRecord,
+    uploadRequest: Promise<DecryptedFhirRecord>
+  ): Promise<DecryptedFhirRecord> {
     return fhirValidator.validate(record.fhirResource).then(() =>
       this.uploadRecord(
         ownerId,
@@ -131,20 +98,20 @@ const recordService = {
 
   async uploadRecord(
     ownerId: string,
-    record: DecryptedRecord | DecryptedAppData,
-    uploadRequest: (userId: string, data: object) => Promise<DecryptedRecord | DecryptedAppData>
+    record: DecryptedFhirRecord | DecryptedAppData,
+    uploadRequest: (userId: string, data: object) => Promise<DecryptedFhirRecord | DecryptedAppData>
   ) {
     const owner = await userService.getUser(ownerId);
     const cryptoService = await createCryptoService(ownerId);
     const bodyDataToEncrypt =
-      (record as DecryptedRecord).fhirResource || (record as DecryptedAppData).data;
+      (record as DecryptedFhirRecord).fhirResource || (record as DecryptedAppData).data;
     const [cipherData, dataKey] = await cryptoService.encryptObject(bodyDataToEncrypt);
     // update keys step makes certain data and attachment keys
     // are encrypted with the latest common key
     // in particular that they are encrypted with the _same_ common key
     // this part is very important as we only store a single common key ID per record
-    const keys = (record as DecryptedRecord).attachmentKey
-      ? [dataKey, (record as DecryptedRecord).attachmentKey]
+    const keys = (record as DecryptedFhirRecord).attachmentKey
+      ? [dataKey, (record as DecryptedFhirRecord).attachmentKey]
       : [dataKey];
     const [syncedDataKey, syncedAttachmentKey] = await cryptoService.updateKeys(...keys);
     const encryptedTags = await Promise.all(
@@ -180,11 +147,11 @@ const recordService = {
 
     return {
       ...returnObject,
-      fhirResource: (record as DecryptedRecord).fhirResource,
+      fhirResource: (record as DecryptedFhirRecord).fhirResource,
     };
   },
 
-  downloadRecord(ownerId: string, recordId: string): Promise<DecryptedRecord> {
+  downloadRecord(ownerId: string, recordId: string): Promise<DecryptedFhirRecord> {
     return documentRoutes
       .downloadRecord(ownerId, recordId)
       .then(result =>
@@ -247,7 +214,7 @@ const recordService = {
     return documentRoutes.deleteRecord(ownerId, recordId);
   },
 
-  decryptResourceAndTags(record: any, tagKey: Key): Promise<DecryptedRecord> {
+  decryptResourceAndTags(record: any, tagKey: Key): Promise<DecryptedFhirRecord> {
     const tagsPromise = Promise.all<string>(
       record.encrypted_tags.map(tag => symDecryptString(tagKey, tag))
     );

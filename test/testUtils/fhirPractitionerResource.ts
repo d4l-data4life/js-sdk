@@ -25,7 +25,7 @@ export default {
   ],
   address: [
     {
-      use: 'home',
+      use: 'home' as fhir.AdressUse,
       line: ['534 Erewhon St'],
       city: 'PleasantVille',
       state: 'Vic',
