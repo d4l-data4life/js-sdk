@@ -247,15 +247,14 @@ const addPreviewsToAttachments = async vanillaAttachments => {
 const uploadAttachments = (ownerId, encryptedFiles) =>
   Promise.all(encryptedFiles.map(file => documentRoutes.uploadDocument(ownerId, file)));
 
-const cleanResource = (fhirResource: fhir.DomainResource) => {
+export const cleanResource = (fhirResource: fhir.DomainResource) => {
   if (fhirResource.resourceType === DOCUMENT_REFERENCE) {
     // @ts-ignore
     if (fhirResource.content) {
+      const clonedResource = cloneDeep(fhirResource);
       // @ts-ignore
-      fhirResource.content = fhirResource.content.map(value => {
-        delete value.attachment.file;
-        return value;
-      });
+      clonedResource.content = fhirResource.content.map(value => omit(value, 'attachment.file'));
+      return clonedResource;
     }
   }
 
@@ -379,7 +378,7 @@ const fhirService = {
   ): Promise<Record> {
     let validationResult;
     try {
-      validationResult = await fhirValidator.validate(cleanResource(cloneDeep(fhirResource)));
+      validationResult = await fhirValidator.validate(cleanResource(fhirResource));
     } catch (e) {
       return Promise.reject(new ValidationError(e));
     }
