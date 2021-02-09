@@ -10,6 +10,7 @@ import fhirService, {
   prepareSearchParameters,
   setAttachmentsToResource,
   getCleanAttachmentsFromResource,
+  cleanResource,
 } from '../../src/services/fhirService';
 import testVariables from '../testUtils/testVariables';
 import fhirValidator from '../../src/lib/fhirValidator';
@@ -17,11 +18,71 @@ import stu3FhirResources from '../testUtils/stu3FhirResources';
 import recordService from '../../src/services/recordService';
 import { D4LSDK } from '../../src/d4l';
 import documentRoutes from '../../src/routes/documentRoutes';
+import DocumentReference, { DOCUMENT_REFERENCE } from '../../src/lib/models/fhir/DocumentReference';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
 
 chai.use(sinonChai);
 
 const { expect } = chai;
+
+describe('cleanResource', () => {
+  it('works on a mutable documentReference', () => {
+    const resource = {
+      resourceType: DOCUMENT_REFERENCE,
+      content: [
+        {
+          attachment: {
+            file: 'Pretend this is a file to be deleted',
+            anotherProperty: 'I should survive this operation',
+          },
+        },
+      ],
+    };
+    const cleanedResource = cleanResource(resource);
+    // @ts-ignore
+    expect(cleanedResource.content[0].attachment.file).to.be.undefined;
+    // @ts-ignore
+    expect(cleanedResource.content[0].attachment.anotherProperty).to.equal(
+      'I should survive this operation'
+    );
+    expect(resource.content[0].attachment.file).not.to.be.undefined;
+    expect(resource.content[0].attachment.anotherProperty).to.equal(
+      'I should survive this operation'
+    );
+  });
+
+  it('works on an immutable documentReference', () => {
+    const resource = {
+      resourceType: DOCUMENT_REFERENCE,
+    };
+
+    Object.defineProperty(resource, 'content', {
+      value: [
+        {
+          attachment: {
+            file: 'Pretend this is a file to be deleted',
+            anotherProperty: 'I should survive this operation',
+          },
+        },
+      ],
+      configurable: false,
+      writable: false,
+    });
+    const cleanedResource = cleanResource(resource);
+    // @ts-ignore
+    expect(cleanedResource.content[0].attachment.file).to.be.undefined;
+    // @ts-ignore
+    expect(cleanedResource.content[0].attachment.anotherProperty).to.equal(
+      'I should survive this operation'
+    );
+    // @ts-ignore
+    expect(resource.content[0].attachment.file).not.to.be.undefined;
+    // @ts-ignore
+    expect(resource.content[0].attachment.anotherProperty).to.equal(
+      'I should survive this operation'
+    );
+  });
+});
 
 describe('prepareSearchParameters', () => {
   it('correctly prepares simple parameters', () => {
