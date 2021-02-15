@@ -23,6 +23,10 @@ export default class DocumentReference implements fhir.DocumentReference {
   // this method can be utilised to use all the helper methods provided in class.
   // here we copy the properties from fhir object which are supported in our class.
   public static fromFHIRObject(FHIRObject: fhir.DocumentReference): DocumentReference {
+    console.warn(
+      'DocumentReference.fromFHIRObject: This method will be removed in a future version of the SDK.'
+    );
+
     if (!FHIRObject) {
       throw new Error(
         'DocumentReference.fromFHIRObject requires 1 argument of type fhir DocumentReference.'
@@ -164,7 +168,7 @@ export default class DocumentReference implements fhir.DocumentReference {
   // author can be Practitioner or Organisation
   // TODO handle organisation
   public getAuthor() {
-    const practitionerFhir = getResource(this.author[0], this.contained);
+    const practitionerFhir = this.author?.[0] ? getResource(this.author[0], this.contained) : null;
     return practitionerFhir
       ? (Practitioner.fromFHIRObject(practitionerFhir) as fhir.Practitioner)
       : undefined;

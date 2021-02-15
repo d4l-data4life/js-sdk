@@ -123,6 +123,17 @@ describe('models/FHIR', () => {
       );
       expect(documentReference.getType().text).to.equal('Document');
     });
+
+    it('should return undefined for an unset author, practitioner, specialty when not in original resource', () => {
+      const convertedDocument = DocumentReference.fromFHIRObject(
+        // @ts-ignore
+        stu3FhirResources.authorlessDocumentReference
+      );
+      expect(convertedDocument.getAuthor()).to.be.undefined;
+      expect(convertedDocument.getPractitioner()).to.be.undefined;
+      expect(convertedDocument.getPracticeSpecialty()).to.be.undefined;
+    });
+
     it('should throw error when fromFHIRObject is called with no arguments', done => {
       try {
         // @ts-ignore

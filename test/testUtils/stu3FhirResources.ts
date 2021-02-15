@@ -22,6 +22,47 @@ const stu3FhirResources = {
       },
     ],
   },
+  authorlessDocumentReference: {
+    resourceType: 'DocumentReference',
+    id: '19b45d90-c965-4021-aa15-3dd13c9224e3',
+    status: 'current',
+    content: [
+      {
+        attachment: {
+          id: '8fa3cf2f-2d98-4f0d-a769-1c1ad5107e5d',
+          title: 'v53',
+          contentType: 'image/png',
+          size: 25295,
+          data: 'doesnotreallymaatter',
+          file: {},
+          hash: 'AeuJipYrgLenRjhOo64L6JnyY9E=',
+        },
+      },
+    ],
+    date: '2020-11-04T11:00:00.000Z',
+    type: {
+      coding: [
+        {
+          display: 'Befund',
+        },
+      ],
+    },
+    category: [
+      {
+        coding: [
+          {
+            display: 'Befund',
+          },
+        ],
+      },
+    ],
+    identifier: [
+      {
+        value:
+          'd4l_f_p_t#8fa3cf2f-2d98-4f0d-a769-1c1ad5107e5d#8fa3cf2f-2d98-4f0d-a769-1c1ad5107e5d#8fa3cf2f-2d98-4f0d-a769-1c1ad5107e5d',
+      },
+    ],
+  },
   carePlan: {
     resourceType: 'CarePlan',
     contained: [
