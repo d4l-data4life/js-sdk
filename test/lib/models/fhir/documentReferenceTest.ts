@@ -129,9 +129,11 @@ describe('models/FHIR', () => {
         // @ts-ignore
         stu3FhirResources.authorlessDocumentReference
       );
+      /* eslint-disable no-unused-expressions */
       expect(convertedDocument.getAuthor()).to.be.undefined;
       expect(convertedDocument.getPractitioner()).to.be.undefined;
       expect(convertedDocument.getPracticeSpecialty()).to.be.undefined;
+      /* eslint-enable no-unused-expressions */
     });
 
     it('should throw error when fromFHIRObject is called with no arguments', done => {
