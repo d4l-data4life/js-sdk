@@ -33,6 +33,8 @@ export const SUPPORTED_RESOURCES = {
     'DocumentReference',
     'DiagnosticReport',
     'Patient',
+    'Medication',
+    'MedicationStatement',
     'Practitioner',
     'PractitionerRole',
     'Observation',
