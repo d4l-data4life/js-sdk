@@ -61,6 +61,22 @@ const fhirValidator = {
             );
             break;
 
+          case 'Medication':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/Medication').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+
+          case 'MedicationStatement':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/MedicationStatement').then(
+              bundle => {
+                this.validator[version][resourceType] = bundle.default;
+                return this.validator[version][resourceType];
+              }
+            );
+            break;
+
           case 'Practitioner':
             returnPromise = import('@d4l/js-fhir-validator/r4/js/Practitioner').then(bundle => {
               this.validator[version][resourceType] = bundle.default;

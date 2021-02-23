@@ -29,6 +29,8 @@ import r4QuestionnaireExamples from './resources/r4/questionnaire-examples';
 import r4QuestionnaireResponseExamples from './resources/r4/questionnaireresponse-examples';
 import r4DiagnosticReportExamples from './resources/r4/diagnosticreport-examples';
 import r4ResearchSubjectExamples from './resources/r4/researchsubject-examples';
+import r4MedicationExamples from './resources/r4/medication-examples';
+import r4MedicationStatementExamples from './resources/r4/medicationstatement-examples';
 
 import fhirService from '../../src/services/fhirService';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
@@ -503,6 +505,8 @@ describe('fhir validator', () => {
       QuestionnaireResponse: r4QuestionnaireResponseExamples,
       Patient: r4PatientExamples,
       ResearchSubject: r4ResearchSubjectExamples,
+      Medication: r4MedicationExamples,
+      MedicationStatement: r4MedicationStatementExamples,
     };
 
     // eslint-disable-next-line no-restricted-syntax
