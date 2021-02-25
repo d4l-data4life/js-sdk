@@ -86,7 +86,7 @@ describe('cleanResource', () => {
 
 describe('prepareSearchParameters', () => {
   it('correctly prepares simple parameters', () => {
-    const preparedParams = prepareSearchParameters({ limit: 4, offset: 3 });
+    const preparedParams = prepareSearchParameters({ params: { limit: 4, offset: 3 } });
     expect(preparedParams).to.deep.equal({
       limit: 4,
       offset: 3,
@@ -96,8 +96,10 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares simple parameters with a tag', () => {
     const preparedParams = prepareSearchParameters({
-      limit: 10,
-      tags: ['superhero-origin-story'],
+      params: {
+        limit: 10,
+        tags: ['superhero-origin-story'],
+      },
     });
     expect(preparedParams).to.deep.equal({
       limit: 10,
@@ -107,9 +109,11 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares simple parameters with a tag and annotation', () => {
     const preparedParams = prepareSearchParameters({
-      limit: 10,
-      tags: ['superhero-origin-story'],
-      annotations: ['an annoation'],
+      params: {
+        limit: 10,
+        tags: ['superhero-origin-story'],
+        annotations: ['an annoation'],
+      },
     });
     expect(preparedParams).to.deep.equal({
       limit: 10,
@@ -119,9 +123,11 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with a tag and a resourceType', () => {
     const preparedParams = prepareSearchParameters({
-      limit: 10,
-      tags: ['superhero-origin-story'],
-      resourceType: 'Patient',
+      params: {
+        limit: 10,
+        tags: ['superhero-origin-story'],
+        resourceType: 'Patient',
+      },
     });
     expect(preparedParams).to.deep.equal({
       limit: 10,
@@ -131,9 +137,11 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with a tag and a partner', () => {
     const preparedParams = prepareSearchParameters({
-      offset: 20,
-      tags: ['superhero-origin-story'],
-      partner: 'S.H.I.E.L.D.',
+      params: {
+        offset: 20,
+        tags: ['superhero-origin-story'],
+        partner: 'S.H.I.E.L.D.',
+      },
     });
     expect(preparedParams).to.deep.equal({
       offset: 20,
@@ -143,8 +151,10 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with exclude_tags', () => {
     const preparedParams = prepareSearchParameters({
-      tags: ['superhero-origin-story'],
-      exclude_tags: ['superman'],
+      params: {
+        tags: ['superhero-origin-story'],
+        exclude_tags: ['superman'],
+      },
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story'],
@@ -154,8 +164,10 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with exclude_flags', () => {
     const preparedParams = prepareSearchParameters({
-      tags: ['superhero-origin-story'],
-      exclude_flags: [testVariables.appDataFlag],
+      params: {
+        tags: ['superhero-origin-story'],
+        exclude_flags: [testVariables.appDataFlag],
+      },
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story'],
@@ -165,12 +177,46 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with exclude_tags and exclude_flags', () => {
     const preparedParams = prepareSearchParameters({
-      tags: ['superhero-origin-story'],
-      exclude_tags: ['superman'],
-      exclude_flags: [testVariables.appDataFlag],
+      params: {
+        tags: ['superhero-origin-story'],
+        exclude_tags: ['superman'],
+        exclude_flags: [testVariables.appDataFlag],
+      },
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story'],
+      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+    });
+  });
+
+  it('correctly prepares a non-fallback fhir version tag', () => {
+    const preparedParams = prepareSearchParameters({
+      params: {
+        tags: ['superhero-origin-story'],
+        exclude_tags: ['superman'],
+        exclude_flags: [testVariables.appDataFlag],
+        fhirVersion: '3.0.1',
+      },
+      useFallbackParams: false,
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story', 'fhirversion=3%2e0%2e1'],
+      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+    });
+  });
+
+  it('correctly prepares a fallback fhir version tag', () => {
+    const preparedParams = prepareSearchParameters({
+      params: {
+        tags: ['superhero-origin-story'],
+        exclude_tags: ['superman'],
+        exclude_flags: [testVariables.appDataFlag],
+        fhirVersion: '4.0.1',
+      },
+      useFallbackParams: true,
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: ['superhero-origin-story', 'fhirversion=4.0.1'],
       exclude_tags: ['custom=superman', testVariables.appDataFlag],
     });
   });

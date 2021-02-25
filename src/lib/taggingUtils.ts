@@ -75,6 +75,10 @@ const taggingUtils = {
     );
   },
 
+  buildFallbackTag(key: string, value: string): string {
+    return `${key.toLowerCase()}${TAG_DELIMITER}${value.toLowerCase()}`;
+  },
+
   getTagValueFromList(tagList: string[], tagKey: string): string {
     const clientTag = tagList.find(el => el.startsWith(`${tagKey}${TAG_DELIMITER}`));
     return clientTag ? this.getValue(clientTag) : undefined;

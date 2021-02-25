@@ -54,6 +54,8 @@ const SUPPORTED_PARAMS = [
   'offset',
   'start_date',
   'end_date',
+  'fhirVersion',
+  'fallbackParams',
   'tags',
   'exclude_tags',
   'exclude_flags',
@@ -312,13 +314,21 @@ export const attachBlobs = ({
   });
 };
 
-export const prepareSearchParameters = (params: Params) => {
+export const prepareSearchParameters = ({
+  params,
+  useFallbackParams = false,
+}: {
+  params: Params;
+  useFallbackParams?: boolean;
+}) => {
   const parameters = { ...params };
   if (!Object.keys(parameters).every(key => includes(SUPPORTED_PARAMS, key))) {
     throw new Error(
       `Passed unsupported parameter. Supported parameters are ${SUPPORTED_PARAMS.join(', ')}`
     );
   }
+  delete parameters.fhirVersion;
+
   parameters.tags = parameters.tags || [];
   if (params.resourceType) {
     parameters.tags.push(taggingUtils.buildTag(tagKeys.resourceType, params.resourceType));
@@ -338,6 +348,15 @@ export const prepareSearchParameters = (params: Params) => {
   if (params.exclude_tags) {
     const excludeTags = taggingUtils.generateCustomTags(params.exclude_tags);
     parameters.exclude_tags = excludeTags;
+  }
+
+  if (params.fhirVersion) {
+    if (useFallbackParams) {
+      parameters.tags.push(taggingUtils.buildFallbackTag(tagKeys.fhirVersion, params.fhirVersion));
+    } else {
+      parameters.tags.push(taggingUtils.buildTag(tagKeys.fhirVersion, params.fhirVersion));
+    }
+    delete params.fhirVersion;
   }
 
   if (params.exclude_flags) {
@@ -588,24 +607,58 @@ const fhirService = {
     return recordService.deleteRecord(ownerId, resourceId);
   },
 
-  countResources(ownerId: string, params: Params = {}): Promise<number> {
-    const parameters = prepareSearchParameters({
-      ...params,
-      exclude_flags: [taggingUtils.generateAppDataFlagTag()],
+  getSearchCallWithFallbackIfNeeded(
+    ownerId: string,
+    countOnly: boolean,
+    params: Params = {}
+  ): Promise<any> {
+    const basicParameters = prepareSearchParameters({
+      params: {
+        ...params,
+        exclude_flags: [taggingUtils.generateAppDataFlagTag()],
+      },
+      useFallbackParams: false,
     });
-    return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
+
+    if (params?.fhirVersion) {
+      const fallbackParameters = prepareSearchParameters({
+        params: {
+          ...params,
+          exclude_flags: [taggingUtils.generateAppDataFlagTag()],
+        },
+        useFallbackParams: true,
+      });
+      return Promise.all([
+        recordService.searchRecords(ownerId, basicParameters, countOnly),
+        recordService.searchRecords(ownerId, fallbackParameters, countOnly),
+      ]);
+    }
+    return recordService.searchRecords(ownerId, basicParameters, countOnly);
   },
 
-  fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
-    const parameters = prepareSearchParameters({
-      ...params,
-      exclude_flags: [taggingUtils.generateAppDataFlagTag()],
-    });
-    return recordService.searchRecords(ownerId, parameters).then(result => ({
-      records: result.records.map(convertToExposedRecord),
-      totalCount: result.totalCount,
-    }));
+  countResources(ownerId: string, params: Params = {}): Promise<number> {
+    return this.getSearchCallWithFallbackIfNeeded(ownerId, true, params).then(result =>
+      result.totalCount
+        ? result.totalCount
+        : parseInt(result[0].totalCount, 10) + parseInt(result[1].totalCount, 10)
+    );
   },
+
+  /* eslint-disable indent */
+  fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
+    return this.getSearchCallWithFallbackIfNeeded(ownerId, false, params).then(response =>
+      response.records
+        ? {
+            records: response.records.map(convertToExposedRecord),
+            totalCount: response.totalCount,
+          }
+        : {
+            records: [...response[0].records, ...response[1].records].map(convertToExposedRecord),
+            totalCount: parseInt(response[0].totalCount, 10) + parseInt(response[1].totalCount, 10),
+          }
+    );
+  },
+  /* eslint-enable indent */
 
   downloadResource(
     ownerId: string,
