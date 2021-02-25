@@ -55,7 +55,6 @@ const SUPPORTED_PARAMS = [
   'start_date',
   'end_date',
   'fhirVersion',
-  'fallbackParams',
   'tags',
   'exclude_tags',
   'exclude_flags',
