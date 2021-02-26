@@ -355,7 +355,7 @@ export const prepareSearchParameters = ({
     } else {
       parameters.tags.push(taggingUtils.buildTag(tagKeys.fhirVersion, params.fhirVersion));
     }
-    delete params.fhirVersion;
+    delete parameters.fhirVersion;
   }
 
   if (params.exclude_flags) {
@@ -606,7 +606,9 @@ const fhirService = {
     return recordService.deleteRecord(ownerId, resourceId);
   },
 
-  getSearchCallWithFallbackIfNeeded(
+  /* earlier versions of the Android SDK did not escape the dots in fhir versions,
+    so we query for both of this encoding and the current standard one */
+  searchWithFallbackIfNeeded(
     ownerId: string,
     countOnly: boolean,
     params: Params = {}
@@ -636,7 +638,7 @@ const fhirService = {
   },
 
   countResources(ownerId: string, params: Params = {}): Promise<number> {
-    return this.getSearchCallWithFallbackIfNeeded(ownerId, true, params).then(result =>
+    return this.searchWithFallbackIfNeeded(ownerId, true, params).then(result =>
       result.totalCount
         ? result.totalCount
         : parseInt(result[0].totalCount, 10) + parseInt(result[1].totalCount, 10)
@@ -645,7 +647,7 @@ const fhirService = {
 
   /* eslint-disable indent */
   fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
-    return this.getSearchCallWithFallbackIfNeeded(ownerId, false, params).then(response =>
+    return this.searchWithFallbackIfNeeded(ownerId, false, params).then(response =>
       response.records
         ? {
             records: response.records.map(convertToExposedRecord),
