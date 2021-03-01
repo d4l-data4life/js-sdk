@@ -2,6 +2,7 @@
 export interface Params {
   limit?: number;
   offset?: number;
+  fhirVersion?: string;
   start_date?: string;
   end_date?: string;
   tags?: string[];
