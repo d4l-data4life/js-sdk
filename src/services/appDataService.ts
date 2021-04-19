@@ -2,7 +2,7 @@ import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import { prepareSearchParameters } from './fhirService';
 import recordService from './recordService';
-import { AppData, DecryptedAppData, FetchResponse, Params } from './types';
+import { AppData, DecryptedAppData, DecryptedFhirRecord, FetchResponse, Params } from './types';
 
 const convertToExposedAppData = (decryptedAppData: DecryptedAppData) => ({
   annotations: taggingUtils.getAnnotations(decryptedAppData.tags),
@@ -92,10 +92,32 @@ const appDataService = {
       },
     });
 
-    return recordService.searchRecords(ownerId, parameters).then(result => ({
-      records: result.records.map(convertToExposedAppData),
-      totalCount: result.totalCount,
-    }));
+    const tagFallbackParameters = prepareSearchParameters({
+      params: {
+        ...params,
+        tags: [taggingUtils.generateAppDataFlagTag()],
+      },
+      fallbackMode: 'annotation',
+    });
+
+    return Promise.all([
+      recordService.searchRecords(ownerId, parameters),
+      recordService.searchRecords(ownerId, tagFallbackParameters),
+    ]).then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
+      responseArray.reduce(
+        (combinedRecords, currentResponse) => ({
+          records: [
+            ...combinedRecords.records,
+            ...currentResponse.records.map(convertToExposedAppData),
+          ],
+          totalCount: combinedRecords.totalCount + parseInt(currentResponse.totalCount, 10),
+        }),
+        {
+          records: [],
+          totalCount: 0,
+        }
+      )
+    );
   },
 };
 
