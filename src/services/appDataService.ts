@@ -1,8 +1,7 @@
 import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
-import { prepareSearchParameters } from './fhirService';
 import recordService from './recordService';
-import { AppData, DecryptedAppData, FetchResponse, Params } from './types';
+import { AppData, DecryptedAppData, DecryptedFhirRecord, FetchResponse, Params } from './types';
 
 const convertToExposedAppData = (decryptedAppData: DecryptedAppData) => ({
   annotations: taggingUtils.getAnnotations(decryptedAppData.tags),
@@ -85,17 +84,17 @@ const appDataService = {
   },
 
   fetchAllAppData(ownerId: string, params: Params = {}): Promise<FetchResponse<AppData>> {
-    const parameters = prepareSearchParameters({
-      params: {
+    return recordService
+      .searchWithFallbackIfNeeded(ownerId, false, {
         ...params,
         tags: [taggingUtils.generateAppDataFlagTag()],
-      },
-    });
-
-    return recordService.searchRecords(ownerId, parameters).then(result => ({
-      records: result.records.map(convertToExposedAppData),
-      totalCount: result.totalCount,
-    }));
+      })
+      .then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
+        recordService.normalizeFallbackSearchResults({
+          responseArray,
+          conversionFunction: convertToExposedAppData,
+        })
+      );
   },
 };
 

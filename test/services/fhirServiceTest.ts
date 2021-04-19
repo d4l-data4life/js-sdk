@@ -112,12 +112,12 @@ describe('prepareSearchParameters', () => {
       params: {
         limit: 10,
         tags: ['superhero-origin-story'],
-        annotations: ['an annoation'],
+        annotations: ['an annotation'],
       },
     });
     expect(preparedParams).to.deep.equal({
       limit: 10,
-      tags: ['superhero-origin-story', 'custom=an%20annoation'],
+      tags: ['superhero-origin-story', 'custom=an%20annotation'],
     });
   });
 
@@ -197,7 +197,7 @@ describe('prepareSearchParameters', () => {
         exclude_flags: [testVariables.appDataFlag],
         fhirVersion: '3.0.1',
       },
-      useFallbackParams: false,
+      fallbackMode: null,
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story', 'fhirversion=3%2e0%2e1'],
@@ -213,10 +213,31 @@ describe('prepareSearchParameters', () => {
         exclude_flags: [testVariables.appDataFlag],
         fhirVersion: '4.0.1',
       },
-      useFallbackParams: true,
+      fallbackMode: 'fhirversion',
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story', 'fhirversion=4.0.1'],
+      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+    });
+  });
+
+  it('correctly prepares a fallback annotation', () => {
+    const preparedParams = prepareSearchParameters({
+      params: {
+        tags: ['wanda-vision'],
+        annotations: ['***it was: agatha all along***'],
+        exclude_tags: ['superman'],
+        exclude_flags: [testVariables.appDataFlag],
+        fhirVersion: '4.0.1',
+      },
+      fallbackMode: 'annotation',
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: [
+        'wanda-vision',
+        'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+        'fhirversion=4%2e0%2e1',
+      ],
       exclude_tags: ['custom=superman', testVariables.appDataFlag],
     });
   });

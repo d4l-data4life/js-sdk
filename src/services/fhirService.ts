@@ -315,10 +315,10 @@ export const attachBlobs = ({
 
 export const prepareSearchParameters = ({
   params,
-  useFallbackParams = false,
+  fallbackMode = null,
 }: {
   params: Params;
-  useFallbackParams?: boolean;
+  fallbackMode?: null | 'fhirversion' | 'annotation';
 }) => {
   const parameters = { ...params };
   if (!Object.keys(parameters).every(key => includes(SUPPORTED_PARAMS, key))) {
@@ -339,18 +339,21 @@ export const prepareSearchParameters = ({
   }
 
   if (params.annotations) {
-    const customTags = taggingUtils.generateCustomTags(params.annotations);
-    parameters.tags.push(...customTags);
+    parameters.tags.push(
+      ...taggingUtils.generateCustomTags(params.annotations, fallbackMode === 'annotation')
+    );
     delete parameters.annotations;
   }
 
   if (params.exclude_tags) {
-    const excludeTags = taggingUtils.generateCustomTags(params.exclude_tags);
-    parameters.exclude_tags = excludeTags;
+    parameters.exclude_tags = taggingUtils.generateCustomTags(
+      params.exclude_tags,
+      fallbackMode === 'annotation'
+    );
   }
 
   if (params.fhirVersion) {
-    if (useFallbackParams) {
+    if (fallbackMode === 'fhirversion') {
       parameters.tags.push(taggingUtils.buildFallbackTag(tagKeys.fhirVersion, params.fhirVersion));
     } else {
       parameters.tags.push(taggingUtils.buildTag(tagKeys.fhirVersion, params.fhirVersion));
@@ -606,60 +609,27 @@ const fhirService = {
     return recordService.deleteRecord(ownerId, resourceId);
   },
 
-  /* earlier versions of the Android SDK did not escape the dots in fhir versions,
-    so we query for both of this encoding and the current standard one */
-  searchWithFallbackIfNeeded(
-    ownerId: string,
-    countOnly: boolean,
-    params: Params = {}
-  ): Promise<any> {
-    const basicParameters = prepareSearchParameters({
-      params: {
-        ...params,
-        exclude_flags: [taggingUtils.generateAppDataFlagTag()],
-      },
-      useFallbackParams: false,
-    });
-
-    if (params?.fhirVersion) {
-      const fallbackParameters = prepareSearchParameters({
-        params: {
-          ...params,
-          exclude_flags: [taggingUtils.generateAppDataFlagTag()],
-        },
-        useFallbackParams: true,
-      });
-      return Promise.all([
-        recordService.searchRecords(ownerId, basicParameters, countOnly),
-        recordService.searchRecords(ownerId, fallbackParameters, countOnly),
-      ]);
-    }
-    return recordService.searchRecords(ownerId, basicParameters, countOnly);
-  },
-
   countResources(ownerId: string, params: Params = {}): Promise<number> {
-    return this.searchWithFallbackIfNeeded(ownerId, true, params).then(result =>
-      result.totalCount
-        ? result.totalCount
-        : parseInt(result[0].totalCount, 10) + parseInt(result[1].totalCount, 10)
-    );
+    return recordService
+      .searchWithFallbackIfNeeded(ownerId, true, params)
+      .then((responseArray: { totalCount: string }[]) =>
+        responseArray.reduce(
+          (sum, currentResponse) => sum + parseInt(currentResponse.totalCount, 10),
+          0
+        )
+      );
   },
 
-  /* eslint-disable indent */
   fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
-    return this.searchWithFallbackIfNeeded(ownerId, false, params).then(response =>
-      response.records
-        ? {
-            records: response.records.map(convertToExposedRecord),
-            totalCount: response.totalCount,
-          }
-        : {
-            records: [...response[0].records, ...response[1].records].map(convertToExposedRecord),
-            totalCount: parseInt(response[0].totalCount, 10) + parseInt(response[1].totalCount, 10),
-          }
-    );
+    return recordService
+      .searchWithFallbackIfNeeded(ownerId, false, params)
+      .then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
+        recordService.normalizeFallbackSearchResults({
+          responseArray,
+          conversionFunction: convertToExposedRecord,
+        })
+      );
   },
-  /* eslint-enable indent */
 
   downloadResource(
     ownerId: string,
