@@ -647,7 +647,7 @@ const fhirService = {
           ...params,
           exclude_flags,
         },
-        fallbackMode: 'fhirversion',
+        fallbackMode: 'annotation',
       });
       return Promise.all([
         recordService.searchRecords(ownerId, basicParameters, countOnly),
