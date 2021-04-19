@@ -251,7 +251,7 @@ const recordService = {
     );
   },
 
-  normalizeFallbackSearchResults({responseArray, conversionFunction}) {
+  normalizeFallbackSearchResults({ responseArray, conversionFunction }) {
     return responseArray.reduce(
       (combinedRecords, currentResponse) => {
         const nonDuplicateRecords = reject(currentResponse.records, newRecord =>
@@ -260,25 +260,22 @@ const recordService = {
         const numberOfDuplicates = currentResponse.records.length - nonDuplicateRecords.length;
         return nonDuplicateRecords?.length
           ? {
-            records: [
-              ...combinedRecords.records,
-              ...nonDuplicateRecords.map(conversionFunction),
-            ],
-            totalCount:
-              combinedRecords.totalCount +
-              parseInt(currentResponse.totalCount, 10) -
-              numberOfDuplicates,
-          }
+              records: [...combinedRecords.records, ...nonDuplicateRecords.map(conversionFunction)],
+              totalCount:
+                combinedRecords.totalCount +
+                parseInt(currentResponse.totalCount, 10) -
+                numberOfDuplicates,
+            }
           : {
-            records: [...combinedRecords.records],
-            totalCount: combinedRecords.totalCount,
-          };
+              records: [...combinedRecords.records],
+              totalCount: combinedRecords.totalCount,
+            };
       },
       {
         records: [],
         totalCount: 0,
       }
-    )
+    );
   },
 
   deleteRecord(ownerId: string, recordId: string) {
