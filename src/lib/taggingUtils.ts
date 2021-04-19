@@ -70,9 +70,7 @@ const taggingUtils = {
     annotations: string[];
     useFallback?: boolean;
   }): string[] {
-    return useFallback
-      ? annotations.map(el => this.buildTag(ANNOTATION_LABEL, el, true))
-      : annotations.map(el => this.buildTag(ANNOTATION_LABEL, el));
+    return annotations.map(el => this.buildTag(ANNOTATION_LABEL, el, useFallback));
   },
 
   buildTag(key: string, value: string, useFallback = false): string {
