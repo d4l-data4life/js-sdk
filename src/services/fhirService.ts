@@ -612,97 +612,27 @@ const fhirService = {
     return recordService.deleteRecord(ownerId, resourceId);
   },
 
-  /* earlier versions of the Android SDK did not escape the dots in fhir versions,
-    so we query for both of this encoding and the current standard one */
-  searchWithFallbackIfNeeded(
-    ownerId: string,
-    countOnly: boolean,
-    params: Params = {}
-  ): Promise<any[]> {
-    const exclude_flags = [taggingUtils.generateAppDataFlagTag()];
-
-    const basicParameters = prepareSearchParameters({
-      params: {
-        ...params,
-        exclude_flags,
-      },
-      fallbackMode: null,
-    });
-
-    if (params?.fhirVersion || params?.annotations || params?.exclude_tags) {
-      /* earlier versions of the Android SDK did not escape the dots in fhir versions,
-      so we query for both of this encoding and the current standard one */
-      const versionFallbackParameters = prepareSearchParameters({
-        params: {
-          ...params,
-          exclude_flags,
-        },
-        fallbackMode: 'fhirversion',
-      });
-
-      /* original JS SDK implementation was inconsistent in lowercasing/uppercasing
-      some escaped characters, so we query for both versions */
-      const tagFallbackParameters = prepareSearchParameters({
-        params: {
-          ...params,
-          exclude_flags,
-        },
-        fallbackMode: 'annotation',
-      });
-      return Promise.all([
-        recordService.searchRecords(ownerId, basicParameters, countOnly),
-        recordService.searchRecords(ownerId, versionFallbackParameters, countOnly),
-        recordService.searchRecords(ownerId, tagFallbackParameters, countOnly),
-      ]);
-    }
-    return Promise.all([recordService.searchRecords(ownerId, basicParameters, countOnly)]);
-  },
-
   countResources(ownerId: string, params: Params = {}): Promise<number> {
-    return this.searchWithFallbackIfNeeded(
-      ownerId,
-      true,
-      params
-    ).then((responseArray: { totalCount: string }[]) =>
-      responseArray.reduce(
-        (sum, currentResponse) => sum + parseInt(currentResponse.totalCount, 10),
-        0
-      )
-    );
+    return recordService
+      .searchWithFallbackIfNeeded(ownerId, true, params)
+      .then((responseArray: { totalCount: string }[]) =>
+        responseArray.reduce(
+          (sum, currentResponse) => sum + parseInt(currentResponse.totalCount, 10),
+          0
+        )
+      );
   },
 
-  /* eslint-disable indent, max-nested-callbacks */
   fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
-    return this.searchWithFallbackIfNeeded(ownerId, false, params).then(
-      (responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
-        responseArray.reduce(
-          (combinedRecords, currentResponse) => {
-            const nonDuplicateRecords = reject(currentResponse.records, newRecord =>
-              combinedRecords.records.some(existingRecord => existingRecord.id === newRecord.id)
-            );
-            const numberOfDuplicates = currentResponse.records.length - nonDuplicateRecords.length;
-            return nonDuplicateRecords?.length
-              ? {
-                  records: [
-                    ...combinedRecords.records,
-                    ...nonDuplicateRecords.map(convertToExposedRecord),
-                  ],
-                  totalCount:
-                    combinedRecords.totalCount +
-                    parseInt(currentResponse.totalCount, 10) -
-                    numberOfDuplicates,
-                }
-              : {
-                  records: [...combinedRecords.records],
-                  totalCount: combinedRecords.totalCount,
-                };
-          },
-          {
-            records: [],
-            totalCount: 0,
-          }
-        )
-    );
+    /* eslint-disable indent, max-nested-callbacks */
+    return recordService
+      .searchWithFallbackIfNeeded(ownerId, false, params)
+      .then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
+        recordService.normalizeFallbackSearchResults({
+          responseArray,
+          conversionFunction: convertToExposedRecord,
+        })
+      );
   },
   /* eslint-enable indent, max-nested-callbacks */
 

@@ -1,9 +1,7 @@
 import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
-import { prepareSearchParameters } from './fhirService';
 import recordService from './recordService';
 import { AppData, DecryptedAppData, DecryptedFhirRecord, FetchResponse, Params } from './types';
-import reject from 'lodash/reject';
 
 const convertToExposedAppData = (decryptedAppData: DecryptedAppData) => ({
   annotations: taggingUtils.getAnnotations(decryptedAppData.tags),
@@ -86,56 +84,18 @@ const appDataService = {
   },
 
   fetchAllAppData(ownerId: string, params: Params = {}): Promise<FetchResponse<AppData>> {
-    const parameters = prepareSearchParameters({
-      params: {
+    return recordService
+      .searchWithFallbackIfNeeded(ownerId, false, {
         ...params,
         tags: [taggingUtils.generateAppDataFlagTag()],
-      },
-    });
-
-    const tagFallbackParameters = prepareSearchParameters({
-      params: {
-        ...params,
-        tags: [taggingUtils.generateAppDataFlagTag()],
-      },
-      fallbackMode: 'annotation',
-    });
-
-    /* eslint-disable indent, max-nested-callbacks */
-    return Promise.all([
-      recordService.searchRecords(ownerId, parameters),
-      recordService.searchRecords(ownerId, tagFallbackParameters),
-    ]).then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
-      responseArray.reduce(
-        (combinedRecords, currentResponse) => {
-          const nonDuplicateRecords = reject(currentResponse.records, newRecord =>
-            combinedRecords.records.some(existingRecord => existingRecord.id === newRecord.id)
-          );
-          const numberOfDuplicates = currentResponse.records.length - nonDuplicateRecords.length;
-          return nonDuplicateRecords?.length
-            ? {
-                records: [
-                  ...combinedRecords.records,
-                  ...nonDuplicateRecords.map(convertToExposedAppData),
-                ],
-                totalCount:
-                  combinedRecords.totalCount +
-                  parseInt(currentResponse.totalCount, 10) -
-                  numberOfDuplicates,
-              }
-            : {
-                records: [...combinedRecords.records],
-                totalCount: combinedRecords.totalCount,
-              };
-        },
-        {
-          records: [],
-          totalCount: 0,
-        }
-      )
-    );
+      })
+      .then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
+        recordService.normalizeFallbackSearchResults({
+          responseArray,
+          conversionFunction: convertToExposedAppData,
+        })
+      );
   },
 };
-/* eslint-enable indent, max-nested-callbacks */
 
 export default appDataService;
