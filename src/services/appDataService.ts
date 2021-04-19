@@ -3,6 +3,7 @@ import documentRoutes from '../routes/documentRoutes';
 import { prepareSearchParameters } from './fhirService';
 import recordService from './recordService';
 import { AppData, DecryptedAppData, DecryptedFhirRecord, FetchResponse, Params } from './types';
+import reject from 'lodash/reject';
 
 const convertToExposedAppData = (decryptedAppData: DecryptedAppData) => ({
   annotations: taggingUtils.getAnnotations(decryptedAppData.tags),
@@ -100,18 +101,33 @@ const appDataService = {
       fallbackMode: 'annotation',
     });
 
+    /* eslint-disable indent, max-nested-callbacks */
     return Promise.all([
       recordService.searchRecords(ownerId, parameters),
       recordService.searchRecords(ownerId, tagFallbackParameters),
     ]).then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
       responseArray.reduce(
-        (combinedRecords, currentResponse) => ({
-          records: [
-            ...combinedRecords.records,
-            ...currentResponse.records.map(convertToExposedAppData),
-          ],
-          totalCount: combinedRecords.totalCount + parseInt(currentResponse.totalCount, 10),
-        }),
+        (combinedRecords, currentResponse) => {
+          const nonDuplicateRecords = reject(currentResponse.records, newRecord =>
+            combinedRecords.records.some(existingRecord => existingRecord.id === newRecord.id)
+          );
+          const numberOfDuplicates = currentResponse.records.length - nonDuplicateRecords.length;
+          return nonDuplicateRecords?.length
+            ? {
+                records: [
+                  ...combinedRecords.records,
+                  ...nonDuplicateRecords.map(convertToExposedAppData),
+                ],
+                totalCount:
+                  combinedRecords.totalCount +
+                  parseInt(currentResponse.totalCount, 10) -
+                  numberOfDuplicates,
+              }
+            : {
+                records: [...combinedRecords.records],
+                totalCount: combinedRecords.totalCount,
+              };
+        },
         {
           records: [],
           totalCount: 0,
@@ -120,5 +136,6 @@ const appDataService = {
     );
   },
 };
+/* eslint-enable indent, max-nested-callbacks */
 
 export default appDataService;

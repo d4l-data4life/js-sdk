@@ -671,18 +671,32 @@ const fhirService = {
     );
   },
 
-  /* eslint-disable indent */
-  fetchResources: function(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
+  /* eslint-disable indent, max-nested-callbacks */
+  fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
     return this.searchWithFallbackIfNeeded(ownerId, false, params).then(
       (responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
         responseArray.reduce(
-          (combinedRecords, currentResponse) => ({
-            records: [
-              ...combinedRecords.records,
-              ...currentResponse.records.map(convertToExposedRecord),
-            ],
-            totalCount: combinedRecords.totalCount + parseInt(currentResponse.totalCount, 10),
-          }),
+          (combinedRecords, currentResponse) => {
+            const nonDuplicateRecords = reject(currentResponse.records, newRecord =>
+              combinedRecords.records.some(existingRecord => existingRecord.id === newRecord.id)
+            );
+            const numberOfDuplicates = currentResponse.records.length - nonDuplicateRecords.length;
+            return nonDuplicateRecords?.length
+              ? {
+                  records: [
+                    ...combinedRecords.records,
+                    ...nonDuplicateRecords.map(convertToExposedRecord),
+                  ],
+                  totalCount:
+                    combinedRecords.totalCount +
+                    parseInt(currentResponse.totalCount, 10) -
+                    numberOfDuplicates,
+                }
+              : {
+                  records: [...combinedRecords.records],
+                  totalCount: combinedRecords.totalCount,
+                };
+          },
           {
             records: [],
             totalCount: 0,
@@ -690,7 +704,7 @@ const fhirService = {
         )
     );
   },
-  /* eslint-enable indent */
+  /* eslint-enable indent, max-nested-callbacks */
 
   downloadResource(
     ownerId: string,
