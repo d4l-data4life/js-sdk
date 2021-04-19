@@ -349,11 +349,10 @@ export const prepareSearchParameters = ({
   }
 
   if (params.exclude_tags) {
-    const excludeTags = taggingUtils.generateCustomTags({
+    parameters.exclude_tags = taggingUtils.generateCustomTags({
       annotations: params.exclude_tags,
       useFallback: fallbackMode === 'annotation',
     });
-    parameters.exclude_tags = excludeTags;
   }
 
   if (params.fhirVersion) {
@@ -619,51 +618,76 @@ const fhirService = {
     ownerId: string,
     countOnly: boolean,
     params: Params = {}
-  ): Promise<any> {
+  ): Promise<any[]> {
+    const exclude_flags = [taggingUtils.generateAppDataFlagTag()];
+
     const basicParameters = prepareSearchParameters({
       params: {
         ...params,
-        exclude_flags: [taggingUtils.generateAppDataFlagTag()],
+        exclude_flags,
       },
       fallbackMode: null,
     });
 
-    if (params?.fhirVersion) {
-      const fallbackParameters = prepareSearchParameters({
+    if (params?.fhirVersion || params?.annotations || params?.exclude_tags) {
+      /* earlier versions of the Android SDK did not escape the dots in fhir versions,
+      so we query for both of this encoding and the current standard one */
+      const versionFallbackParameters = prepareSearchParameters({
         params: {
           ...params,
-          exclude_flags: [taggingUtils.generateAppDataFlagTag()],
+          exclude_flags,
         },
-        fallbackMode: null,
+        fallbackMode: 'fhirversion',
+      });
+
+      /* original JS SDK implementation was inconsistent in lowercasing/uppercasing
+      some escaped characters, so we query for both versions */
+      const tagFallbackParameters = prepareSearchParameters({
+        params: {
+          ...params,
+          exclude_flags,
+        },
+        fallbackMode: 'fhirversion',
       });
       return Promise.all([
         recordService.searchRecords(ownerId, basicParameters, countOnly),
-        recordService.searchRecords(ownerId, fallbackParameters, countOnly),
+        recordService.searchRecords(ownerId, versionFallbackParameters, countOnly),
+        recordService.searchRecords(ownerId, tagFallbackParameters, countOnly),
       ]);
     }
-    return recordService.searchRecords(ownerId, basicParameters, countOnly);
+    return Promise.all([recordService.searchRecords(ownerId, basicParameters, countOnly)]);
   },
 
   countResources(ownerId: string, params: Params = {}): Promise<number> {
-    return this.searchWithFallbackIfNeeded(ownerId, true, params).then(result =>
-      result.totalCount
-        ? result.totalCount
-        : parseInt(result[0].totalCount, 10) + parseInt(result[1].totalCount, 10)
+    return this.searchWithFallbackIfNeeded(
+      ownerId,
+      true,
+      params
+    ).then((responseArray: { totalCount: string }[]) =>
+      responseArray.reduce(
+        (sum, currentResponse) => sum + parseInt(currentResponse.totalCount, 10),
+        0
+      )
     );
   },
 
   /* eslint-disable indent */
-  fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
-    return this.searchWithFallbackIfNeeded(ownerId, false, params).then(response =>
-      response.records
-        ? {
-            records: response.records.map(convertToExposedRecord),
-            totalCount: response.totalCount,
+  fetchResources: function(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
+    return this.searchWithFallbackIfNeeded(ownerId, false, params).then(
+      (responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
+        responseArray.reduce(
+          (combinedRecords, currentResponse) => ({
+            records: [
+              ...combinedRecords.records,
+              ...currentResponse.records.map(convertToExposedRecord),
+            ],
+            totalCount: combinedRecords.totalCount + parseInt(currentResponse.totalCount, 10),
+          }),
+          {
+            records: [],
+            totalCount: 0,
           }
-        : {
-            records: [...response[0].records, ...response[1].records].map(convertToExposedRecord),
-            totalCount: parseInt(response[0].totalCount, 10) + parseInt(response[1].totalCount, 10),
-          }
+        )
     );
   },
   /* eslint-enable indent */
