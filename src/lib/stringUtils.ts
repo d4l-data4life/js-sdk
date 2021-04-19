@@ -1,13 +1,8 @@
 const stringUtils = {
   addPercentEncoding(string: string): string {
-    return encodeURIComponent(string).replace(
-      /[!'()*\-_.~]/g,
-      c =>
-        `%${c
-          .charCodeAt(0)
-          .toString(16)
-          .toLowerCase()}`
-    );
+    return encodeURIComponent(string)
+      .replace(/[!'()*\-_.~]/g, c => `%${c.charCodeAt(0).toString(16)}`)
+      .toLowerCase();
   },
 
   addFallbackPercentEncoding(string: string): string {
