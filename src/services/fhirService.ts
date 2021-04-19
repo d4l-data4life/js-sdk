@@ -624,7 +624,6 @@ const fhirService = {
   },
 
   fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
-    /* eslint-disable indent, max-nested-callbacks */
     return recordService
       .searchWithFallbackIfNeeded(ownerId, false, params)
       .then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
@@ -634,7 +633,6 @@ const fhirService = {
         })
       );
   },
-  /* eslint-enable indent, max-nested-callbacks */
 
   downloadResource(
     ownerId: string,

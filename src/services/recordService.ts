@@ -251,6 +251,7 @@ const recordService = {
     );
   },
 
+  /* eslint-disable indent */
   normalizeFallbackSearchResults({ responseArray, conversionFunction }) {
     return responseArray.reduce(
       (combinedRecords, currentResponse) => {
@@ -277,6 +278,7 @@ const recordService = {
       }
     );
   },
+  /* eslint-enable indent */
 
   deleteRecord(ownerId: string, recordId: string) {
     return documentRoutes.deleteRecord(ownerId, recordId);
