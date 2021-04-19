@@ -29,7 +29,7 @@ const appDataService = {
             customCreationDate: date,
             tags: [
               ...new Set([
-                ...taggingUtils.generateCustomTags(annotations),
+                ...taggingUtils.generateCustomTags({ annotations }),
                 taggingUtils.generateAppDataFlagTag(),
               ]),
             ],
@@ -59,7 +59,7 @@ const appDataService = {
       tags = annotations.length
         ? [
             ...new Set([
-              ...taggingUtils.generateCustomTags(annotations),
+              ...taggingUtils.generateCustomTags({ annotations }),
               taggingUtils.generateAppDataFlagTag(),
             ]),
           ]

@@ -315,10 +315,10 @@ export const attachBlobs = ({
 
 export const prepareSearchParameters = ({
   params,
-  useFallbackParams = false,
+  fallbackMode = null,
 }: {
   params: Params;
-  useFallbackParams?: boolean;
+  fallbackMode?: null | 'fhirversion' | 'annotation';
 }) => {
   const parameters = { ...params };
   if (!Object.keys(parameters).every(key => includes(SUPPORTED_PARAMS, key))) {
@@ -339,18 +339,25 @@ export const prepareSearchParameters = ({
   }
 
   if (params.annotations) {
-    const customTags = taggingUtils.generateCustomTags(params.annotations);
-    parameters.tags.push(...customTags);
+    parameters.tags.push(
+      ...taggingUtils.generateCustomTags({
+        annotations: params.annotations,
+        useFallback: fallbackMode === 'annotation',
+      })
+    );
     delete parameters.annotations;
   }
 
   if (params.exclude_tags) {
-    const excludeTags = taggingUtils.generateCustomTags(params.exclude_tags);
+    const excludeTags = taggingUtils.generateCustomTags({
+      annotations: params.exclude_tags,
+      useFallback: fallbackMode === 'annotation',
+    });
     parameters.exclude_tags = excludeTags;
   }
 
   if (params.fhirVersion) {
-    if (useFallbackParams) {
+    if (fallbackMode === 'fhirversion') {
       parameters.tags.push(taggingUtils.buildFallbackTag(tagKeys.fhirVersion, params.fhirVersion));
     } else {
       parameters.tags.push(taggingUtils.buildTag(tagKeys.fhirVersion, params.fhirVersion));
@@ -424,7 +431,7 @@ const fhirService = {
         fhirResource: cleanResource(resource || fhirResource),
         customCreationDate: date,
         tags: [
-          ...taggingUtils.generateCustomTags(annotations),
+          ...taggingUtils.generateCustomTags({ annotations }),
           taggingUtils.generateFhirVersionTag(),
         ],
       })
@@ -509,7 +516,7 @@ const fhirService = {
 
     let tags;
     if (annotations) {
-      tags = annotations.length ? taggingUtils.generateCustomTags(annotations) : [];
+      tags = annotations.length ? taggingUtils.generateCustomTags({ annotations }) : [];
     }
 
     return recordService
@@ -618,7 +625,7 @@ const fhirService = {
         ...params,
         exclude_flags: [taggingUtils.generateAppDataFlagTag()],
       },
-      useFallbackParams: false,
+      fallbackMode: null,
     });
 
     if (params?.fhirVersion) {
@@ -627,7 +634,7 @@ const fhirService = {
           ...params,
           exclude_flags: [taggingUtils.generateAppDataFlagTag()],
         },
-        useFallbackParams: true,
+        fallbackMode: null,
       });
       return Promise.all([
         recordService.searchRecords(ownerId, basicParameters, countOnly),

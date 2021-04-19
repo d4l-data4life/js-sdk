@@ -103,7 +103,7 @@ describe('taggingUtils', () => {
     const annotations = taggingUtils.getAnnotations([
       testVariables.tag,
       testVariables.secondTag,
-      ...taggingUtils.generateCustomTags(documentResources.annotations),
+      ...taggingUtils.generateCustomTags({ annotations: documentResources.annotations }),
     ]);
     expect(annotations.toString()).to.equal(documentResources.annotations.toString());
   });

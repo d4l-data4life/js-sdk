@@ -63,15 +63,23 @@ const taggingUtils = {
     return Object.keys(tagObject).map(tagKey => this.buildTag(tagKey, tagObject[tagKey]));
   },
 
-  generateCustomTags(annotationList: string[] = []): string[] {
-    return annotationList.map(el => this.buildTag(ANNOTATION_LABEL, el));
+  generateCustomTags({
+    annotations = [],
+    useFallback = false,
+  }: {
+    annotations: string[];
+    useFallback?: boolean;
+  }): string[] {
+    return useFallback
+      ? annotations.map(el => this.buildTag(ANNOTATION_LABEL, el, true))
+      : annotations.map(el => this.buildTag(ANNOTATION_LABEL, el));
   },
 
-  buildTag(key: string, value: string): string {
+  buildTag(key: string, value: string, useFallback = false): string {
     return (
-      `${stringUtils.prepareForUpload(key)}` +
+      `${stringUtils.prepareForUpload(key, useFallback)}` +
       `${TAG_DELIMITER}` +
-      `${stringUtils.prepareForUpload(value)}`
+      `${stringUtils.prepareForUpload(value, useFallback)}`
     );
   },
 

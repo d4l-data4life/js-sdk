@@ -197,7 +197,7 @@ describe('prepareSearchParameters', () => {
         exclude_flags: [testVariables.appDataFlag],
         fhirVersion: '3.0.1',
       },
-      useFallbackParams: false,
+      fallbackMode: null,
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story', 'fhirversion=3%2e0%2e1'],
@@ -213,13 +213,14 @@ describe('prepareSearchParameters', () => {
         exclude_flags: [testVariables.appDataFlag],
         fhirVersion: '4.0.1',
       },
-      useFallbackParams: true,
+      fallbackMode: 'fhirversion',
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story', 'fhirversion=4.0.1'],
       exclude_tags: ['custom=superman', testVariables.appDataFlag],
     });
   });
+  // todo: annotations fallback mode
 
   it('throws when an unsupported parameter is passed', () => {
     // @ts-ignore
