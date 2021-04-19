@@ -63,13 +63,7 @@ const taggingUtils = {
     return Object.keys(tagObject).map(tagKey => this.buildTag(tagKey, tagObject[tagKey]));
   },
 
-  generateCustomTags({
-    annotations = [],
-    useFallback = false,
-  }: {
-    annotations: string[];
-    useFallback?: boolean;
-  }): string[] {
+  generateCustomTags(annotations: string[] = [], useFallback = false) {
     return annotations.map(el => this.buildTag(ANNOTATION_LABEL, el, useFallback));
   },
 

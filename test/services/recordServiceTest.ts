@@ -247,7 +247,7 @@ describe('services/recordService', () => {
     it('should pass the right custom tags corresponding to the annotations passed and overwrite existing tags on the document to be updated', done => {
       taggingUtils.setPartnerId(testVariables.partnerId);
       const tags = [
-        ...taggingUtils.generateCustomTags({ annotations: documentResources.annotations }),
+        ...taggingUtils.generateCustomTags(documentResources.annotations),
         taggingUtils.generateUpdateTag(),
         ...taggingUtils.generateTagsFromFhir(stu3FhirResources.documentReference),
       ];
@@ -256,7 +256,7 @@ describe('services/recordService', () => {
         .updateRecord(testVariables.userId, {
           id: testVariables.recordId,
           fhirResource: stu3FhirResources.documentReference,
-          tags: taggingUtils.generateCustomTags({ annotations: documentResources.annotations }),
+          tags: taggingUtils.generateCustomTags(documentResources.annotations),
         })
         .then(res => {
           expect(res.id).to.deep.equal(testVariables.recordId);

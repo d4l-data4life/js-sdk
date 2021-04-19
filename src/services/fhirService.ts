@@ -340,19 +340,16 @@ export const prepareSearchParameters = ({
 
   if (params.annotations) {
     parameters.tags.push(
-      ...taggingUtils.generateCustomTags({
-        annotations: params.annotations,
-        useFallback: fallbackMode === 'annotation',
-      })
+      ...taggingUtils.generateCustomTags(params.annotations, fallbackMode === 'annotation')
     );
     delete parameters.annotations;
   }
 
   if (params.exclude_tags) {
-    parameters.exclude_tags = taggingUtils.generateCustomTags({
-      annotations: params.exclude_tags,
-      useFallback: fallbackMode === 'annotation',
-    });
+    parameters.exclude_tags = taggingUtils.generateCustomTags(
+      params.exclude_tags,
+      fallbackMode === 'annotation'
+    );
   }
 
   if (params.fhirVersion) {
@@ -430,7 +427,7 @@ const fhirService = {
         fhirResource: cleanResource(resource || fhirResource),
         customCreationDate: date,
         tags: [
-          ...taggingUtils.generateCustomTags({ annotations }),
+          ...taggingUtils.generateCustomTags(annotations),
           taggingUtils.generateFhirVersionTag(),
         ],
       })
@@ -515,7 +512,7 @@ const fhirService = {
 
     let tags;
     if (annotations) {
-      tags = annotations.length ? taggingUtils.generateCustomTags({ annotations }) : [];
+      tags = annotations.length ? taggingUtils.generateCustomTags(annotations) : [];
     }
 
     return recordService
