@@ -1,4 +1,6 @@
 import find from 'lodash/find';
+import isString from 'lodash/isString';
+import isUndefined from 'lodash/isUndefined';
 import map from 'lodash/map';
 
 import Attachment from './Attachment';
@@ -87,7 +89,7 @@ export default class DocumentReference implements fhir.DocumentReference {
   }: DocumentReferenceConstructor) {
     this.resourceType = DOCUMENT_REFERENCE;
     this.status = 'current';
-    this.type = type;
+    this.type = !isUndefined(type) && !isString(type) ? type : {};
     this.author = [{ reference: '#contained-author-id' }];
     this.description = title;
     this.subject = { reference: title };

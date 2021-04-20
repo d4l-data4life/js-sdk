@@ -70,7 +70,7 @@ describe('models/FHIR', () => {
         title: 'John Doe Document',
       });
       expect(documentReference.getTitle()).to.equal('John Doe Document');
-      expect(documentReference.getType()).to.equal(undefined);
+      expect(JSON.stringify(documentReference.getType())).to.equal(JSON.stringify({}));
       expect(documentReference.getPracticeSpecialty()).to.equal(undefined);
       expect(documentReference.getAuthor()).to.equal(undefined);
       expect(documentReference.getPractitioner()).to.equal(undefined);
