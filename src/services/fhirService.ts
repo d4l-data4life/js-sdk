@@ -64,6 +64,14 @@ const SUPPORTED_PARAMS = [
 ];
 
 // TODO: Add return Type
+/*
+ * This is preliminary work based on the idea that the SDK should be able to handle
+ * attachments for all the resources it supports, not just for DocumentReference
+ * resources. However, while these methods return the proper attachment structures,
+ * there is not support for a generic upload/download mechanism in the fhirService's
+ * actual CRUD methods.
+ *
+ * */
 export const getCleanAttachmentsFromResource = (resource: any): any[] => {
   const { resourceType } = resource;
 
@@ -371,6 +379,7 @@ export const prepareSearchParameters = ({
   return parameters;
 };
 
+// todo: write test for this
 const convertToExposedRecord = (decryptedRecord: DecryptedFhirRecord) => {
   const exposedRecord = {
     annotations: taggingUtils.getAnnotations(decryptedRecord.tags),
