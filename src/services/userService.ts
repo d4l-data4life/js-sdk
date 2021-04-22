@@ -114,8 +114,8 @@ const userService = {
   /**
    * Get the user for an id.
    *  @param userId Id of the user whos data is requested.
-   *                Loggedin user by default(even if `this.currentUserId` is not set yet).
-   * @returns Resolves to a userObject that contains `userId`, `commonKey` and `tagEncryptionKey`.
+   *                Logged-in user by default (even if 'this.currentUserId' is not set yet).
+   * @returns Resolves to a userObject that contains 'userId', 'commonKey' and 'tagEncryptionKey'.
    */
   pullUser(userId?: string): Promise<User> {
     // Does not work, if this.privateKey is not set.
