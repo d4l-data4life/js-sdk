@@ -41,13 +41,13 @@ import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
 import recordService from './recordService';
 import { DecryptedFhirRecord, FetchResponse, Params, Record } from './types';
-
-type IAttachment = {
-  isImage?: boolean;
-  hasPreview?: boolean;
-  hasThumb?: boolean;
-  id?: string;
-};
+import {
+  addPreviewsToAttachments,
+  attachBlobs,
+  cleanResource,
+  getCleanAttachmentsFromResource,
+  setAttachmentsToResource,
+} from './attachmentService';
 
 const SUPPORTED_PARAMS = [
   'limit',
@@ -63,263 +63,8 @@ const SUPPORTED_PARAMS = [
   'partner',
 ];
 
-// TODO: Add return Type
-/*
- * This is preliminary work based on the idea that the SDK should be able to handle
- * attachments for all the resources it supports, not just for DocumentReference
- * resources. However, while these methods return the proper attachment structures,
- * there is not support for a generic upload/download mechanism in the fhirService's
- * actual CRUD methods.
- *
- * */
-export const getCleanAttachmentsFromResource = (resource: any): any[] => {
-  const { resourceType } = resource;
-
-  let attachments;
-  if (resourceType === 'DocumentReference') {
-    attachments = map(resource.content, 'attachment');
-  }
-  if (resourceType === 'Patient' || resourceType === 'Practitioner') {
-    attachments = cloneDeep(resource.photo);
-  }
-  if (resourceType === 'Medication') {
-    attachments = cloneDeep(resource.image);
-  }
-  if (resourceType === 'DiagnosticReport') {
-    attachments = cloneDeep(resource.presentedForm);
-  }
-  if (resourceType === 'Observation') {
-    const components = [...(resource.component || [])];
-    attachments = reject(
-      [
-        ...[resource.valueAttachment || []],
-        // @ts-ignore
-        ...map(components, 'valueAttachment'),
-      ],
-      isEmpty
-    );
-  }
-  if (resourceType === 'Questionnaire') {
-    const initialAttachments = map(resource.item, 'initialAttachment');
-    attachments = initialAttachments.length ? reject(initialAttachments, isEmpty) : [];
-  }
-
-  if (resourceType === 'QuestionnaireResponse') {
-    const answers = flatMap(resource.item, 'answer');
-    attachments = answers.length ? reject(map(answers, 'valueAttachment'), isEmpty) : [];
-  }
-
-  if (!attachments || !attachments.length) {
-    return [];
-  }
-
-  return attachments.map((attachment: any) => {
-    if (attachment.originalSize && attachment.originalHash) {
-      attachment.size = attachment.originalSize;
-      delete attachment.originalSize;
-      attachment.hash = attachment.originalHash;
-      delete attachment.originalHash;
-    }
-    return attachment;
-  });
-};
-
-export const setAttachmentsToResource = (
-  resourceWithoutAttachments: fhir.DomainResource,
-  attachments: Attachment[]
-): fhir.DomainResource => {
-  const resource = cloneDeep(resourceWithoutAttachments);
-  const { resourceType } = resource;
-
-  if (resourceType === 'DocumentReference') {
-    (resource as fhir.DocumentReference).content = attachments.map(attachment => ({ attachment }));
-  }
-  if (resourceType === 'Patient') {
-    (resource as fhir.Patient).photo = [...attachments];
-  }
-  if (resourceType === 'Practitioner') {
-    (resource as fhir.Practitioner).photo = [...attachments];
-  }
-  if (resourceType === 'Medication') {
-    (resource as fhir.Medication).image = [...attachments];
-  }
-  if (resourceType === 'DiagnosticReport') {
-    (resource as fhir.DiagnosticReport).presentedForm = [...attachments];
-  }
-
-  if (resourceType === 'Observation') {
-    const components = (resource as fhir.Observation).component;
-    if (components && components.length) {
-      components.forEach(component => {
-        if (!isEmpty(component.valueAttachment)) {
-          const { hash = null, id = null } = component.valueAttachment;
-          const matchByHash = find(attachments, { hash });
-          const matchById = find(attachments, { id });
-          if (matchByHash && !matchById) {
-            component.valueAttachment = matchByHash;
-          }
-        }
-      });
-    }
-  }
-  if (resourceType === 'Questionnaire') {
-    const items = (resource as fhir.Questionnaire).item;
-    if (items && items.length) {
-      items.forEach(item => {
-        if (!isEmpty(item.initialAttachment)) {
-          const { hash = null, id = null } = item.initialAttachment;
-          const matchByHash = find(attachments, { hash });
-          const matchById = find(attachments, { id });
-          if (matchByHash && !matchById) {
-            item.initialAttachment = matchByHash;
-          }
-        }
-      });
-    }
-  }
-
-  /*
-   * This one is a little more tricky because of the deep nesting.
-   *
-   * Essentially what we do is find a content (hash) match in
-   * item.answer.valueAttachment, and if it has id declare it as old
-   *
-   * */
-  if (resourceType === 'QuestionnaireResponse') {
-    const items = (resource as fhir.QuestionnaireResponse).item;
-    if (items && items.length) {
-      items.forEach(item => {
-        const answers = item.answer;
-        if (answers && answers.length) {
-          answers.forEach(answer => {
-            if (!isEmpty(answer.valueAttachment)) {
-              const { hash = null, id = null } = answer.valueAttachment;
-              const matchByHash = find(attachments, { hash });
-              const matchById = find(attachments, { id });
-              if (matchByHash && !matchById) {
-                answer.valueAttachment = matchByHash;
-              }
-            }
-          });
-        }
-      });
-    }
-  }
-
-  return resource;
-};
-
-const addPreviewsToAttachments = async vanillaAttachments => {
-  const blobs = [];
-  const attachmentsWithPreviews = cloneDeep(vanillaAttachments);
-  // why are we not using a .map or .forEach?
-  // Because they are not executed in the expected manner with async functions/promises
-  // eslint-disable-next-line no-restricted-syntax
-  for (const attachment of attachmentsWithPreviews) {
-    const { file, title } = attachment;
-    if (!isWithinSizeLimit(file)) {
-      throw new Error('File is too large.');
-    }
-
-    if (!(await isAllowedFileType(file))) {
-      throw new Error('Tried to uploaded unsupported file type');
-    }
-
-    const content = await getFileContentsAsBuffer(file);
-    blobs.push(file);
-
-    if (isResizableImageByteSequence(new Uint8Array(content as ArrayBuffer))) {
-      Object.assign(attachment, {
-        isImage: true,
-        hasThumb: false,
-        hasPreview: false,
-      });
-
-      const thumb = await shrinkImageHeightIfNeeded(title, file, 200);
-      if (!isNull(thumb)) {
-        // this is nested here because if there's no thumb, the image is <= 200px
-        // in which case there will definitely not be a dedicated preview either.
-        const preview = await shrinkImageHeightIfNeeded(title, file, 1000);
-        if (!isNull(preview)) {
-          attachment.hasPreview = true;
-          blobs.push(preview);
-        }
-
-        attachment.hasThumb = true;
-        blobs.push(thumb);
-      }
-    }
-  }
-  return [blobs, attachmentsWithPreviews];
-};
-
 const uploadAttachments = (ownerId, encryptedFiles) =>
   Promise.all(encryptedFiles.map(file => documentRoutes.uploadDocument(ownerId, file)));
-
-export const cleanResource = (fhirResource: fhir.DomainResource) => {
-  if (fhirResource.resourceType === DOCUMENT_REFERENCE) {
-    // @ts-ignore
-    if (fhirResource.content) {
-      const clonedResource = cloneDeep(fhirResource);
-      // @ts-ignore
-      clonedResource.content = fhirResource.content.map(value => omit(value, 'attachment.file'));
-      return clonedResource;
-    }
-  }
-
-  return fhirResource;
-};
-
-export const attachBlobs = ({
-  encryptedFiles,
-  ownerId,
-  oldAttachments = [],
-  newAttachments,
-  resource,
-}: {
-  encryptedFiles: Uint8Array[];
-  ownerId: string;
-  oldAttachments: File[];
-  newAttachments: IAttachment[];
-  resource: fhir.DomainResource;
-}) => {
-  const uploadPromises = newAttachments.map((_, index) =>
-    uploadAttachments(
-      ownerId,
-      getEncryptedFilesByAttachmentIndex(encryptedFiles, newAttachments, index)
-    )
-  );
-
-  return Promise.all(uploadPromises).then(uploadInformation => {
-    // @ts-ignore
-    const identifier = resource.identifier || [];
-    newAttachments.forEach((attachment, attachmentIndex) => {
-      // @ts-ignore
-      attachment.id = uploadInformation[attachmentIndex][0].document_id;
-      identifier.push(getIdentifierValue(uploadInformation[attachmentIndex]));
-    });
-
-    const attachments = [
-      ...oldAttachments,
-      ...map(newAttachments, item => omit(item, ['isImage', 'hasPreview', 'hasThumb'])),
-    ];
-
-    const attachmentsWithoutFiles = map(attachments, item => omit(item, 'file'));
-
-    const returnResource = setAttachmentsToResource(resource, attachments as Attachment[]);
-    const resourceWithAttachments = setAttachmentsToResource(
-      resource,
-      attachmentsWithoutFiles as Attachment[]
-    );
-
-    // @ts-ignore
-    resourceWithAttachments.identifier = identifier;
-    // @ts-ignore
-    returnResource.identifier = identifier;
-
-    return [resourceWithAttachments, returnResource];
-  });
-};
 
 export const prepareSearchParameters = ({
   params,
@@ -379,17 +124,17 @@ export const prepareSearchParameters = ({
   return parameters;
 };
 
-// todo: write test for this
-const convertToExposedRecord = (decryptedRecord: DecryptedFhirRecord) => {
+export const convertToExposedRecord = (decryptedRecord: DecryptedFhirRecord) => {
+  const clonedRecord = cloneDeep(decryptedRecord);
   const exposedRecord = {
-    annotations: taggingUtils.getAnnotations(decryptedRecord.tags),
-    customCreationDate: decryptedRecord.customCreationDate,
-    fhirResource: decryptedRecord.fhirResource,
-    id: decryptedRecord.id,
-    partner: taggingUtils.getTagValueFromList(decryptedRecord.tags, tagKeys.partner),
-    updatedDate: decryptedRecord.updatedDate,
+    annotations: taggingUtils.getAnnotations(clonedRecord.tags),
+    customCreationDate: clonedRecord.customCreationDate,
+    fhirResource: clonedRecord.fhirResource,
+    id: clonedRecord.id,
+    partner: taggingUtils.getTagValueFromList(clonedRecord.tags, tagKeys.partner),
+    updatedDate: clonedRecord.updatedDate,
   };
-  exposedRecord.fhirResource.id = decryptedRecord.id;
+  exposedRecord.fhirResource.id = clonedRecord.id;
   return exposedRecord;
 };
 
