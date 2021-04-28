@@ -13,9 +13,7 @@ import testVariables from '../testUtils/testVariables';
 import fhirValidator from '../../src/lib/fhirValidator';
 import stu3FhirResources from '../testUtils/stu3FhirResources';
 import recordService from '../../src/services/recordService';
-import { D4LSDK } from '../../src/d4l';
-import documentRoutes from '../../src/routes/documentRoutes';
-import DocumentReference, { DOCUMENT_REFERENCE } from '../../src/lib/models/fhir/DocumentReference';
+import DocumentReference from '../../src/lib/models/fhir/DocumentReference';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
 import { setAttachmentsToResource } from '../../src/services/attachmentService';
 
@@ -296,7 +294,7 @@ describe('convertToExposedRecord', () => {
     expect(exposedRecord.id).to.equal(recordId);
     expect(exposedRecord.customCreationDate.getTime()).to.equal(customCreationDate.getTime());
     expect(exposedRecord.updatedDate.getTime()).to.equal(updatedDate.getTime());
-    for (const key in exposedRecord.fhirResource) {
+    for (const key of Object.keys(exposedRecord.fhirResource)) {
       if (key !== 'id') {
         expect(JSON.stringify(exposedRecord.fhirResource[key])).to.equal(
           JSON.stringify(stu3FhirResources.carePlan[key])
@@ -404,7 +402,7 @@ describe('fhirService', () => {
           const { args } = createRecordStub.getCall(0);
           expect(args[1].tags.toString()).to.contain('fhirversion=3%2e0%2e1');
           expect(createRecordStub).to.be.calledOnce;
-          for (const key in record.fhirResource) {
+          for (const key of Object.keys(record.fhirResource)) {
             if (key !== 'id') {
               expect(JSON.stringify(record.fhirResource[key])).to.equal(
                 JSON.stringify(res.fhirResource[key])
@@ -426,7 +424,7 @@ describe('fhirService', () => {
           const { args } = createRecordStub.getCall(0);
           expect(args[1].tags.toString()).to.contain('fhirversion=4%2e0%2e1');
           expect(createRecordStub).to.be.calledOnce;
-          for (const key in record.fhirResource) {
+          for (const key of Object.keys(record.fhirResource)) {
             if (key !== 'id') {
               expect(JSON.stringify(record.fhirResource[key])).to.equal(
                 JSON.stringify(res.fhirResource[key])
@@ -477,7 +475,7 @@ describe('fhirService', () => {
             attachmentKey: undefined,
             customCreationDate,
           });
-          for (const key in record.fhirResource) {
+          for (const key of Object.keys(record.fhirResource)) {
             if (key !== 'id') {
               expect(JSON.stringify(record.fhirResource[key])).to.equal(
                 JSON.stringify(res.fhirResource[key])
@@ -508,7 +506,7 @@ describe('fhirService', () => {
             attachmentKey: undefined,
             customCreationDate,
           });
-          for (const key in record.fhirResource) {
+          for (const key of Object.keys(record.fhirResource)) {
             if (key !== 'id') {
               expect(JSON.stringify(record.fhirResource[key])).to.equal(
                 JSON.stringify(res.fhirResource[key])
@@ -539,7 +537,7 @@ describe('fhirService', () => {
             attachmentKey: undefined,
             customCreationDate,
           });
-          for (const key in record.fhirResource) {
+          for (const key of Object.keys(record.fhirResource)) {
             if (key !== 'id') {
               expect(JSON.stringify(record.fhirResource[key])).to.equal(
                 JSON.stringify(res.fhirResource[key])
