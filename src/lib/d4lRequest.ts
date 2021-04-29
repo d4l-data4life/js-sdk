@@ -74,7 +74,7 @@ export function makeRequest(options): Promise<any> {
       }
 
       if (options.body && (options.body.length || Object.keys(options.body).length > 0)) {
-        if (options.headers && options.headers[CONTENT_TYPE] === 'application/octet-stream') {
+        if (options.headers?.[CONTENT_TYPE] === 'application/octet-stream') {
           xhr.send(options.body);
         } else {
           xhr.send(JSON.stringify(options.body));
@@ -163,6 +163,7 @@ const d4lRequest = {
         This needs more refinement on the back-end, or we'll need to send
         these headers more explicitly for specific endpoints only.
         See also https://gesundheitscloud.atlassian.net/browse/CIT-1340
+        and https://gesundheitscloud.atlassian.net/browse/SDK-446
 
         if (this.currentUserLanguage) {
             httpHeaders['X-User-Language'] = this.currentUserLanguage;

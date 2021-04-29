@@ -4,7 +4,7 @@ import find from 'lodash/find';
 
 import isUndefined from 'lodash/isUndefined';
 import { IBlobFile } from './BlobFile';
-import { getCleanAttachmentsFromResource } from '../services/fhirService';
+import { getCleanAttachmentsFromResource } from '../services/attachmentService';
 
 export const separateOldAndNewAttachments = (newDocumentAttachments, oldDocumentAttachments) =>
   newDocumentAttachments.reduce(
