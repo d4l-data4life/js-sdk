@@ -47,7 +47,12 @@ type IAttachment = {
   id?: string;
 };
 
-// TODO: Add return Type
+type ClientAttachment = fhir.Attachment & {
+  file?: Blob;
+  originalSize?: number;
+  originalHash?: string;
+};
+
 /*
  * This is preliminary work based on the idea that the SDK should be able to handle
  * attachments for all the resources it supports, not just for DocumentReference
@@ -56,27 +61,32 @@ type IAttachment = {
  * actual CRUD methods.
  *
  * */
-export const getCleanAttachmentsFromResource = (resource: any): any[] => {
+export const getCleanAttachmentsFromResource = (
+  resource: fhir.DomainResource
+): ClientAttachment[] => {
   const { resourceType } = resource;
 
   let attachments;
   if (resourceType === 'DocumentReference') {
-    attachments = map(resource.content, 'attachment');
+    attachments = map((resource as fhir.DocumentReference).content, 'attachment');
   }
-  if (resourceType === 'Patient' || resourceType === 'Practitioner') {
-    attachments = cloneDeep(resource.photo);
+  if (resourceType === 'Patient') {
+    attachments = cloneDeep((resource as fhir.Patient).photo);
+  }
+  if (resourceType === 'Practitioner') {
+    attachments = cloneDeep((resource as fhir.Practitioner).photo);
   }
   if (resourceType === 'Medication') {
-    attachments = cloneDeep(resource.image);
+    attachments = cloneDeep((resource as fhir.Medication).image);
   }
   if (resourceType === 'DiagnosticReport') {
-    attachments = cloneDeep(resource.presentedForm);
+    attachments = cloneDeep((resource as fhir.DiagnosticReport).presentedForm);
   }
   if (resourceType === 'Observation') {
-    const components = [...(resource.component || [])];
+    const components = [...((resource as fhir.Observation).component || [])];
     attachments = reject(
       [
-        ...[resource.valueAttachment || []],
+        ...[(resource as fhir.Observation).valueAttachment || []],
         // @ts-ignore
         ...map(components, 'valueAttachment'),
       ],
@@ -84,12 +94,12 @@ export const getCleanAttachmentsFromResource = (resource: any): any[] => {
     );
   }
   if (resourceType === 'Questionnaire') {
-    const initialAttachments = map(resource.item, 'initialAttachment');
+    const initialAttachments = map((resource as fhir.Questionnaire).item, 'initialAttachment');
     attachments = initialAttachments.length ? reject(initialAttachments, isEmpty) : [];
   }
 
   if (resourceType === 'QuestionnaireResponse') {
-    const answers = flatMap(resource.item, 'answer');
+    const answers = flatMap((resource as fhir.QuestionnaireResponse).item, 'answer');
     attachments = answers.length ? reject(map(answers, 'valueAttachment'), isEmpty) : [];
   }
 
