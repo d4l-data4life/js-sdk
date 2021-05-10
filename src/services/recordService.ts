@@ -265,6 +265,7 @@ const recordService = {
         id: record.record_id,
         tags: decryptedTags,
         updatedDate: new Date(record.createdAt),
+        status: record.status,
       };
 
       if (decryptedTags?.some(tag => tag === taggingUtils.generateAppDataFlagTag())) {

@@ -23,9 +23,6 @@ import { isAllowedByteSequence } from '../lib/fileValidator';
 import Attachment from '../lib/models/fhir/Attachment';
 import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
-import createCryptoService from './createCryptoService';
-import recordService from './recordService';
-import { DecryptedFhirRecord, FetchResponse, Params, Record, SearchParameters } from './types';
 import {
   addPreviewsToAttachments,
   attachBlobs,
@@ -33,6 +30,9 @@ import {
   getCleanAttachmentsFromResource,
   setAttachmentsToResource,
 } from './attachmentService';
+import createCryptoService from './createCryptoService';
+import recordService from './recordService';
+import { DecryptedFhirRecord, FetchResponse, Params, Record, SearchParameters } from './types';
 
 const SUPPORTED_PARAMS = [
   'limit',
@@ -46,6 +46,7 @@ const SUPPORTED_PARAMS = [
   'annotations',
   'resourceType',
   'partner',
+  'include_deleted',
 ];
 
 export const prepareSearchParameters = (params: Params): SearchParameters => {
@@ -100,6 +101,7 @@ export const convertToExposedRecord = (decryptedRecord: DecryptedFhirRecord) => 
     id: clonedRecord.id,
     partner: taggingUtils.getTagValueFromList(clonedRecord.tags, tagKeys.partner),
     updatedDate: clonedRecord.updatedDate,
+    status: clonedRecord.status,
   };
   exposedRecord.fhirResource.id = clonedRecord.id;
   return exposedRecord;

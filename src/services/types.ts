@@ -11,6 +11,7 @@ export interface Params {
   annotations?: string[];
   resourceType?: string;
   partner?: string;
+  include_deleted?: boolean;
 }
 
 export type SearchParameters = {
@@ -59,6 +60,7 @@ export interface DecryptedFhirRecord {
   customCreationDate?: Date;
   updatedDate?: Date;
   commonKeyId?: string;
+  status?: string;
 }
 
 /** The record we expose to users should not expose any sensitive information.
@@ -74,6 +76,7 @@ export interface Record {
   customCreationDate?: Date;
   updatedDate?: Date;
   partner?: string;
+  status?: string;
 }
 
 /** AppData */

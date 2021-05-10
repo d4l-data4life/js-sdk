@@ -579,8 +579,9 @@ Lets you specify options for the `fetchResource` method.
 | resourceType | String | (optional) Type of requested FHIR resources |
 | fhirVersion | String | (optional) The FHIR verion of the resources, for example "4.0.1" |
 | partner | String | (optional) ID of the partner the records where uploaded from |
-| annotations | String[] | (optional) Custom annotations to filter by
-| exclude_tags | String[] | (optional) Don't fetch resources with given tags
+| annotations | String[] | (optional) Custom annotations to filter by |
+| exclude_tags | String[] | (optional) Don't fetch resources with given tags |
+| include_deleted | Boolean | (optional) Fetch deleted records |
 
 #### Resolves
 | Property | Type | Description |
@@ -633,6 +634,7 @@ To count the FHIR resources you uploaded, use the `countResources` method.
 |------|:-----|:------------|
 | start_date | Date |(optional) Earliest date for which to return records |
 | end_date | Date | (optional) Latest date for which to return records |
+| include_deleted | Boolean | (optional) include deleted records |
 
 #### Resolves
 | Property | Type | Description |
