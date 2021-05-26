@@ -13,7 +13,7 @@ import taggingUtils from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
 import { DecryptedAppData, DecryptedFhirRecord, Key, QueryParams } from './types';
-import userService from './userService';
+import userService, { SymKey } from './userService';
 
 const recordService = {
   updateRecord(
@@ -159,55 +159,65 @@ const recordService = {
       );
   },
 
-  searchRecords(ownerId: string, params: QueryParams, countOnly = false): Promise<any> {
-    let user;
-    let totalCount;
+  /**
+   * Encrypt a tag or a tag group with the user's tag encryption key
+   *
+   * A tag group starts with an opening bracket (_(_) and ends with a closing bracket (_)_) and
+   * includes a comma separated list of tags
+   * @param tek The tag encryption key of the user
+   * @param tag The tag or tag group to encrypt
+   * @returns The encrypted tag or tag group
+   */
+  async encryptTag(tek: SymKey, tag: string) {
+    if (tag.startsWith('(') && tag.endsWith(')')) {
+      const partials = tag.slice(1, -1).split(',');
+      return `(${(await Promise.all(partials.map(partial => symEncryptString(tek, partial)))).join(
+        ','
+      )})`;
+    }
+    return symEncryptString(tek, tag);
+  },
 
-    return (
-      userService
-        .getUser(ownerId)
-        // @ts-ignore
-        .then(userObject => {
-          user = userObject;
-          const encryptedTagsPromise = params?.tags?.length
-            ? Promise.all(params.tags.map(tag => symEncryptString(user.tek, tag)))
-            : Promise.resolve([]);
-          const excludeTagsPromise = params?.exclude_tags?.length
-            ? Promise.all(params.exclude_tags.map(tag => symEncryptString(user.tek, tag)))
-            : Promise.resolve([]);
-          return Promise.all([encryptedTagsPromise, excludeTagsPromise]).then(
-            ([tags, excludeTags]) => ({
-              ...params,
-              tags,
-              exclude_tags: excludeTags,
-            })
-          );
-        })
-        .then(queryParams =>
-          countOnly
-            ? documentRoutes.getRecordsCount(user.id, queryParams)
-            : documentRoutes.searchRecords(user.id, queryParams)
+  async searchRecords(ownerId: string, params: QueryParams, countOnly = false): Promise<any> {
+    const user = await userService.getUser(ownerId);
+
+    let encryptedTags: string[] = [];
+    if (params?.tags?.length) {
+      encryptedTags = await Promise.all(
+        params.tags.map(async tag => recordService.encryptTag(user.tek, tag))
+      );
+    }
+
+    let encryptedExcludedTags: string[] = [];
+    if (params?.exclude_tags?.length) {
+      encryptedExcludedTags = await Promise.all(
+        params.exclude_tags.map(async tag => recordService.encryptTag(user.tek, tag))
+      );
+    }
+
+    const queryParams = {
+      ...params,
+      tags: encryptedTags,
+      exclude_tags: encryptedExcludedTags,
+    };
+
+    const searchResults: { records?: any[]; totalCount: number } = countOnly
+      ? await documentRoutes.getRecordsCount(user.id, queryParams)
+      : await documentRoutes.searchRecords(user.id, queryParams);
+
+    if (searchResults.records) {
+      const encryptedRecords = await Promise.all(
+        searchResults.records.map(searchResult =>
+          this.decryptResourceAndTags(searchResult, user.tek).catch(err => {
+            // eslint-disable-next-line no-console
+            console.warn(`Decryption failed for record: ${searchResult.record_id}`, err);
+            return new Error(err);
+          })
         )
-        .then((searchResult: { records?: any[]; totalCount: number }) => {
-          totalCount = searchResult.totalCount;
-          /* eslint-disable indent */
-          return searchResult.records
-            ? Promise.all(
-                searchResult.records.map(result =>
-                  this.decryptResourceAndTags(result, user.tek).catch(err => {
-                    // eslint-disable-next-line no-console
-                    console.warn(`Decryption failed for record: ${result.record_id}`, err);
-                    return new Error(err);
-                  })
-                )
-              )
-            : undefined;
-          /* eslint-enable indent */
-        })
-        .then(results =>
-          results ? { totalCount, records: reject(results, isError) } : { totalCount }
-        )
-    );
+      );
+      return { totalCount: searchResults.totalCount, records: reject(encryptedRecords, isError) };
+    }
+    return { totalCount: searchResults.totalCount };
   },
 
   deleteRecord(ownerId: string, recordId: string) {
