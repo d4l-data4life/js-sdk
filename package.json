@@ -20,6 +20,7 @@
     "karma:prod:web": "karma start karma.conf.js --single-run --node false",
     "test": "npm run lint && npm run build:test && npm run karma:prod:web",
     "test-only": "npm run karma:prod:web",
+    "test:watch": "karma start karma.conf.js --node false",
     "lebab-fhir-safe": "lebab --replace fhir/ --transform arrow --transform arrow-return --transform for-of --transform for-each --transform arg-rest --transform arg-spread --transform obj-method --transform obj-shorthand --transform no-strict --transform exponent --transform multi-var",
     "lebab-fhir-unsafe": "lebab --replace fhir/ --transform commonjs",
     "lebab-fhir": "npm run lebab-fhir-safe && npm run lebab-fhir-unsafe"

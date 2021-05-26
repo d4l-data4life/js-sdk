@@ -1,41 +1,26 @@
 /* eslint-disable no-param-reassign, no-await-in-loop */
 import { convertBlobToArrayBufferView } from 'js-crypto';
 import cloneDeep from 'lodash/cloneDeep';
-import find from 'lodash/find';
-import flatMap from 'lodash/flatMap';
 import includes from 'lodash/includes';
-import isEmpty from 'lodash/isEmpty';
-import isNull from 'lodash/isNull';
 import map from 'lodash/map';
 import merge from 'lodash/merge';
 import mergeWith from 'lodash/mergeWith';
 import omit from 'lodash/omit';
-import reject from 'lodash/reject';
 import some from 'lodash/some';
 import {
   FULL,
   getAttachmentIdToDownload,
   getContentHash,
-  getEncryptedFilesByAttachmentIndex,
-  getFileContentsAsBuffer,
-  getIdentifierValue,
   hasAttachments,
   separateOldAndNewAttachments,
-  shrinkImageHeightIfNeeded,
   verifyAttachmentPayload,
 } from '../lib/attachmentUtils';
 import BlobFile from '../lib/BlobFile';
 import InvalidAttachmentPayloadError from '../lib/errors/InvalidAttachmentPayloadError';
 import ValidationError from '../lib/errors/ValidationError';
 import fhirValidator from '../lib/fhirValidator';
-import {
-  isAllowedByteSequence,
-  isAllowedFileType,
-  isResizableImageByteSequence,
-  isWithinSizeLimit,
-} from '../lib/fileValidator';
+import { isAllowedByteSequence } from '../lib/fileValidator';
 import Attachment from '../lib/models/fhir/Attachment';
-import { DOCUMENT_REFERENCE } from '../lib/models/fhir/DocumentReference';
 import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
@@ -63,16 +48,7 @@ const SUPPORTED_PARAMS = [
   'partner',
 ];
 
-const uploadAttachments = (ownerId, encryptedFiles) =>
-  Promise.all(encryptedFiles.map(file => documentRoutes.uploadDocument(ownerId, file)));
-
-export const prepareSearchParameters = ({
-  params,
-  fallbackMode = null,
-}: {
-  params: Params;
-  fallbackMode?: null | 'fhirversion' | 'annotation';
-}) => {
+export const prepareSearchParameters = ({ params }: { params: Params }) => {
   const parameters = { ...params };
   if (!Object.keys(parameters).every(key => includes(SUPPORTED_PARAMS, key))) {
     throw new Error(
@@ -92,25 +68,16 @@ export const prepareSearchParameters = ({
   }
 
   if (params.annotations) {
-    parameters.tags.push(
-      ...taggingUtils.generateCustomTags(params.annotations, fallbackMode === 'annotation')
-    );
+    parameters.tags.push(...taggingUtils.generateCustomTags(params.annotations, true));
     delete parameters.annotations;
   }
 
   if (params.exclude_tags) {
-    parameters.exclude_tags = taggingUtils.generateCustomTags(
-      params.exclude_tags,
-      fallbackMode === 'annotation'
-    );
+    parameters.exclude_tags = taggingUtils.generateCustomTags(params.exclude_tags, true);
   }
 
   if (params.fhirVersion) {
-    if (fallbackMode === 'fhirversion') {
-      parameters.tags.push(taggingUtils.buildFallbackTag(tagKeys.fhirVersion, params.fhirVersion));
-    } else {
-      parameters.tags.push(taggingUtils.buildTag(tagKeys.fhirVersion, params.fhirVersion));
-    }
+    parameters.tags.push(taggingUtils.generateFhirVersionTag(params.fhirVersion, true));
     delete parameters.fhirVersion;
   }
 
@@ -364,25 +331,22 @@ const fhirService = {
   },
 
   countResources(ownerId: string, params: Params = {}): Promise<number> {
-    return recordService
-      .searchWithFallbackIfNeeded(ownerId, true, params)
-      .then((responseArray: { totalCount: string }[]) =>
-        responseArray.reduce(
-          (sum, currentResponse) => sum + parseInt(currentResponse.totalCount, 10),
-          0
-        )
-      );
+    const parameters = prepareSearchParameters({
+      params: { ...params, exclude_flags: [taggingUtils.generateAppDataFlagTag()] },
+    });
+
+    return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
   },
 
   fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
-    return recordService
-      .searchWithFallbackIfNeeded(ownerId, false, params)
-      .then((responseArray: { totalCount: string; records: DecryptedFhirRecord[] }[]) =>
-        recordService.normalizeFallbackSearchResults({
-          responseArray,
-          conversionFunction: convertToExposedRecord,
-        })
-      );
+    const parameters = prepareSearchParameters({
+      params: { ...params, exclude_flags: [taggingUtils.generateAppDataFlagTag()] },
+    });
+
+    return recordService.searchRecords(ownerId, parameters).then(result => ({
+      records: result.records.map(convertToExposedRecord),
+      totalCount: result.totalCount,
+    }));
   },
 
   downloadResource(

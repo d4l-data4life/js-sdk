@@ -13,7 +13,6 @@ import testVariables from '../testUtils/testVariables';
 import fhirValidator from '../../src/lib/fhirValidator';
 import stu3FhirResources from '../testUtils/stu3FhirResources';
 import recordService from '../../src/services/recordService';
-import DocumentReference from '../../src/lib/models/fhir/DocumentReference';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
 import { setAttachmentsToResource } from '../../src/services/attachmentService';
 
@@ -126,56 +125,55 @@ describe('prepareSearchParameters', () => {
     });
   });
 
-  it('correctly prepares a non-fallback fhir version tag', () => {
+  it('correctly prepares parameters including a fhir version 3.0.1', () => {
     const preparedParams = prepareSearchParameters({
       params: {
-        tags: ['superhero-origin-story'],
-        exclude_tags: ['superman'],
-        exclude_flags: [testVariables.appDataFlag],
         fhirVersion: '3.0.1',
       },
-      fallbackMode: null,
     });
     expect(preparedParams).to.deep.equal({
-      tags: ['superhero-origin-story', 'fhirversion=3%2e0%2e1'],
-      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+      tags: ['(fhirversion=3%2e0%2e1,fhirversion=3.0.1)'],
     });
   });
 
-  it('correctly prepares a fallback fhir version tag', () => {
+  it('correctly prepares parameters including a fhir version 4.0.1', () => {
     const preparedParams = prepareSearchParameters({
       params: {
-        tags: ['superhero-origin-story'],
-        exclude_tags: ['superman'],
-        exclude_flags: [testVariables.appDataFlag],
         fhirVersion: '4.0.1',
       },
-      fallbackMode: 'fhirversion',
     });
     expect(preparedParams).to.deep.equal({
-      tags: ['superhero-origin-story', 'fhirversion=4.0.1'],
-      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+      tags: ['(fhirversion=4%2e0%2e1,fhirversion=4.0.1)'],
     });
   });
 
-  it('correctly prepares a fallback annotation', () => {
+  it('correctly prepares parameters including an annotation', () => {
     const preparedParams = prepareSearchParameters({
       params: {
-        tags: ['wanda-vision'],
         annotations: ['***it was: agatha all along***'],
-        exclude_tags: ['superman'],
-        exclude_flags: [testVariables.appDataFlag],
-        fhirVersion: '4.0.1',
       },
-      fallbackMode: 'annotation',
     });
     expect(preparedParams).to.deep.equal({
       tags: [
-        'wanda-vision',
-        'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
-        'fhirversion=4%2e0%2e1',
+        '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
       ],
-      exclude_tags: ['custom=superman', testVariables.appDataFlag],
+    });
+  });
+
+  it('correctly prepares parameters including excluded tags', () => {
+    const preparedParams = prepareSearchParameters({
+      params: {
+        annotations: ['***it was: agatha all along***'],
+        exclude_tags: ['***it was: agatha all along***'],
+      },
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: [
+        '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
+      ],
+      exclude_tags: [
+        '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
+      ],
     });
   });
 
@@ -423,6 +421,37 @@ describe('fhirService', () => {
           expect(createRecordStub).to.be.calledWith(userId);
           const { args } = createRecordStub.getCall(0);
           expect(args[1].tags.toString()).to.contain('fhirversion=4%2e0%2e1');
+          // The tags should not include the fallback versions of annotations
+          expect(args[1].tags.toString()).to.not.contain('(');
+          expect(args[1].tags.toString()).to.not.contain(')');
+          expect(createRecordStub).to.be.calledOnce;
+          Object.keys(record.fhirResource).forEach(key => {
+            if (key !== 'id') {
+              expect(JSON.stringify(record.fhirResource[key])).to.equal(
+                JSON.stringify(res.fhirResource[key])
+              );
+            }
+          });
+          done();
+        })
+        .catch(done);
+    });
+
+    it('should create resource with a valid input and tag it with the correct FHIR version (R4) and the set annotation without the fallback for annotations', done => {
+      fhirService.setFhirVersion(FHIR_VERSION_R4);
+      const d4lResource = { resourceType: 'Encounter', id: 'record_id' };
+      fhirService
+        .createResource(userId, d4lResource, new Date(), ['***it was: agatha all along***'])
+        .then(res => {
+          expect(createRecordStub).to.be.calledWith(userId);
+          const { args } = createRecordStub.getCall(0);
+          expect(args[1].tags.toString()).to.contain('fhirversion=4%2e0%2e1');
+          expect(args[1].tags.toString()).to.contain(
+            'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a'
+          );
+          // The tags should not include the fallback versions of annotations
+          expect(args[1].tags.toString()).to.not.contain('(');
+          expect(args[1].tags.toString()).to.not.contain(')');
           expect(createRecordStub).to.be.calledOnce;
           Object.keys(record.fhirResource).forEach(key => {
             if (key !== 'id') {

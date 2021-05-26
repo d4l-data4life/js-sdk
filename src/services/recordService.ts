@@ -12,9 +12,8 @@ import fhirValidator from '../lib/fhirValidator';
 import taggingUtils from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
-import { DecryptedAppData, DecryptedFhirRecord, Key, Params, QueryParams } from './types';
+import { DecryptedAppData, DecryptedFhirRecord, Key, QueryParams } from './types';
 import userService from './userService';
-import { prepareSearchParameters } from './fhirService';
 
 const recordService = {
   updateRecord(
@@ -160,46 +159,6 @@ const recordService = {
       );
   },
 
-  searchWithFallbackIfNeeded(
-    ownerId: string,
-    countOnly: boolean,
-    params: Params = {}
-  ): Promise<any[]> {
-    const searchParams = { ...params };
-
-    const appDataFlag = taggingUtils.generateAppDataFlagTag();
-    if (!params?.tags?.includes(appDataFlag)) {
-      searchParams.exclude_flags = [appDataFlag];
-    }
-
-    const basicParameters = prepareSearchParameters({
-      params: searchParams,
-      fallbackMode: null,
-    });
-
-    if (params?.fhirVersion || params?.annotations || params?.exclude_tags) {
-      /* earlier versions of the Android SDK did not escape the dots in fhir versions,
-      so we query for both of this encoding and the current standard one */
-      const versionFallbackParameters = prepareSearchParameters({
-        params: searchParams,
-        fallbackMode: 'fhirversion',
-      });
-
-      /* original JS SDK implementation was inconsistent in lowercasing/uppercasing
-      some escaped characters, so we query for both versions */
-      const tagFallbackParameters = prepareSearchParameters({
-        params: searchParams,
-        fallbackMode: 'annotation',
-      });
-      return Promise.all([
-        this.searchRecords(ownerId, basicParameters, countOnly),
-        this.searchRecords(ownerId, versionFallbackParameters, countOnly),
-        this.searchRecords(ownerId, tagFallbackParameters, countOnly),
-      ]);
-    }
-    return Promise.all([this.searchRecords(ownerId, basicParameters, countOnly)]);
-  },
-
   searchRecords(ownerId: string, params: QueryParams, countOnly = false): Promise<any> {
     let user;
     let totalCount;
@@ -250,35 +209,6 @@ const recordService = {
         )
     );
   },
-
-  /* eslint-disable indent */
-  normalizeFallbackSearchResults({ responseArray, conversionFunction }) {
-    return responseArray.reduce(
-      (combinedRecords, currentResponse) => {
-        const nonDuplicateRecords = reject(currentResponse.records, newRecord =>
-          combinedRecords.records.some(existingRecord => existingRecord.id === newRecord.id)
-        );
-        const numberOfDuplicates = currentResponse.records.length - nonDuplicateRecords.length;
-        return nonDuplicateRecords?.length
-          ? {
-              records: [...combinedRecords.records, ...nonDuplicateRecords.map(conversionFunction)],
-              totalCount:
-                combinedRecords.totalCount +
-                parseInt(currentResponse.totalCount, 10) -
-                numberOfDuplicates,
-            }
-          : {
-              records: [...combinedRecords.records],
-              totalCount: combinedRecords.totalCount,
-            };
-      },
-      {
-        records: [],
-        totalCount: 0,
-      }
-    );
-  },
-  /* eslint-enable indent */
 
   deleteRecord(ownerId: string, recordId: string) {
     return documentRoutes.deleteRecord(ownerId, recordId);
