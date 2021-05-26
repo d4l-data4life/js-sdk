@@ -668,6 +668,24 @@ describe('fhirService', () => {
         })
         .catch(done);
     });
+
+    it('should add the annotations as tags and the partner', done => {
+      const parameters = { annotations: ['***it was: agatha all along***'], partner: 'glumpany' };
+      fhirService
+        .fetchResources(testVariables.userId, parameters)
+        .then(() => {
+          expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
+            tags: [
+              'partner=glumpany',
+              '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
+            ],
+            exclude_tags: [testVariables.appDataFlag],
+          });
+          expect(parameters.partner).to.equal('glumpany');
+          done();
+        })
+        .catch(done);
+    });
   });
 
   describe('countResources', () => {
