@@ -54,7 +54,7 @@ const taggingUtils = {
   /**
    * Generate the tag for the FHIR version
    *
-   * Note: When generating the tag for a search, the tag will
+   * Note: When generating the tag for a search, the tag
    *       will include the fallback option
    * @param fhirVersion The FHIR version that should be added as a tag (Default: SDK FHIR version)
    * @param isSearch Flag indicating if the tags are used for search or not
