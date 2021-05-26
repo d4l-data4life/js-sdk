@@ -31,6 +31,7 @@ import r4DiagnosticReportExamples from './resources/r4/diagnosticreport-examples
 import r4ResearchSubjectExamples from './resources/r4/researchsubject-examples';
 import r4MedicationExamples from './resources/r4/medication-examples';
 import r4MedicationStatementExamples from './resources/r4/medicationstatement-examples';
+import r4AllergyInteroleranceExamples from './resources/r4/allergyintolerance-examples';
 
 import fhirService from '../../src/services/fhirService';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
@@ -69,13 +70,16 @@ delete stu3DiagnosticReportExamples.DiagnosticreportExampleF001Bloodexam;
 describe('fhir validator', () => {
   describe('getValidator', () => {
     let fhirVersionStub;
+
     beforeEach(() => {
       fhirVersionStub = sinon.stub(fhirService, 'getFhirVersion');
       fhirVersionStub.returns(FHIR_VERSION_STU3);
     });
+
     afterEach(() => {
       fhirVersionStub.restore();
     });
+
     it('successfully calls getValidator for a DocumentReference', done => {
       fhirValidator.getValidator('DocumentReference').then(res => {
         expect(typeof res).to.equal('function');
@@ -292,8 +296,14 @@ describe('fhir validator', () => {
       expect(valid).to.equal(false);
     });
 
-    it('passes isValidResourceType for a resource not supported in STU3 mode', () => {
+    it('passes isValidResourceType for a resource not supported in STU3 mode (Encounter)', () => {
       const valid = fhirValidator.isValidResourceType('Encounter');
+      expect(valid).to.not.be.null;
+      expect(valid).to.equal(true);
+    });
+
+    it('passes isValidResourceType for a resource not supported in STU3 mode (AllergyIntolerance)', () => {
+      const valid = fhirValidator.isValidResourceType('AllergyIntolerance');
       expect(valid).to.not.be.null;
       expect(valid).to.equal(true);
     });
@@ -332,9 +342,8 @@ describe('fhir validator', () => {
       let err;
       try {
         await fhirValidator.validate({
-          // @ts-ignore
           uselessProperty: 'not a resource type',
-        });
+        } as fhir.DomainResource);
       } catch (error) {
         err = error;
       } finally {
@@ -350,12 +359,11 @@ describe('fhir validator', () => {
       let err;
       try {
         await fhirValidator.validate({
-          // @ts-ignore
           uselessProperty: 'not a resource type',
           fhirResource: {
             why: 'You might want to submit me though',
           },
-        });
+        } as fhir.DomainResource);
       } catch (error) {
         err = error;
       } finally {
@@ -388,7 +396,6 @@ describe('fhir validator', () => {
               },
             },
           ],
-          // @ts-ignore
           status: 'final',
           code: {
             text: 'example',
@@ -396,7 +403,7 @@ describe('fhir validator', () => {
           subject: {
             reference: '#pat',
           },
-        });
+        } as fhir.Observation);
       } catch (error) {
         err = error;
       } finally {
@@ -473,7 +480,6 @@ describe('fhir validator', () => {
               },
             },
           ],
-          // @ts-ignore
           status: 'final',
           code: {
             text: 'example',
@@ -481,7 +487,7 @@ describe('fhir validator', () => {
           subject: {
             reference: '#pat',
           },
-        });
+        } as fhir.Observation);
       } catch (error) {
         err = error;
       } finally {
@@ -507,6 +513,7 @@ describe('fhir validator', () => {
       ResearchSubject: r4ResearchSubjectExamples,
       Medication: r4MedicationExamples,
       MedicationStatement: r4MedicationStatementExamples,
+      AllergyInterolerance: r4AllergyInteroleranceExamples,
     };
 
     // eslint-disable-next-line no-restricted-syntax

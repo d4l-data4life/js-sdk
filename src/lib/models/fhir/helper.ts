@@ -29,6 +29,7 @@ export const getResource = (ref: fhir.Reference, resources: FHIRResource[]): FHI
 
 export const SUPPORTED_RESOURCES = {
   [FHIR_VERSION_R4]: [
+    'AllergyIntolerance',
     'Encounter',
     'DocumentReference',
     'DiagnosticReport',
