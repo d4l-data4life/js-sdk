@@ -394,7 +394,7 @@ describe('services/recordService', () => {
 
     it('works as expected when there is a tag group', done => {
       const params = {
-        tags: [`(${testVariables.tag},${testVariables.secondTag})`],
+        tags: [[testVariables.tag, testVariables.secondTag]],
       };
       const expectedParamsForRoute = {
         exclude_tags: [],
@@ -416,7 +416,7 @@ describe('services/recordService', () => {
 
     it('works as expected when there is an excluded tag group', done => {
       const params = {
-        exclude_tags: [`(${testVariables.tag},${testVariables.secondTag})`],
+        exclude_tags: [[testVariables.tag, testVariables.secondTag]],
       };
       const expectedParamsForRoute = {
         tags: [],

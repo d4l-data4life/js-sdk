@@ -86,7 +86,8 @@ const appDataService = {
 
   fetchAllAppData(ownerId: string, params: Params = {}): Promise<FetchResponse<AppData>> {
     const parameters = prepareSearchParameters({
-      params: { ...params, tags: [taggingUtils.generateAppDataFlagTag()] },
+      ...params,
+      tags: [taggingUtils.generateAppDataFlagTag()],
     });
 
     return recordService.searchRecords(ownerId, parameters).then(result => ({

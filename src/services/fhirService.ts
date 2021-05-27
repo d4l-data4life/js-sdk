@@ -25,7 +25,7 @@ import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
 import recordService from './recordService';
-import { DecryptedFhirRecord, FetchResponse, Params, Record } from './types';
+import { DecryptedFhirRecord, FetchResponse, Params, Record, SearchParameters } from './types';
 import {
   addPreviewsToAttachments,
   attachBlobs,
@@ -48,44 +48,44 @@ const SUPPORTED_PARAMS = [
   'partner',
 ];
 
-export const prepareSearchParameters = ({ params }: { params: Params }) => {
-  const parameters = { ...params };
-  if (!Object.keys(parameters).every(key => includes(SUPPORTED_PARAMS, key))) {
+export const prepareSearchParameters = (params: Params): SearchParameters => {
+  if (!Object.keys(params).every(key => includes(SUPPORTED_PARAMS, key))) {
     throw new Error(
       `Passed unsupported parameter. Supported parameters are ${SUPPORTED_PARAMS.join(', ')}`
     );
   }
-  delete parameters.fhirVersion;
+  const parameters: SearchParameters = {
+    tags: params.tags || [],
+    ...(params.limit && { limit: params.limit }),
+    ...(params.offset && { offset: params.offset }),
+    ...(params.start_date && { start_date: params.start_date }),
+    ...(params.end_date && { end_date: params.end_date }),
+  };
 
-  parameters.tags = parameters.tags || [];
   if (params.resourceType) {
     parameters.tags.push(taggingUtils.buildTag(tagKeys.resourceType, params.resourceType));
-    delete parameters.resourceType;
   }
+
   if (params.partner) {
     parameters.tags.push(taggingUtils.buildTag(tagKeys.partner, params.partner));
-    delete parameters.partner;
   }
 
   if (params.annotations) {
-    parameters.tags.push(...taggingUtils.generateCustomTags(params.annotations, true));
-    delete parameters.annotations;
+    parameters.tags.push(...taggingUtils.generateCustomTagsForSearch(params.annotations));
   }
 
   if (params.exclude_tags) {
-    parameters.exclude_tags = taggingUtils.generateCustomTags(params.exclude_tags, true);
+    parameters.exclude_tags = taggingUtils.generateCustomTagsForSearch(params.exclude_tags);
   }
 
   if (params.fhirVersion) {
-    parameters.tags.push(taggingUtils.generateFhirVersionTag(params.fhirVersion, true));
-    delete parameters.fhirVersion;
+    parameters.tags.push(taggingUtils.generateFhirVersionTagForSearch(params.fhirVersion));
   }
 
   if (params.exclude_flags) {
     parameters.exclude_tags = [
       ...new Set([...(parameters.exclude_tags || []), ...params.exclude_flags]),
     ];
-    delete parameters.exclude_flags;
   }
 
   return parameters;
@@ -332,7 +332,8 @@ const fhirService = {
 
   countResources(ownerId: string, params: Params = {}): Promise<number> {
     const parameters = prepareSearchParameters({
-      params: { ...params, exclude_flags: [taggingUtils.generateAppDataFlagTag()] },
+      ...params,
+      exclude_flags: [taggingUtils.generateAppDataFlagTag()],
     });
 
     return recordService.searchRecords(ownerId, parameters, true).then(result => result.totalCount);
@@ -340,7 +341,8 @@ const fhirService = {
 
   fetchResources(ownerId: string, params: Params = {}): Promise<FetchResponse<Record>> {
     const parameters = prepareSearchParameters({
-      params: { ...params, exclude_flags: [taggingUtils.generateAppDataFlagTag()] },
+      ...params,
+      exclude_flags: [taggingUtils.generateAppDataFlagTag()],
     });
 
     return recordService.searchRecords(ownerId, parameters).then(result => ({

@@ -12,7 +12,15 @@ import fhirValidator from '../lib/fhirValidator';
 import taggingUtils from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
 import createCryptoService from './createCryptoService';
-import { DecryptedAppData, DecryptedFhirRecord, Key, QueryParams } from './types';
+import {
+  DecryptedAppData,
+  DecryptedFhirRecord,
+  Key,
+  QueryParams,
+  SearchParameters,
+  Tag,
+  TagGroup,
+} from './types';
 import userService, { SymKey } from './userService';
 
 const recordService = {
@@ -162,23 +170,22 @@ const recordService = {
   /**
    * Encrypt a tag or a tag group with the user's tag encryption key
    *
-   * A tag group starts with an opening bracket (_(_) and ends with a closing bracket (_)_) and
+   * A tag group starts with an opening bracket "(" and ends with a closing bracket ")" and
    * includes a comma separated list of tags
    * @param tek The tag encryption key of the user
    * @param tag The tag or tag group to encrypt
    * @returns The encrypted tag or tag group
    */
-  async encryptTag(tek: SymKey, tag: string) {
-    if (tag.startsWith('(') && tag.endsWith(')')) {
-      const partials = tag.slice(1, -1).split(',');
-      return `(${(await Promise.all(partials.map(partial => symEncryptString(tek, partial)))).join(
+  async encryptTag(tek: SymKey, tag: Tag | TagGroup) {
+    if (Array.isArray(tag)) {
+      return `(${(await Promise.all(tag.map(partial => symEncryptString(tek, partial)))).join(
         ','
       )})`;
     }
     return symEncryptString(tek, tag);
   },
 
-  async searchRecords(ownerId: string, params: QueryParams, countOnly = false): Promise<any> {
+  async searchRecords(ownerId: string, params: SearchParameters, countOnly = false): Promise<any> {
     const user = await userService.getUser(ownerId);
 
     let encryptedTags: string[] = [];

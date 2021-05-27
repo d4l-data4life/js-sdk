@@ -15,6 +15,7 @@ import stu3FhirResources from '../testUtils/stu3FhirResources';
 import recordService from '../../src/services/recordService';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
 import { setAttachmentsToResource } from '../../src/services/attachmentService';
+import { Params } from '../../src/services/types';
 
 chai.use(sinonChai);
 
@@ -22,7 +23,7 @@ const { expect } = chai;
 
 describe('prepareSearchParameters', () => {
   it('correctly prepares simple parameters', () => {
-    const preparedParams = prepareSearchParameters({ params: { limit: 4, offset: 3 } });
+    const preparedParams = prepareSearchParameters({ limit: 4, offset: 3 });
     expect(preparedParams).to.deep.equal({
       limit: 4,
       offset: 3,
@@ -32,10 +33,8 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares simple parameters with a tag', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        limit: 10,
-        tags: ['superhero-origin-story'],
-      },
+      limit: 10,
+      tags: ['superhero-origin-story'],
     });
     expect(preparedParams).to.deep.equal({
       limit: 10,
@@ -45,25 +44,21 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares simple parameters with a tag and annotation', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        limit: 10,
-        tags: ['superhero-origin-story'],
-        annotations: ['an annotation'],
-      },
+      limit: 10,
+      tags: ['superhero-origin-story'],
+      annotations: ['annotation'],
     });
     expect(preparedParams).to.deep.equal({
       limit: 10,
-      tags: ['superhero-origin-story', 'custom=an%20annotation'],
+      tags: ['superhero-origin-story', 'custom=annotation'],
     });
   });
 
   it('correctly prepares parameters with a tag and a resourceType', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        limit: 10,
-        tags: ['superhero-origin-story'],
-        resourceType: 'Patient',
-      },
+      limit: 10,
+      tags: ['superhero-origin-story'],
+      resourceType: 'Patient',
     });
     expect(preparedParams).to.deep.equal({
       limit: 10,
@@ -73,11 +68,9 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with a tag and a partner', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        offset: 20,
-        tags: ['superhero-origin-story'],
-        partner: 'S.H.I.E.L.D.',
-      },
+      offset: 20,
+      tags: ['superhero-origin-story'],
+      partner: 'S.H.I.E.L.D.',
     });
     expect(preparedParams).to.deep.equal({
       offset: 20,
@@ -87,10 +80,8 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with exclude_tags', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        tags: ['superhero-origin-story'],
-        exclude_tags: ['superman'],
-      },
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['superman'],
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story'],
@@ -100,10 +91,8 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with exclude_flags', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        tags: ['superhero-origin-story'],
-        exclude_flags: [testVariables.appDataFlag],
-      },
+      tags: ['superhero-origin-story'],
+      exclude_flags: [testVariables.appDataFlag],
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story'],
@@ -113,11 +102,9 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters with exclude_tags and exclude_flags', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        tags: ['superhero-origin-story'],
-        exclude_tags: ['superman'],
-        exclude_flags: [testVariables.appDataFlag],
-      },
+      tags: ['superhero-origin-story'],
+      exclude_tags: ['superman'],
+      exclude_flags: [testVariables.appDataFlag],
     });
     expect(preparedParams).to.deep.equal({
       tags: ['superhero-origin-story'],
@@ -127,59 +114,89 @@ describe('prepareSearchParameters', () => {
 
   it('correctly prepares parameters including a fhir version 3.0.1', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        fhirVersion: '3.0.1',
-      },
+      fhirVersion: '3.0.1',
     });
     expect(preparedParams).to.deep.equal({
-      tags: ['(fhirversion=3%2e0%2e1,fhirversion=3.0.1)'],
+      tags: [['fhirversion=3%2e0%2e1', 'fhirversion=3.0.1']],
     });
   });
 
   it('correctly prepares parameters including a fhir version 4.0.1', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        fhirVersion: '4.0.1',
-      },
+      fhirVersion: '4.0.1',
     });
     expect(preparedParams).to.deep.equal({
-      tags: ['(fhirversion=4%2e0%2e1,fhirversion=4.0.1)'],
+      tags: [['fhirversion=4%2e0%2e1', 'fhirversion=4.0.1']],
     });
   });
 
   it('correctly prepares parameters including an annotation', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        annotations: ['***it was: agatha all along***'],
-      },
+      annotations: ['***it was: agatha all along***'],
     });
+    expect(preparedParams.tags.length).to.equal(1);
+    expect(preparedParams.tags[0].length).to.equal(3);
+
     expect(preparedParams).to.deep.equal({
       tags: [
-        '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
+        [
+          'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a', // Original
+          'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a', // JS SDK Bug
+          'custom=***it was: agatha all along***', // KMP SDK Bug
+        ],
+      ],
+    });
+  });
+
+  it('correctly prepares parameters including an annotation and a tag', () => {
+    const preparedParams = prepareSearchParameters({
+      annotations: ['***it was: agatha all along***'],
+      tags: ['superhero-origin-story'],
+    });
+    expect(preparedParams.tags.length).to.equal(2);
+    expect(typeof preparedParams.tags[0]).to.equal('string');
+    expect(Array.isArray(preparedParams.tags[1])).to.equal(true);
+    expect(preparedParams.tags[1].length).to.equal(3);
+
+    expect(preparedParams).to.deep.equal({
+      tags: [
+        'superhero-origin-story',
+        [
+          'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
+          'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+          'custom=***it was: agatha all along***',
+        ],
       ],
     });
   });
 
   it('correctly prepares parameters including excluded tags', () => {
     const preparedParams = prepareSearchParameters({
-      params: {
-        annotations: ['***it was: agatha all along***'],
-        exclude_tags: ['***it was: agatha all along***'],
-      },
+      annotations: ['***it was: agatha all along***'],
+      exclude_tags: ['***it was: agatha all along***'],
     });
     expect(preparedParams).to.deep.equal({
       tags: [
-        '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
+        [
+          'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
+          'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+          'custom=***it was: agatha all along***',
+        ],
       ],
       exclude_tags: [
-        '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
+        [
+          'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
+          'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+          'custom=***it was: agatha all along***',
+        ],
       ],
     });
   });
 
   it('throws when an unsupported parameter is passed', () => {
-    // @ts-ignore
-    expect(() => prepareSearchParameters({ illegalTag: 'suchIllegalMuchEvil' })).to.throw();
+    expect(() =>
+      prepareSearchParameters({ illegalTag: 'suchIllegalMuchEvil' } as Params)
+    ).to.throw();
   });
 });
 
@@ -677,7 +694,11 @@ describe('fhirService', () => {
           expect(searchRecordsStub).to.be.calledWith(testVariables.userId, {
             tags: [
               'partner=glumpany',
-              '(custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a,custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a)',
+              [
+                'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
+                'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+                'custom=***it was: agatha all along***',
+              ],
             ],
             exclude_tags: [testVariables.appDataFlag],
           });
