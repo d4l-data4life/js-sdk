@@ -23,6 +23,8 @@ import stu3FhirResources from '../testUtils/stu3FhirResources';
 import recordResources from '../testUtils/recordResources';
 import encryptionResources from '../testUtils/encryptionResources';
 import recordService from '../../src/services/recordService';
+import fhirService from '../../src/services/fhirService';
+import { FHIR_VERSION_STU3 } from '../../src/lib/models/fhir/helper';
 
 chai.use(sinonChai);
 const { expect } = chai;
@@ -138,9 +140,11 @@ describe('services/recordService', () => {
 
   describe('createRecord', () => {
     it('should resolve when called with userId and correct fhirResource', done => {
+      fhirService.setFhirVersion(FHIR_VERSION_STU3);
       const tags = [
         taggingUtils.generateCreationTag(),
         ...taggingUtils.generateTagsFromFhir(stu3FhirResources.documentReference),
+        taggingUtils.generateFhirVersionTag(),
       ];
 
       recordService
@@ -246,10 +250,12 @@ describe('services/recordService', () => {
 
     it('should pass the right custom tags corresponding to the annotations passed and overwrite existing tags on the document to be updated', done => {
       taggingUtils.setPartnerId(testVariables.partnerId);
+      fhirService.setFhirVersion(FHIR_VERSION_STU3);
       const tags = [
         ...taggingUtils.generateCustomTags(documentResources.annotations),
         taggingUtils.generateUpdateTag(),
         ...taggingUtils.generateTagsFromFhir(stu3FhirResources.documentReference),
+        taggingUtils.generateFhirVersionTag(),
       ];
 
       recordService
@@ -279,6 +285,7 @@ describe('services/recordService', () => {
 
     it('should leave existing annotations when no new ones are passed', done => {
       taggingUtils.setPartnerId(testVariables.partnerId);
+      fhirService.setFhirVersion(FHIR_VERSION_STU3);
       downloadRecordStub.returns(
         Promise.resolve(Object.assign({}, recordResources.documentReferenceEncryptedTwoTags))
       );
@@ -300,7 +307,12 @@ describe('services/recordService', () => {
           expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
             id: testVariables.recordId,
             fhirResource: stu3FhirResources.documentReference,
-            tags: ['resourcetype=documentreference', 'partner=1', taggingUtils.generateUpdateTag()],
+            tags: [
+              'resourcetype=documentreference',
+              'partner=1',
+              taggingUtils.generateUpdateTag(),
+              taggingUtils.generateFhirVersionTag(),
+            ],
           });
           done();
         })
@@ -309,6 +321,7 @@ describe('services/recordService', () => {
 
     it('should delete existing annotations when an empty array of annotations as tags is passed', done => {
       taggingUtils.setPartnerId(testVariables.partnerId);
+      fhirService.setFhirVersion(FHIR_VERSION_STU3);
       downloadRecordStub.returns(
         Promise.resolve(Object.assign({}, recordResources.documentReferenceEncryptedTwoTags))
       );
@@ -331,7 +344,11 @@ describe('services/recordService', () => {
           expect(recordServiceUploadRecordSpy).to.be.calledWith(testVariables.userId, {
             id: testVariables.recordId,
             fhirResource: stu3FhirResources.documentReference,
-            tags: [taggingUtils.generateUpdateTag(), 'resourcetype=documentreference'],
+            tags: [
+              taggingUtils.generateUpdateTag(),
+              'resourcetype=documentreference',
+              taggingUtils.generateFhirVersionTag(),
+            ],
           });
           done();
         })
