@@ -102,27 +102,21 @@ const taggingUtils = {
    */
   generateCustomTagsForSearch(annotationList: string[] = []): (Tag | TagGroup)[] {
     return annotationList.map(annotation => {
-      const tagGroup: TagGroup = [];
-
       /*
       Original JS SDK implementation was inconsistent in lowercasing/uppercasing
       some escaped characters
       */
       const original: Tag = this.buildTag(ANNOTATION_LABEL, annotation, false);
       const fallbackJS: Tag = this.buildTag(ANNOTATION_LABEL, annotation, true);
-      if (original !== fallbackJS) {
-        tagGroup.push(fallbackJS);
-      }
 
       /*
       For a brief time the KMP SDK did not encode annotations and tags
       */
       const fallbackKMP: Tag = this.buildFallbackTag(ANNOTATION_LABEL, annotation);
-      if (original !== fallbackKMP) {
-        tagGroup.push(fallbackKMP);
-      }
 
-      return tagGroup.length > 0 ? [original, ...tagGroup] : original;
+      const tagGroup: TagGroup = [...new Set([original, fallbackJS, fallbackKMP])];
+
+      return tagGroup.length > 1 ? tagGroup : original;
     });
   },
 
