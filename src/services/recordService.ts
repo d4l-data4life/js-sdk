@@ -16,7 +16,6 @@ import {
   DecryptedAppData,
   DecryptedFhirRecord,
   Key,
-  QueryParams,
   SearchParameters,
   Tag,
   TagGroup,
@@ -96,7 +95,11 @@ const recordService = {
         {
           ...record,
           tags: [
-            ...new Set([...record.tags, ...taggingUtils.generateTagsFromFhir(record.fhirResource)]),
+            ...new Set([
+              ...record.tags,
+              ...taggingUtils.generateTagsFromFhir(record.fhirResource),
+              taggingUtils.generateFhirVersionTag(),
+            ]),
           ],
         },
         uploadRequest
