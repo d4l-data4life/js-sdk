@@ -13,6 +13,15 @@ export interface Params {
   partner?: string;
 }
 
+export type SearchParameters = {
+  limit?: number;
+  offset?: number;
+  start_date?: string;
+  end_date?: string;
+  tags?: (Tag | TagGroup)[];
+  exclude_tags?: (Tag | TagGroup)[];
+};
+
 export interface QueryParams {
   limit?: number;
   offset?: number;
@@ -21,6 +30,9 @@ export interface QueryParams {
   tags?: string[];
   exclude_tags?: string[];
 }
+
+export type Tag = string;
+export type TagGroup = Tag[];
 
 export interface FetchResponse<T extends AppData | Record> {
   totalCount: number;

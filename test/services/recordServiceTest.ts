@@ -392,6 +392,47 @@ describe('services/recordService', () => {
         .catch(done);
     });
 
+    it('works as expected when there is a tag group', done => {
+      const params = {
+        tags: [[testVariables.tag, testVariables.secondTag]],
+      };
+      const expectedParamsForRoute = {
+        exclude_tags: [],
+        tags: [`(${testVariables.encryptedTag},${testVariables.encryptedSecondTag})`],
+      };
+      recordService
+        .searchRecords(testVariables.userId, params)
+        .then(res => {
+          expect(res.records.length).to.equal(1);
+          expect(res.totalCount).to.equal(recordResources.count);
+          expect(res.records[0].id).to.equal(testVariables.recordId);
+          expect(searchRecordsStub).to.be.calledOnce;
+          expect(searchRecordsStub).to.be.calledWith(testVariables.userId, expectedParamsForRoute);
+          expect(getUserStub).to.be.calledOnce;
+          done();
+        })
+        .catch(done);
+    });
+
+    it('works as expected when there is an excluded tag group', done => {
+      const params = {
+        exclude_tags: [[testVariables.tag, testVariables.secondTag]],
+      };
+      const expectedParamsForRoute = {
+        tags: [],
+        exclude_tags: [`(${testVariables.encryptedTag},${testVariables.encryptedSecondTag})`],
+      };
+      recordService
+        .searchRecords(testVariables.userId, params)
+        .then(() => {
+          expect(searchRecordsStub).to.be.calledOnce;
+          expect(searchRecordsStub).to.be.calledWith(testVariables.userId, expectedParamsForRoute);
+          expect(getUserStub).to.be.calledOnce;
+          done();
+        })
+        .catch(done);
+    });
+
     it('ignores corrupted records and resolves', done => {
       // eslint-disable-next-line prefer-promise-reject-errors
       decryptDataStub.withArgs().returns(Promise.reject('Error'));
@@ -428,79 +469,6 @@ describe('services/recordService', () => {
           done();
         })
         .catch(done);
-    });
-  });
-
-  describe('normalizeFallbackSearchResults', () => {
-    const conversionFunction = sinon.stub().returnsArg(0);
-    const firstResponse = {
-      records: [
-        {
-          id: 1,
-          content: 'content1',
-        },
-        {
-          id: 2,
-          content: 'content2',
-        },
-      ],
-      totalCount: 2,
-    };
-    const secondResponse = {
-      records: [
-        {
-          id: 3,
-          content: 'content3',
-        },
-        {
-          id: 4,
-          content: 'content4',
-        },
-      ],
-      totalCount: 2,
-    };
-    const thirdResponse = {
-      records: [
-        {
-          id: 3,
-          content: 'content3',
-        },
-        {
-          id: 5,
-          content: 'content5',
-        },
-      ],
-      totalCount: 2,
-    };
-
-    it('passes through a normal searchResultArray with just one response item', () => {
-      const normalizationResult = recordService.normalizeFallbackSearchResults({
-        responseArray: [firstResponse],
-        conversionFunction,
-      });
-      expect(normalizationResult.totalCount).to.equal(2);
-      expect(JSON.stringify(normalizationResult)).to.equal(JSON.stringify(firstResponse));
-    });
-
-    it('merges a searchResultArray with multiple responses (but no duplicates)', () => {
-      const normalizationResult = recordService.normalizeFallbackSearchResults({
-        responseArray: [firstResponse, secondResponse],
-        conversionFunction,
-      });
-      expect(normalizationResult.totalCount).to.equal(4);
-      expect(JSON.stringify(normalizationResult)).to.equal(
-        '{"records":[{"id":1,"content":"content1"},{"id":2,"content":"content2"},{"id":3,"content":"content3"},{"id":4,"content":"content4"}],"totalCount":4}'
-      );
-    });
-    it('merges a searchResultArray with multiple responses and removes duplicates', () => {
-      const normalizationResult = recordService.normalizeFallbackSearchResults({
-        responseArray: [firstResponse, secondResponse, thirdResponse],
-        conversionFunction,
-      });
-      expect(normalizationResult.totalCount).to.equal(5);
-      expect(JSON.stringify(normalizationResult)).to.equal(
-        '{"records":[{"id":1,"content":"content1"},{"id":2,"content":"content2"},{"id":3,"content":"content3"},{"id":4,"content":"content4"},{"id":5,"content":"content5"}],"totalCount":5}'
-      );
     });
   });
 
