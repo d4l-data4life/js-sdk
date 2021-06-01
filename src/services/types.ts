@@ -5,6 +5,8 @@ export interface Params {
   fhirVersion?: string;
   start_date?: string;
   end_date?: string;
+  start_updated_date?: string;
+  end_updated_date?: string;
   tags?: string[];
   exclude_tags?: string[];
   exclude_flags?: string[];
@@ -19,8 +21,11 @@ export type SearchParameters = {
   offset?: number;
   start_date?: string;
   end_date?: string;
+  start_updated_date?: string;
+  end_updated_date?: string;
   tags?: (Tag | TagGroup)[];
   exclude_tags?: (Tag | TagGroup)[];
+  include_deleted?: boolean;
 };
 
 export interface QueryParams {
@@ -28,8 +33,11 @@ export interface QueryParams {
   offset?: number;
   start_date?: string;
   end_date?: string;
+  start_updated_date?: string;
+  end_updated_date?: string;
   tags?: string[];
   exclude_tags?: string[];
+  include_deleted?: boolean;
 }
 
 export type Tag = string;

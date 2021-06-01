@@ -39,6 +39,8 @@ const SUPPORTED_PARAMS = [
   'offset',
   'start_date',
   'end_date',
+  'start_updated_date',
+  'end_updated_date',
   'fhirVersion',
   'tags',
   'exclude_tags',
@@ -61,6 +63,9 @@ export const prepareSearchParameters = (params: Params): SearchParameters => {
     ...(params.offset && { offset: params.offset }),
     ...(params.start_date && { start_date: params.start_date }),
     ...(params.end_date && { end_date: params.end_date }),
+    ...(params.start_updated_date && { start_updated_date: params.start_updated_date }),
+    ...(params.end_updated_date && { end_updated_date: params.end_updated_date }),
+    ...(params.include_deleted && { include_deleted: params.include_deleted }),
   };
 
   if (params.resourceType) {
