@@ -380,7 +380,10 @@ describe('services/recordService', () => {
         offset: 20,
         start_date: '2017-06-06',
         end_date: '2017-08-08',
+        start_updated_date: '2017-06-06T00:00:00.00Z',
+        end_updated_date: '2017-08-08T00:00:00.00Z',
         exclude_tags: [testVariables.appDataFlag],
+        include_deleted: true,
         tags: [testVariables.tag, testVariables.secondTag],
       };
 
@@ -389,6 +392,9 @@ describe('services/recordService', () => {
         offset: 20,
         start_date: '2017-06-06',
         end_date: '2017-08-08',
+        start_updated_date: '2017-06-06T00:00:00.00Z',
+        end_updated_date: '2017-08-08T00:00:00.00Z',
+        include_deleted: true,
         exclude_tags: [testVariables.encryptedAppDataFlag],
         tags: [testVariables.encryptedTag, testVariables.encryptedSecondTag],
       };
