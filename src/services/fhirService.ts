@@ -51,6 +51,7 @@ const SUPPORTED_PARAMS = [
   'include_deleted',
 ];
 
+/* eslint-disable complexity */
 export const prepareSearchParameters = (params: Params): SearchParameters => {
   if (!Object.keys(params).every(key => includes(SUPPORTED_PARAMS, key))) {
     throw new Error(
