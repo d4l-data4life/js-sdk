@@ -321,7 +321,7 @@ is <https://www.hl7.org/fhir/careplan-example.json.html>.
     },
     annotations: ["blood test report", "dr john doe"],
     customCreationDate: "2018-05-07T10:09:09.394Z",
-    updatedDate: "2018-05-07",
+    updatedDate: "2018-05-07T10:09:09.394Z",
     partner: "partner_id" // Partner ID from that the record is uploaded. Refers to the apps using the SDK.
 }
 ```
@@ -368,7 +368,7 @@ D4L.SDK.updateResource(ownerId, fhirResource, ["blood test report", "dr john mil
     },
     annotations: ["blood test report", "dr john miller"],
     customCreationDate: "2018-05-07T10:09:09.394Z",
-    updatedDate: "2018-05-07",
+    updatedDate: "2018-05-07T10:09:09.394Z",
     partner: "partner_id" // Partner ID from which the record is uploaded. Refers to the apps using the SDK.
 
 }
@@ -408,7 +408,7 @@ D4L.SDK.fetchResource('1cf5ee52-88dc-406a-bf7b-bc5e26a17b47', '500b2aa5-2728-48f
     },
     annotations: ["blood test report", "dr john doe"],
     customCreationDate: "2018-05-07T10:09:09.394Z",
-    updatedDate: "2018-05-07",
+    updatedDate: "2018-05-07T10:09:09.394Z",
     partner: "partner_id"
 }
 ```
@@ -576,11 +576,14 @@ Lets you specify options for the `fetchResource` method.
 | offset | String | (optional, default: 0) Number of records to skip when retrieving |
 | start_date | Date |(optional) Earliest date for which to return records |
 | end_date | Date | (optional) Latest date for which to return records |
+| start_updated_date | Datetime |(optional) Earliest date for which to return records based on last modification |
+| end_updated_date | Datetime | (optional) Latest date for which to return records based on last modification |
 | resourceType | String | (optional) Type of requested FHIR resources |
 | fhirVersion | String | (optional) The FHIR verion of the resources, for example "4.0.1" |
 | partner | String | (optional) ID of the partner the records where uploaded from |
-| annotations | String[] | (optional) Custom annotations to filter by
-| exclude_tags | String[] | (optional) Don't fetch resources with given tags
+| annotations | String[] | (optional) Custom annotations to filter by |
+| exclude_tags | String[] | (optional) Don't fetch resources with given tags |
+| include_deleted | Boolean | (optional) Fetch deleted records |
 
 #### Resolves
 | Property | Type | Description |
@@ -612,7 +615,7 @@ D4L.SDK.fetchResources('1cf5ee52-88dc-406a-bf7b-bc5e26a17b47', {
         },
         annotations: ["blood test report", "dr john doe"],
         customCreationDate: "2018-05-07T10:09:09.394Z",
-        updatedDate: "2018-05-07",
+        updatedDate: "2018-05-07T10:09:09.394Z",
         partner: "partner_id"
     }
 ]
@@ -633,6 +636,9 @@ To count the FHIR resources you uploaded, use the `countResources` method.
 |------|:-----|:------------|
 | start_date | Date |(optional) Earliest date for which to return records |
 | end_date | Date | (optional) Latest date for which to return records |
+| start_updated_date | Datetime |(optional) Earliest date for which to return records based on last modification |
+| end_updated_date | Datetime | (optional) Latest date for which to return records based on last modification |
+| include_deleted | Boolean | (optional) include deleted records |
 
 #### Resolves
 | Property | Type | Description |

@@ -23,9 +23,6 @@ import { isAllowedByteSequence } from '../lib/fileValidator';
 import Attachment from '../lib/models/fhir/Attachment';
 import taggingUtils, { tagKeys } from '../lib/taggingUtils';
 import documentRoutes from '../routes/documentRoutes';
-import createCryptoService from './createCryptoService';
-import recordService from './recordService';
-import { DecryptedFhirRecord, FetchResponse, Params, Record, SearchParameters } from './types';
 import {
   addPreviewsToAttachments,
   attachBlobs,
@@ -33,12 +30,17 @@ import {
   getCleanAttachmentsFromResource,
   setAttachmentsToResource,
 } from './attachmentService';
+import createCryptoService from './createCryptoService';
+import recordService from './recordService';
+import { DecryptedFhirRecord, FetchResponse, Params, Record, SearchParameters } from './types';
 
 const SUPPORTED_PARAMS = [
   'limit',
   'offset',
   'start_date',
   'end_date',
+  'start_updated_date',
+  'end_updated_date',
   'fhirVersion',
   'tags',
   'exclude_tags',
@@ -46,8 +48,10 @@ const SUPPORTED_PARAMS = [
   'annotations',
   'resourceType',
   'partner',
+  'include_deleted',
 ];
 
+/* eslint-disable complexity */
 export const prepareSearchParameters = (params: Params): SearchParameters => {
   if (!Object.keys(params).every(key => includes(SUPPORTED_PARAMS, key))) {
     throw new Error(
@@ -60,6 +64,9 @@ export const prepareSearchParameters = (params: Params): SearchParameters => {
     ...(params.offset && { offset: params.offset }),
     ...(params.start_date && { start_date: params.start_date }),
     ...(params.end_date && { end_date: params.end_date }),
+    ...(params.start_updated_date && { start_updated_date: params.start_updated_date }),
+    ...(params.end_updated_date && { end_updated_date: params.end_updated_date }),
+    ...(params.include_deleted && { include_deleted: params.include_deleted }),
   };
 
   if (params.resourceType) {
@@ -100,6 +107,7 @@ export const convertToExposedRecord = (decryptedRecord: DecryptedFhirRecord) => 
     id: clonedRecord.id,
     partner: taggingUtils.getTagValueFromList(clonedRecord.tags, tagKeys.partner),
     updatedDate: clonedRecord.updatedDate,
+    status: clonedRecord.status,
   };
   exposedRecord.fhirResource.id = clonedRecord.id;
   return exposedRecord;

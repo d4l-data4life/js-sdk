@@ -5,12 +5,15 @@ export interface Params {
   fhirVersion?: string;
   start_date?: string;
   end_date?: string;
+  start_updated_date?: string;
+  end_updated_date?: string;
   tags?: string[];
   exclude_tags?: string[];
   exclude_flags?: string[];
   annotations?: string[];
   resourceType?: string;
   partner?: string;
+  include_deleted?: boolean;
 }
 
 export type SearchParameters = {
@@ -18,8 +21,11 @@ export type SearchParameters = {
   offset?: number;
   start_date?: string;
   end_date?: string;
+  start_updated_date?: string;
+  end_updated_date?: string;
   tags?: (Tag | TagGroup)[];
   exclude_tags?: (Tag | TagGroup)[];
+  include_deleted?: boolean;
 };
 
 export interface QueryParams {
@@ -27,8 +33,11 @@ export interface QueryParams {
   offset?: number;
   start_date?: string;
   end_date?: string;
+  start_updated_date?: string;
+  end_updated_date?: string;
   tags?: string[];
   exclude_tags?: string[];
+  include_deleted?: boolean;
 }
 
 export type Tag = string;
@@ -59,6 +68,7 @@ export interface DecryptedFhirRecord {
   customCreationDate?: Date;
   updatedDate?: Date;
   commonKeyId?: string;
+  status?: string;
 }
 
 /** The record we expose to users should not expose any sensitive information.
@@ -74,6 +84,7 @@ export interface Record {
   customCreationDate?: Date;
   updatedDate?: Date;
   partner?: string;
+  status?: string;
 }
 
 /** AppData */
