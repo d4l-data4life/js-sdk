@@ -146,7 +146,7 @@ const recordService = {
       id: result.record_id,
       tags: record.tags,
       // @ts-ignore
-      updatedDate: result.createdAt,
+      updatedDate: result.updated,
     };
 
     if ((record as DecryptedAppData).data) {
@@ -264,7 +264,7 @@ const recordService = {
         customCreationDate: new Date(record.date),
         id: record.record_id,
         tags: decryptedTags,
-        updatedDate: new Date(record.createdAt),
+        updatedDate: new Date(record.updated),
         status: record.status,
       };
 
