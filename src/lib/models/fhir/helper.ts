@@ -31,8 +31,11 @@ export const SUPPORTED_RESOURCES = {
   [FHIR_VERSION_R4]: [
     'AllergyIntolerance',
     'Encounter',
+    'Device',
+    'DeviceUseStatement',
     'DocumentReference',
     'DiagnosticReport',
+    'Immunization',
     'Patient',
     'Medication',
     'MedicationStatement',

@@ -62,6 +62,22 @@ const fhirValidator = {
             });
             break;
 
+          case 'Device':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/Device').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+
+          case 'DeviceUseStatement':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/DeviceUseStatement').then(
+              bundle => {
+                this.validator[version][resourceType] = bundle.default;
+                return this.validator[version][resourceType];
+              }
+            );
+            break;
+
           case 'DiagnosticReport':
             returnPromise = import('@d4l/js-fhir-validator/r4/js/DiagnosticReport').then(bundle => {
               this.validator[version][resourceType] = bundle.default;
@@ -76,6 +92,13 @@ const fhirValidator = {
                 return this.validator[version][resourceType];
               }
             );
+            break;
+
+          case 'Immunization':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/Immunization').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
             break;
 
           case 'Medication':

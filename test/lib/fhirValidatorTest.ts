@@ -32,6 +32,9 @@ import r4ResearchSubjectExamples from './resources/r4/researchsubject-examples';
 import r4MedicationExamples from './resources/r4/medication-examples';
 import r4MedicationStatementExamples from './resources/r4/medicationstatement-examples';
 import r4AllergyInteroleranceExamples from './resources/r4/allergyintolerance-examples';
+import r4DeviceExamples from './resources/r4/device-examples';
+import r4ImmunizationExamples from './resources/r4/immunization-examples';
+import r4DeviceUseStatementExamples from './resources/r4/deviceusestatement-exmaples';
 
 import fhirService from '../../src/services/fhirService';
 import { FHIR_VERSION_STU3, FHIR_VERSION_R4 } from '../../src/lib/models/fhir/helper';
@@ -514,6 +517,9 @@ describe('fhir validator', () => {
       Medication: r4MedicationExamples,
       MedicationStatement: r4MedicationStatementExamples,
       AllergyInterolerance: r4AllergyInteroleranceExamples,
+      Device: r4DeviceExamples,
+      Immunization: r4ImmunizationExamples,
+      DeviceUseStatement: r4DeviceUseStatementExamples,
     };
 
     // eslint-disable-next-line no-restricted-syntax
