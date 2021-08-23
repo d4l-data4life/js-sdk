@@ -116,9 +116,14 @@ describe('prepareSearchParameters', () => {
     const preparedParams = prepareSearchParameters({
       fhirVersion: '3.0.1',
     });
-    expect(preparedParams).to.deep.equal({
-      tags: [['fhirversion=3%2e0%2e1', 'fhirversion=3.0.1']],
-    });
+
+    expect(preparedParams.tags.length).to.equal(1);
+    expect(preparedParams.tags[0].length).to.equal(3);
+    expect(preparedParams.tags[0]).to.deep.equal([
+      'fhirversion=3%2e0%2e1',
+      'fhirversion=3.0.1',
+      'fhirversion=3%2E0%2E1',
+    ]);
   });
 
   it('correctly prepares parameters including a fhir version 4.0.1', () => {
@@ -126,7 +131,7 @@ describe('prepareSearchParameters', () => {
       fhirVersion: '4.0.1',
     });
     expect(preparedParams).to.deep.equal({
-      tags: [['fhirversion=4%2e0%2e1', 'fhirversion=4.0.1']],
+      tags: [['fhirversion=4%2e0%2e1', 'fhirversion=4.0.1', 'fhirversion=4%2E0%2E1']],
     });
   });
 
@@ -135,7 +140,7 @@ describe('prepareSearchParameters', () => {
       annotations: ['***it was: agatha all along***'],
     });
     expect(preparedParams.tags.length).to.equal(1);
-    expect(preparedParams.tags[0].length).to.equal(3);
+    expect(preparedParams.tags[0].length).to.equal(4);
 
     expect(preparedParams).to.deep.equal({
       tags: [
@@ -143,6 +148,7 @@ describe('prepareSearchParameters', () => {
           'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a', // Original
           'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a', // JS SDK Bug
           'custom=***it was: agatha all along***', // KMP SDK Bug
+          'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A', // IOS SDK Bug
         ],
       ],
     });
@@ -156,7 +162,7 @@ describe('prepareSearchParameters', () => {
     expect(preparedParams.tags.length).to.equal(2);
     expect(typeof preparedParams.tags[0]).to.equal('string');
     expect(Array.isArray(preparedParams.tags[1])).to.equal(true);
-    expect(preparedParams.tags[1].length).to.equal(3);
+    expect(preparedParams.tags[1].length).to.equal(4);
 
     expect(preparedParams).to.deep.equal({
       tags: [
@@ -165,6 +171,7 @@ describe('prepareSearchParameters', () => {
           'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
           'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
           'custom=***it was: agatha all along***',
+          'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A',
         ],
       ],
     });
@@ -181,6 +188,7 @@ describe('prepareSearchParameters', () => {
           'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
           'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
           'custom=***it was: agatha all along***',
+          'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A',
         ],
       ],
       exclude_tags: [
@@ -188,6 +196,7 @@ describe('prepareSearchParameters', () => {
           'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
           'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
           'custom=***it was: agatha all along***',
+          'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A',
         ],
       ],
     });
@@ -698,6 +707,7 @@ describe('fhirService', () => {
                 'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
                 'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
                 'custom=***it was: agatha all along***',
+                'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A',
               ],
             ],
             exclude_tags: [testVariables.appDataFlag],

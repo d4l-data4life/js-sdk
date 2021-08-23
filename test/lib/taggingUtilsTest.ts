@@ -90,15 +90,28 @@ describe('taggingUtils', () => {
         '%3b%2c%2f%3f%3a%40%26%3d%2b%24%23%2d%5f%2e%21%7e%2a%27%28%29abc%20abc%20123'
     );
   });
-  it('verifies that buildTag returns correctly encoded tag (fallback mode)', () => {
+
+  it('verifies that buildTag returns correctly encoded tag (JS fallback mode)', () => {
     const tag = taggingUtils.buildTag(
       ";,/?:@&=+$#-_.!~*'()ABC abc 123",
       ";,/?:@&=+$#-_.!~*'()ABC abc 123",
-      true
+      { js: true }
     );
     expect(tag).to.equal(
       '%3B%2C%2F%3F%3A%40%26%3D%2B%24%23%2d%5f%2e%21%7e%2a%27%28%29abc%20abc%20123=' +
         '%3B%2C%2F%3F%3A%40%26%3D%2B%24%23%2d%5f%2e%21%7e%2a%27%28%29abc%20abc%20123'
+    );
+  });
+
+  it('verifies that buildTag returns correctly encoded tag (IOS fallback mode)', () => {
+    const tag = taggingUtils.buildTag(
+      ";,/?:@&=+$#-_.!~*'()ABC abc 123",
+      ";,/?:@&=+$#-_.!~*'()ABC abc 123",
+      { ios: true }
+    );
+    expect(tag).to.equal(
+      '%3B%2C%2F%3F%3A%40%26%3D%2B%24%23%2D%5F%2E%21%7E%2A%27%28%29abc%20abc%20123=' +
+        '%3B%2C%2F%3F%3A%40%26%3D%2B%24%23%2D%5F%2E%21%7E%2A%27%28%29abc%20abc%20123'
     );
   });
 
@@ -120,17 +133,17 @@ describe('taggingUtils', () => {
   });
 
   describe('getValue', () => {
-    it('returns correct tag-value when  is called with tag', () => {
+    it('returns correct tag-value when is called with tag', () => {
       const tagValue = taggingUtils.getValue(testVariables.secondTag);
       expect(tagValue).to.equal('1');
     });
 
-    it('returns correct tag-value when  is called with encoded tag', () => {
+    it('returns correct tag-value when is called with encoded tag', () => {
       const tagValue = taggingUtils.getValue(testVariables.encodedTag);
       expect(tagValue).to.equal('ann_otation');
     });
 
-    it('returns undefined whencalled with incorrect tag format', () => {
+    it('returns undefined when called with incorrect tag format', () => {
       const tagValue = taggingUtils.getValue('client%2');
       expect(tagValue).to.equal(undefined);
     });
