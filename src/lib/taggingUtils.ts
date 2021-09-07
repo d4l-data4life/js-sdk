@@ -69,12 +69,11 @@ const taggingUtils = {
    * @returns The TagGroup containing the FHIR Tags
    */
   generateFhirVersionTagForSearch(fhirVersion = fhirService.getFhirVersion()): TagGroup {
-    /*
-    Earlier versions of the Android SDK did not escape the dots in fhir versions
-    */
-    const original = this.buildTag(tagKeys.fhirVersion, fhirVersion);
-    const fallback = taggingUtils.buildFallbackTag(tagKeys.fhirVersion, fhirVersion);
-    return [original, fallback];
+    const fhirVersionTags = taggingUtils.generateFallbacksForSearch(
+      tagKeys.fhirVersion,
+      fhirVersion
+    );
+    return Array.isArray(fhirVersionTags) ? fhirVersionTags : [fhirVersionTags];
   },
 
   generateTagsFromFhir(fhirObject: Record<string, any>): Tag[] {
@@ -101,26 +100,48 @@ const taggingUtils = {
    * @returns A list of Tags and TagGroups
    */
   generateCustomTagsForSearch(annotationList: string[] = []): (Tag | TagGroup)[] {
-    return annotationList.map(annotation => {
-      /*
-      Original JS SDK implementation was inconsistent in lowercasing/uppercasing
-      some escaped characters
-      */
-      const original: Tag = this.buildTag(ANNOTATION_LABEL, annotation, false);
-      const fallbackJS: Tag = this.buildTag(ANNOTATION_LABEL, annotation, true);
-
-      /*
-      For a brief time the KMP SDK did not encode annotations and tags
-      */
-      const fallbackKMP: Tag = this.buildFallbackTag(ANNOTATION_LABEL, annotation);
-
-      const tagGroup: TagGroup = [...new Set([original, fallbackJS, fallbackKMP])];
-
-      return tagGroup.length > 1 ? tagGroup : original;
-    });
+    return annotationList.map(annotation =>
+      taggingUtils.generateFallbacksForSearch(ANNOTATION_LABEL, annotation)
+    );
   },
 
-  buildTag(key: string, value: string, useFallback = false): Tag {
+  /**
+   * Generate all fallback versions of a tag
+   * @param label The label of the tag
+   * @param value The value of the tag
+   * @returns A list of tags or a single tag
+   */
+  generateFallbacksForSearch(label: string, value: string): Tag | TagGroup {
+    /*
+      Original JS SDK implementation was inconsistent in lowercasing/uppercasing
+      some escaped characters
+    */
+    const original: Tag = this.buildTag(label, value);
+    const fallbackJS: Tag = this.buildTag(label, value, { js: true });
+
+    /*
+      For a brief time the KMP SDK did not encode values and tags
+    */
+    const fallbackKMP: Tag = this.buildFallbackTag(label, value);
+
+    /*
+      Old iOS apps were tagging without lowercasing the percent encoding
+    */
+    const fallbackIOS: Tag = this.buildTag(label, value, { ios: true });
+
+    const tagGroup: TagGroup = [...new Set([original, fallbackJS, fallbackKMP, fallbackIOS])];
+
+    return tagGroup.length > 1 ? tagGroup : original;
+  },
+
+  buildTag(
+    key: string,
+    value: string,
+    useFallback: {
+      js?: boolean;
+      ios?: boolean;
+    } = { js: false, ios: false }
+  ): Tag {
     return (
       `${stringUtils.prepareForUpload(key, useFallback)}` +
       `${TAG_DELIMITER}` +
