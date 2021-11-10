@@ -582,7 +582,7 @@ Lets you specify options for the `fetchResource` method.
 | fhirVersion | String | (optional) The FHIR verion of the resources, for example "4.0.1" |
 | partner | String | (optional) ID of the partner the records where uploaded from |
 | annotations | (String or String[])[] | (optional) Custom annotations to filter by. Values in an array are combined to <or> |
-| exclude_tags | (String or String[])[] | (optional) Don't fetch resources with given tags. Values in an array are combined to <or> |
+| exclude_tags | (String or String[])[] | (optional) Don't fetch resources with given tags. Values in an array are combined to <and> |
 | include_deleted | Boolean | (optional) Fetch deleted records |
 
 #### Resolves
