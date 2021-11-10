@@ -114,23 +114,17 @@ const taggingUtils = {
    */
   generateFallbacksForSearch(label: string, value: string | string[]): Tag | TagGroup {
     const generateAllTags = (tagLabel: string, tagValue: string): TagGroup | Tag => {
-      /*
-      Original JS SDK implementation was inconsistent in lowercasing/uppercasing
-      some escaped characters
-    */
+      // Original JS SDK implementation was inconsistent in lower-/uppercasing
+      // some escaped characters
       const original: Tag = this.buildTag(tagLabel, tagValue);
       const fallbackJS: Tag = this.buildTag(tagLabel, tagValue, {
         js: true,
       });
 
-      /*
-      For a brief time the KMP SDK did not encode values and tags
-    */
+      //  For a brief time the KMP SDK did not encode values and tags
       const fallbackKMP: Tag = this.buildFallbackTag(tagLabel, tagValue);
 
-      /*
-      Old iOS apps were tagging without lowercasing the percent encoding
-    */
+      // Old iOS apps were tagging without lowercasing the percent encoding
       const fallbackIOS: Tag = this.buildTag(tagLabel, tagValue, {
         ios: true,
       });
