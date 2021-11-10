@@ -1,4 +1,5 @@
 import isString from 'lodash/isString';
+import flatten from 'lodash/flatten';
 import stringUtils from './stringUtils';
 import fhirService from '../services/fhirService';
 import SetupError, { NOT_SETUP } from './errors/SetupError';
@@ -99,7 +100,7 @@ const taggingUtils = {
    * @param annotationList The list of annotations to build tags for
    * @returns A list of Tags and TagGroups
    */
-  generateCustomTagsForSearch(annotationList: string[] = []): (Tag | TagGroup)[] {
+  generateCustomTagsForSearch(annotationList: (string | string[])[] = []): (Tag | TagGroup)[] {
     return annotationList.map(annotation =>
       taggingUtils.generateFallbacksForSearch(ANNOTATION_LABEL, annotation)
     );
@@ -111,27 +112,39 @@ const taggingUtils = {
    * @param value The value of the tag
    * @returns A list of tags or a single tag
    */
-  generateFallbacksForSearch(label: string, value: string): Tag | TagGroup {
-    /*
+  generateFallbacksForSearch(label: string, value: string | string[]): Tag | TagGroup {
+    const generateAllTags = (tagLabel: string, tagValue: string): TagGroup | Tag => {
+      /*
       Original JS SDK implementation was inconsistent in lowercasing/uppercasing
       some escaped characters
     */
-    const original: Tag = this.buildTag(label, value);
-    const fallbackJS: Tag = this.buildTag(label, value, { js: true });
+      const original: Tag = this.buildTag(tagLabel, tagValue);
+      const fallbackJS: Tag = this.buildTag(tagLabel, tagValue, {
+        js: true,
+      });
 
-    /*
+      /*
       For a brief time the KMP SDK did not encode values and tags
     */
-    const fallbackKMP: Tag = this.buildFallbackTag(label, value);
+      const fallbackKMP: Tag = this.buildFallbackTag(tagLabel, tagValue);
 
-    /*
+      /*
       Old iOS apps were tagging without lowercasing the percent encoding
     */
-    const fallbackIOS: Tag = this.buildTag(label, value, { ios: true });
+      const fallbackIOS: Tag = this.buildTag(tagLabel, tagValue, {
+        ios: true,
+      });
 
-    const tagGroup: TagGroup = [...new Set([original, fallbackJS, fallbackKMP, fallbackIOS])];
+      const tagGroup: TagGroup = [...new Set([original, fallbackJS, fallbackKMP, fallbackIOS])];
+      return tagGroup.length > 1 ? tagGroup : original;
+    };
 
-    return tagGroup.length > 1 ? tagGroup : original;
+    if (Array.isArray(value)) {
+      const tags = value.map((group: string) => generateAllTags(label, group));
+      return flatten(tags);
+    }
+
+    return generateAllTags(label, value);
   },
 
   buildTag(
