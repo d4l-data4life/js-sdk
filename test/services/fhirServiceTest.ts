@@ -202,6 +202,67 @@ describe('prepareSearchParameters', () => {
     });
   });
 
+  it('correctly prepares search parameters with an <or> annotation', () => {
+    const preparedParams = prepareSearchParameters({
+      annotations: [['annotation1', 'annotation2']],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: [['custom=annotation1', 'custom=annotation2']],
+    });
+  });
+
+  it('correctly prepares search parameters with an <or> and <and> annotation', () => {
+    const preparedParams = prepareSearchParameters({
+      annotations: [['annotation1', 'annotation2'], 'annotation3'],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: [['custom=annotation1', 'custom=annotation2'], 'custom=annotation3'],
+    });
+  });
+
+  it('correctly prepares search parameters with an <or> annotation and fallbacks', () => {
+    const preparedParams = prepareSearchParameters({
+      annotations: [['annotation1', '***it was: agatha all along***']],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: [
+        [
+          'custom=annotation1',
+          'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
+          'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+          'custom=***it was: agatha all along***',
+          'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A',
+        ],
+      ],
+    });
+  });
+
+  it('correctly prepares search parameters with an <or> annotation, exclude_tags and fallbacks', () => {
+    const preparedParams = prepareSearchParameters({
+      annotations: [['annotation1', '***it was: agatha all along***']],
+      exclude_tags: ['***it was: agatha all along***'],
+    });
+    expect(preparedParams).to.deep.equal({
+      tags: [
+        [
+          'custom=annotation1',
+          'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
+          'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+          'custom=***it was: agatha all along***',
+          'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A',
+        ],
+      ],
+      exclude_tags: [
+        [
+          'custom=%2a%2a%2ait%20was%3a%20agatha%20all%20along%2a%2a%2a',
+          'custom=%2a%2a%2ait%20was%3A%20agatha%20all%20along%2a%2a%2a',
+          'custom=***it was: agatha all along***',
+          'custom=%2A%2A%2Ait%20was%3A%20agatha%20all%20along%2A%2A%2A',
+        ],
+      ],
+    });
+  });
+
   it('throws when an unsupported parameter is passed', () => {
     expect(() =>
       prepareSearchParameters({ illegalTag: 'suchIllegalMuchEvil' } as Params)

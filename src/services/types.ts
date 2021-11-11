@@ -8,9 +8,9 @@ export interface Params {
   start_updated_date?: string;
   end_updated_date?: string;
   tags?: string[];
-  exclude_tags?: string[];
+  exclude_tags?: (string | string[])[];
   exclude_flags?: string[];
-  annotations?: string[];
+  annotations?: (string | string[])[];
   resourceType?: string;
   partner?: string;
   include_deleted?: boolean;

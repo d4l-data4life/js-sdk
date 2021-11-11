@@ -437,6 +437,31 @@ describe('services/recordService', () => {
         .catch(done);
     });
 
+    it('works as expected when there is a tag group and a tag', done => {
+      const params = {
+        tags: [[testVariables.tag, testVariables.secondTag], testVariables.secondTag],
+      };
+      const expectedParamsForRoute = {
+        exclude_tags: [],
+        tags: [
+          `(${testVariables.encryptedTag},${testVariables.encryptedSecondTag})`,
+          testVariables.encryptedSecondTag,
+        ],
+      };
+      recordService
+        .searchRecords(testVariables.userId, params)
+        .then(res => {
+          expect(res.records.length).to.equal(1);
+          expect(res.totalCount).to.equal(recordResources.count);
+          expect(res.records[0].id).to.equal(testVariables.recordId);
+          expect(searchRecordsStub).to.be.calledOnce;
+          expect(searchRecordsStub).to.be.calledWith(testVariables.userId, expectedParamsForRoute);
+          expect(getUserStub).to.be.calledOnce;
+          done();
+        })
+        .catch(done);
+    });
+
     it('works as expected when there is an excluded tag group', done => {
       const params = {
         exclude_tags: [[testVariables.tag, testVariables.secondTag]],
