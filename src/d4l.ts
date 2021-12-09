@@ -120,6 +120,7 @@ export const D4LSDK = {
    *      of the logged in user
    * @param extendedEnvConfig environment config to extend the base config
    * @param fhirVersion the FHIR Version in use
+   * @param disableUserPolling flag indicating if user polling should be disabled
    * @returns the id of the logged in user
    */
   async setup({
@@ -129,6 +130,7 @@ export const D4LSDK = {
     requestAccessToken,
     extendedEnvConfig = {},
     fhirVersion = FHIR_VERSION_STU3,
+    disableUserPolling = false,
   }: {
     clientId: string;
     environment: string;
@@ -136,6 +138,7 @@ export const D4LSDK = {
     requestAccessToken: () => Promise<string>;
     extendedEnvConfig?: any;
     fhirVersion?: string;
+    disableUserPolling?: boolean;
   }): Promise<string> {
     if (arguments.length > 1) {
       return Promise.reject(
@@ -163,10 +166,14 @@ export const D4LSDK = {
     userService.setPrivateKey(privateKey);
     const accessToken = await requestAccessToken();
     d4lRequest.setMasterAccessToken(accessToken);
-    // as an interim measure, we check the user info endpoint regularly
-    // this is for common key rotation v1 in order to pick up on the new common key
-    // it can be removed once the backend can reject out-of-date common keys
-    userService.beginUserInfoPoll(config.userInfoPollInterval);
+
+    // Polling the user data (i.e. common keys) can be disabled if it is not required
+    if (!disableUserPolling) {
+      // as an interim measure, we check the user info endpoint regularly
+      // this is for common key rotation v1 in order to pick up on the new common key
+      // it can be removed once the backend can reject out-of-date common keys
+      userService.beginUserInfoPoll(config.userInfoPollInterval);
+    }
     const { id } = await userService.pullUser();
     d4lRequest.currentUserId = id;
     return id;

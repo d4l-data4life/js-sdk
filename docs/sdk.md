@@ -30,8 +30,9 @@ To revoke the received refresh token, post to '/oauth/revoke' with the refresh t
         environment,            // The environment the SDK should run in. The options are 'development' and 'production'
         privateKey,             // Private key of the logged-in user
         requestAccessToken,     // Callback for requesting a valid access token
-        extendedEnvConfig,     // additional environment configuration options
-        fhirVersion
+        extendedEnvConfig,      // Additional environment configuration options
+        fhirVersion,            // The FHIR version to use (3.0.1 or 4.0.1), defaults to '3.0.1'
+        disableUserPolling      // Disabled user info polling (e.g for common key updates) if it is not required, defaults to `false`
         });
 ```
 
