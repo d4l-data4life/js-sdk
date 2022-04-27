@@ -30,6 +30,7 @@ export const getResource = (ref: fhir.Reference, resources: FHIRResource[]): FHI
 export const SUPPORTED_RESOURCES = {
   [FHIR_VERSION_R4]: [
     'AllergyIntolerance',
+    'Condition',
     'Encounter',
     'Device',
     'DeviceUseStatement',
@@ -49,6 +50,7 @@ export const SUPPORTED_RESOURCES = {
     'ResearchSubject',
   ],
   [FHIR_VERSION_STU3]: [
+    'Condition',
     'DocumentReference',
     'DiagnosticReport',
     'Patient',

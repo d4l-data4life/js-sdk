@@ -7,6 +7,7 @@ import sinonChai from 'sinon-chai';
 
 import fhirValidator from '../../src/lib/fhirValidator';
 
+import stu3ConditionExamples from './resources/stu3/condition-examples';
 import stu3DiagnosticReportExamples from './resources/stu3/diagnosticreport-examples';
 import stu3DocumentReferenceExamples from './resources/stu3/documentreference-examples';
 import stu3OrganizationExamples from './resources/stu3/organization-examples';
@@ -19,6 +20,7 @@ import stu3ObservationExamples from './resources/stu3/observation-examples';
 import stu3ResearchSubjectExamples from './resources/stu3/researchsubject-examples';
 
 // R4 examples
+import r4ConditionExamples from './resources/r4/condition-examples';
 import r4DocumentReferenceExamples from './resources/r4/documentreference-examples';
 import r4EncounterExamples from './resources/r4/encounter-examples';
 import r4ObservationExamples from './resources/r4/observation-examples';
@@ -254,6 +256,7 @@ describe('fhir validator', () => {
     });
 
     const exampleSTU3Collection = {
+      Condition: stu3ConditionExamples,
       DiagnosticReport: stu3DiagnosticReportExamples,
       DocumentReference: stu3DocumentReferenceExamples,
       Organization: stu3OrganizationExamples,
@@ -505,6 +508,7 @@ describe('fhir validator', () => {
     });
 
     const exampleR4Collection = {
+      Condition: r4ConditionExamples,
       DocumentReference: r4DocumentReferenceExamples,
       Encounter: r4EncounterExamples,
       Observation: r4ObservationExamples,

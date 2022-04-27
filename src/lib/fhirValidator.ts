@@ -62,6 +62,13 @@ const fhirValidator = {
             });
             break;
 
+          case 'Condition':
+            returnPromise = import('@d4l/js-fhir-validator/r4/js/Condition').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+
           case 'Device':
             returnPromise = import('@d4l/js-fhir-validator/r4/js/Device').then(bundle => {
               this.validator[version][resourceType] = bundle.default;
@@ -177,6 +184,13 @@ const fhirValidator = {
         }
       } else if (version === FHIR_VERSION_STU3) {
         switch (resourceType) {
+          case 'Condition':
+            returnPromise = import('@d4l/js-fhir-validator/stu3/js/Condition').then(bundle => {
+              this.validator[version][resourceType] = bundle.default;
+              return this.validator[version][resourceType];
+            });
+            break;
+
           case 'DiagnosticReport':
             returnPromise = import('@d4l/js-fhir-validator/stu3/js/DiagnosticReport').then(
               bundle => {
