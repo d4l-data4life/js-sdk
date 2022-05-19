@@ -193,9 +193,12 @@ const userService = {
       // the method multiple times in a short period with the same arguments,
       // only one endpoint call will be made.
       // TODO: Terra often makes multiple calls to the same endpoint. Is a similar issue to blame?
-      this.commonKeys[userId][keyId] = await userRoutes
-        .getCommonKey(userId, keyId)
-        .then(res => asymDecryptString(this.privateKey, res.common_key))
+      this.commonKeys[userId][keyId] = await keyRoutes
+        .getUserKeys(userId)
+        .then(({ common_keys }) => {
+          const matchingKey = common_keys.common_keys.find(key => key.common_key_id === keyId);
+          return asymDecryptString(this.privateKey, matchingKey.common_key);
+        })
         .then(JSON.parse);
     }
     return this.commonKeys[userId][keyId];

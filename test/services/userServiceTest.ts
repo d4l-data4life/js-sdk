@@ -22,25 +22,19 @@ const { expect } = chai;
 
 describe('services/userService', () => {
   // User routes
-  let getCommonKeyStub;
   let fetchUserInfoStub;
   let getReceivedPermissionsStub;
   let getCAPsStub;
   let grantPermissionStub;
 
   // Key routes
-  let getUserKeysStub;
+  let getUserKeysStub: sinon.SinonStub;
 
   beforeEach(() => {
     // User routes
     fetchUserInfoStub = sinon
       .stub(userRoutes, 'fetchUserInfo')
       .returns(Promise.resolve(userResources.userInfo));
-    getCommonKeyStub = sinon.stub(userRoutes, 'getCommonKey').returns(
-      Promise.resolve({
-        common_key: encryptionResources.encryptedCommonKey,
-      })
-    );
     getReceivedPermissionsStub = sinon
       .stub(userRoutes, 'getReceivedPermissions')
       .returns(Promise.resolve([encryptionResources.permissionResponse]));
@@ -61,7 +55,6 @@ describe('services/userService', () => {
     userService.resetUser();
     // User routes
     fetchUserInfoStub.restore();
-    getCommonKeyStub.restore();
     getReceivedPermissionsStub.restore();
     grantPermissionStub.restore();
     getCAPsStub.restore();
@@ -123,14 +116,16 @@ describe('services/userService', () => {
     });
   });
 
-  // @ts-ignore
-  describe('isCurrentUser', done => {
-    it('Happy Path', () => {
-      userService.pullUser().then(() => {
-        const isCurrentUser = userService.isCurrentUser(testVariables.userId);
-        expect(isCurrentUser).to.equal(true);
-        done();
-      });
+  describe('isCurrentUser', () => {
+    it('Happy Path', done => {
+      userService
+        .pullUser()
+        .then(() => {
+          const isCurrentUser = userService.isCurrentUser(testVariables.userId);
+          expect(isCurrentUser).to.equal(true);
+          done();
+        })
+        .catch(done);
     });
   });
 
@@ -148,11 +143,9 @@ describe('services/userService', () => {
       userService
         .getCommonKey(testVariables.userId, testVariables.commonKeyId)
         .then(key => {
-          expect(getCommonKeyStub).to.be.calledOnce;
-          expect(getCommonKeyStub).to.be.calledWith(
-            testVariables.userId,
-            testVariables.commonKeyId
-          );
+          // TODO !!
+          expect(getUserKeysStub).to.be.calledOnce;
+          expect(getUserKeysStub).to.be.calledWith(testVariables.userId);
           expect(key).to.deep.equal(encryptionResources.commonKey);
           done();
         })
@@ -167,7 +160,7 @@ describe('services/userService', () => {
         .getCommonKey(testVariables.userId, testVariables.commonKeyId)
         .then(key => {
           expect(key).to.equal(fakeCommonKey);
-          expect(getCommonKeyStub).to.not.be.called;
+          expect(getUserKeysStub).to.not.be.called;
           done();
         })
         .catch(done);
