@@ -9,30 +9,38 @@ import sinonChai from 'sinon-chai';
 
 import userService from '../../src/services/userService';
 import userRoutes from '../../src/routes/userRoutes';
+import keyRoutes from '../../src/routes/keyRoutes';
 import { NOT_SETUP } from '../../src/lib/errors/SetupError';
 import testVariables from '../testUtils/testVariables';
 import userResources from '../testUtils/userResources';
 import encryptionResources from '../testUtils/encryptionResources';
+import keyResources from '../testUtils/keyResources';
 
 chai.use(sinonChai);
 
 const { expect } = chai;
 
 describe('services/userService', () => {
+  // User routes
   let getCommonKeyStub;
   let fetchUserInfoStub;
   let getReceivedPermissionsStub;
   let getCAPsStub;
   let grantPermissionStub;
 
+  // Key routes
+  let getUserKeysStub;
+
   beforeEach(() => {
-    // USERROUTES
+    // User routes
     fetchUserInfoStub = sinon
       .stub(userRoutes, 'fetchUserInfo')
       .returns(Promise.resolve(userResources.userInfo));
-    getCommonKeyStub = sinon
-      .stub(userRoutes, 'getCommonKey')
-      .returns(Promise.resolve({ common_key: encryptionResources.encryptedCommonKey }));
+    getCommonKeyStub = sinon.stub(userRoutes, 'getCommonKey').returns(
+      Promise.resolve({
+        common_key: encryptionResources.encryptedCommonKey,
+      })
+    );
     getReceivedPermissionsStub = sinon
       .stub(userRoutes, 'getReceivedPermissions')
       .returns(Promise.resolve([encryptionResources.permissionResponse]));
@@ -41,17 +49,25 @@ describe('services/userService', () => {
       .stub(userRoutes, 'getCAPs')
       .returns(Promise.resolve([encryptionResources.permissionResponse]));
 
+    // Key routes
+    getUserKeysStub = sinon
+      .stub(keyRoutes, 'getUserKeys')
+      .returns(Promise.resolve(keyResources.getUserKeys));
+
     userService.setPrivateKey(encryptionResources.CUPPrivateKey);
   });
 
   afterEach(() => {
     userService.resetUser();
-    // USERROUTES
+    // User routes
     fetchUserInfoStub.restore();
     getCommonKeyStub.restore();
     getReceivedPermissionsStub.restore();
     grantPermissionStub.restore();
     getCAPsStub.restore();
+
+    // Key routes
+    getUserKeysStub.restore();
   });
 
   describe('pullUser', () => {

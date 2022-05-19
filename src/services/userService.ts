@@ -11,6 +11,7 @@ import d4lRequest from '../lib/d4lRequest';
 import taggingUtils from '../lib/taggingUtils';
 import SetUpError, { NOT_SETUP } from '../lib/errors/SetupError';
 import { populateCommonKeyId } from '../lib/cryptoUtils';
+import keyRoutes from 'routes/keyRoutes';
 
 // todo: there should be a base Key class that is expanded upon in js-crypto
 export interface SymKey {
@@ -105,7 +106,8 @@ const userService = {
    * Defaults to `this.currentUserId`.
    *  @param userId Id of the user whos data is requested.
    *                Loggedin user by default(even if `this.currentUserId` is not set yet).
-   *  @returns Resolves to a userObject that contains `userId`, `commonKey` and `tagEncryptionKey`.
+   *  @returns Resolves to a userObject that contains `userId`, `commonKey` and `tek`
+   *  (tagEncryptionKey).
    */
   getUser(userId: string = this.currentUserId): Promise<User> {
     return this.users[userId] ? Promise.resolve(this.users[userId]) : this.pullUser(userId);
@@ -115,57 +117,63 @@ const userService = {
    * Get the user for an id.
    *  @param userId Id of the user whos data is requested.
    *                Logged-in user by default (even if 'this.currentUserId' is not set yet).
-   * @returns Resolves to a userObject that contains 'userId', 'commonKey' and 'tagEncryptionKey'.
+   * @returns Resolves to a userObject that contains 'userId', 'commonKey' and 'tek'
+   * (tagEncryptionKey).
    */
-  pullUser(userId?: string): Promise<User> {
+  async pullUser(userId?: string): Promise<User> {
     // Does not work, if this.privateKey is not set.
     if (!this.privateKey) {
       return Promise.reject(new SetUpError(NOT_SETUP));
     }
 
-    let commonKey: any;
-    let commonKeyId: string;
-
     // Fetch user info. userId == null is a valid value. It seems to fetch
     // the users data.
-    return userRoutes
-      .fetchUserInfo(userId)
-      .then(res => {
-        if (!userId) {
-          this.currentUserId = res.sub;
-          this.currentAppId = res.app_id;
+    const userInfo = await userRoutes.fetchUserInfo(userId);
+    if (!userId) {
+      this.currentUserId = userInfo.sub;
 
-          // This wouldn't be necessary, if fetch would be used with
-          // this.currentUserId instead of null.
-          // eslint-disable-next-line no-param-reassign
-          userId = this.currentUserId;
-        }
-        return res;
-      })
-      .then(res =>
-        asymDecryptString(this.privateKey, res.common_key)
-          .then(key => {
-            commonKey = JSON.parse(key);
-            commonKeyId = populateCommonKeyId(res.common_key_id);
+      // This wouldn't be necessary, if fetch would be used with
+      // this.currentUserId instead of null.
+      // eslint-disable-next-line no-param-reassign
+      userId = this.currentUserId;
+    }
 
-            if (!this.commonKeys[userId]) {
-              this.commonKeys[userId] = {};
-            }
-            this.commonKeys[userId][commonKeyId] = commonKey;
+    const { common_keys } = await keyRoutes.getUserKeys(userId);
 
-            return symDecryptObject(commonKey, res.tag_encryption_key);
-          })
-          .then(tek => {
-            this.users[userId] = {
-              id: userId,
-              commonKey,
-              commonKeyId,
-              tek,
-            };
+    // Persist app id
+    if (!this.currentAppId) {
+      this.currentAppId = common_keys.app_id;
+    }
 
-            return this.users[userId];
-          })
-      );
+    // Get the active common key out of all common keys
+    const activeCommonKey = common_keys.common_keys.find(
+      key => key.common_key_id === common_keys.active_common_key_id
+    );
+
+    // Extract common key
+    const commonKey = JSON.parse(
+      await asymDecryptString(this.privateKey, activeCommonKey.common_key)
+    );
+    const commonKeyId = populateCommonKeyId(activeCommonKey.common_key_id);
+
+    // Persist common key for later
+    if (!this.commonKeys[userId]) {
+      this.commonKeys[userId] = {};
+    }
+    this.commonKeys[userId][commonKeyId] = commonKey;
+
+    // Extract tag encryption key
+    const tek = await symDecryptObject(commonKey, common_keys.tag_encryption_key);
+
+    // Persist tag encryption key
+    this.users[userId] = {
+      id: userId,
+      commonKey,
+      commonKeyId,
+      tek,
+    };
+
+    return this.users[userId];
   },
 
   /**
