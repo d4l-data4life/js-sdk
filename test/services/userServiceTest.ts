@@ -143,7 +143,6 @@ describe('services/userService', () => {
       userService
         .getCommonKey(testVariables.userId, testVariables.commonKeyId)
         .then(key => {
-          // TODO !!
           expect(getUserKeysStub).to.be.calledOnce;
           expect(getUserKeysStub).to.be.calledWith(testVariables.userId);
           expect(key).to.deep.equal(encryptionResources.commonKey);
