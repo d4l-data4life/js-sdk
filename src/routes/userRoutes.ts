@@ -36,12 +36,6 @@ const userRoutes = {
     });
   },
 
-  getCommonKey(userId: string, commonKeyId: string) {
-    return d4lRequest.submit('GET', `${config.userUrl(userId)}/commonkeys/${commonKeyId}`, {
-      authorize: true,
-    });
-  },
-
   getCAPs(appId: string) {
     return d4lRequest.submit('GET', `${config.apiUrl()}/permissions`, {
       authorize: true,
