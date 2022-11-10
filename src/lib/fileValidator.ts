@@ -14,7 +14,7 @@ interface IFileSignature {
   // extensions are the file types supported with a given file signature
   extensions: string[];
   // offset is the position in the file buffer array where the signature value is present.
-  // Most commonly the offset is 0, but in some cases it can be somthing else. In our case,
+  // Most commonly the offset is 0, but in some cases it can be something else. In our case,
   // the dcm files are the exceptions with offset 128.
   offset: number;
 }
